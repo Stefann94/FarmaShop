@@ -111,26 +111,23 @@
 
 .quickCategoriesContainer {
   display: flex;
-  gap: 20px;
-  overflow-x: auto;
-  padding: 10px 20px 20px; /* padding-bottom for shadow and scrollbar */
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none;
+  gap: 15px; /* Slightly smaller gap to give more room to cards */
+  justify-content: space-between;
+  padding: 10px 4px 20px; /* bottom padding for shadow */
 }
 
-.quickCategoriesContainer::-webkit-scrollbar {
-  display: none; /* Safari/Chrome */
-}
+
 
 .quickCategoryCard {
-  flex: 0 0 auto;
-  min-width: 200px;
+  flex: 1 1 0; /* Forces all cards to have equal width and fill the row */
+  min-width: 0; /* Prevents overflow if text is too long */
   background-color: #e8f0eb; /* Verde pal elegant */
-  border-radius: 16px;
-  padding: 18px 24px;
+  border-radius: 12px;
+  padding: 14px 16px; /* Reduced padding for tighter fit */
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 8px;
   text-decoration: none;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border: 1px solid rgba(39, 79, 56, 0.05);
@@ -154,15 +151,16 @@
 .quickCategoryName {
   font-family: var(--font-body);
   font-weight: 700;
-  font-size: 1.05rem;
+  font-size: clamp(0.75rem, 1vw, 0.95rem); /* Responsive text size */
   color: var(--color-primary-dark);
   line-height: 1.2;
-  max-width: 70%;
+  max-width: 75%;
 }
 
 .quickCategoryIcon {
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
   background-color: rgba(255, 255, 255, 0.6);
   border-radius: 50%;
   display: flex;
@@ -403,6 +401,24 @@
 }
 
 @media (max-width: 768px) {
+  .quickCategoriesContainer {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding-bottom: 25px; /* space for scrollbar */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  
+  .quickCategoriesContainer::-webkit-scrollbar {
+    display: none;
+  }
+
+  .quickCategoryCard {
+    flex: 0 0 auto;
+    min-width: 200px; /* On mobile, we MUST allow scroll, otherwise 6 fit in 300px is unreadable */
+  }
+  
   .bottomMenu {
     display: none; /* Mobile menu needed for real app */
   }
