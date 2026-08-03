@@ -86,23 +86,44 @@
 
 .logo {
   display: flex;
-  flex-direction: column;
   align-items: center;
+  gap: 12px;
   font-family: var(--font-heading);
-  font-size: 2rem;
+  font-size: 2.2rem;
   font-weight: 700;
   color: var(--color-primary);
   text-decoration: none;
   line-height: 1;
 }
 
-.logo span {
+.logoIcon {
+  color: var(--color-accent-dark);
+  flex-shrink: 0;
+}
+
+.logoTextWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.logoText {
+  display: flex;
+  align-items: center;
+}
+
+.logoTextLight {
+  font-family: var(--font-body);
+  font-weight: 300;
+}
+
+.logo span.premiumText {
   font-family: var(--font-body);
   font-size: 0.65rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 3px;
-  color: var(--color-accent);
-  margin-top: 5px;
+  letter-spacing: 4px;
+  color: #6a7b70;
+  margin-top: 4px;
 }
 
 .bottomMenu {
@@ -114,16 +135,37 @@
 }
 
 .menuLink {
-  color: var(--color-text-main);
+  color: #2a7245; /* Un verde mai vibrant și mai vizibil */
+  font-family: var(--font-body); /* Fontul Inter - extrem de ușor de citit */
   text-transform: uppercase;
   font-size: 0.85rem;
-  font-weight: 600;
+  font-weight: 700; /* Puțin mai îngroșat pentru vizibilitate */
   letter-spacing: 1px;
+  position: relative;
+  padding-bottom: 4px;
   transition: color 0.3s ease;
 }
 
+.menuLink::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: var(--color-accent-dark);
+  transform-origin: bottom right;
+  transition: transform 0.3s ease-out;
+}
+
 .menuLink:hover {
-  color: var(--color-accent);
+  color: var(--color-primary-dark);
+}
+
+.menuLink:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
 }
 
 .iconBtn {
