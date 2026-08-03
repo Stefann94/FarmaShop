@@ -60,6 +60,10 @@ export default function HeroCarousel() {
     goToSlide((currentSlide + 1) % slides.length);
   }, [currentSlide, goToSlide]);
 
+  const prevSlide = useCallback(() => {
+    goToSlide((currentSlide - 1 + slides.length) % slides.length);
+  }, [currentSlide, goToSlide]);
+
   useEffect(() => {
     if (isPaused) return;
     const interval = setInterval(nextSlide, 6000);
@@ -70,11 +74,20 @@ export default function HeroCarousel() {
 
   return (
     <section
-      className={styles.hero}
+      className={styles.heroWrapper}
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
-      <div className={styles.heroContainer}>
+      {/* Navigation Arrows (Positioned relative to the full viewport width) */}
+      <button className={`${styles.arrow} ${styles.arrowLeft}`} onClick={prevSlide} aria-label="Slide anterior">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+      <button className={`${styles.arrow} ${styles.arrowRight}`} onClick={nextSlide} aria-label="Următorul slide">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
+
+      <div className={styles.hero}>
+        <div className={styles.heroContainer}>
         {/* Text Content */}
         <div className={styles.textBlock}>
           <div className={styles.textBlockInner}>
@@ -114,39 +127,42 @@ export default function HeroCarousel() {
 
         {/* Image */}
         <div className={styles.imageBlock}>
-          <div className={styles.imageInner}>
-            {slides.map((s, index) => (
-              <div
-                key={s.id}
-                className={`${styles.imageWrapper} ${index === currentSlide ? styles.imageActive : ''}`}
-              >
-                <Image
-                  src={s.image}
-                  alt={s.title}
-                  fill
-                  className={styles.image}
-                  priority={index === 0}
-                />
-              </div>
-            ))}
-          </div>
+          <div className={styles.imageContainer}>
+            <div className={styles.imageInner}>
+              {slides.map((s, index) => (
+                <div
+                  key={s.id}
+                  className={`${styles.imageWrapper} ${index === currentSlide ? styles.imageActive : ''}`}
+                >
+                  <Image
+                    src={s.image}
+                    alt={s.title}
+                    fill
+                    className={styles.image}
+                    priority={index === 0}
+                  />
+                </div>
+              ))}
+            </div>
 
-          {/* Trust badges floating over the image */}
-          <div className={styles.floatingBadges}>
-            <div className={styles.badge}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-              Formule curate
-            </div>
-            <div className={styles.badge}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-              Fără alergeni
-            </div>
-            <div className={styles.badge}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-              Validat științific
+            {/* Trust badges floating over the image */}
+            <div className={styles.floatingBadges}>
+              <div className={styles.badge}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                Formule curate
+              </div>
+              <div className={styles.badge}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                Fără alergeni
+              </div>
+              <div className={styles.badge}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                Validat științific
+              </div>
             </div>
           </div>
         </div>
+      </div>
       </div>
     </section>
   );
