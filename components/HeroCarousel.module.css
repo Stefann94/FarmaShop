@@ -255,13 +255,14 @@
   align-items: center;
   gap: 5px;
   padding: 8px 14px;
-  background: #fff;
+  background: #ffffff;
+  border: 1px solid rgba(39, 79, 56, 0.2); /* Subtila tenta de verde pe margini */
   border-radius: 8px;
   font-family: var(--font-body);
   font-size: 0.75rem;
   font-weight: 600;
-  color: var(--color-primary-dark);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  color: var(--color-primary); /* Text verde asortat cu iconita */
+  box-shadow: 0 4px 12px rgba(39, 79, 56, 0.08); /* Umbra cu tenta verzuie */
   white-space: nowrap;
 }
 
