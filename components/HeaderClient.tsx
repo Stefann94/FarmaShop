@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import Image from 'next/image';
+import Link from 'next/link';
 import styles from './Header.module.css';
 
 type Category = { id: string; name: string; slug: string; sort_order: number; group_name?: string };

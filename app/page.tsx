@@ -3,38 +3,13 @@ import HeroCarousel from "../components/HeroCarousel";
 import styles from "./page.module.css";
 import { createClient } from "../lib/supabase/server";
 
-// Mock data for products
-const mockProducts = [
-  {
-    id: 1,
-    name: "NMN Puritate 99%",
-    price: "189 RON",
-    image: "/product-1-tr.png"
-  },
-  {
-    id: 2,
-    name: "Resveratrol Complex",
-    price: "145 RON",
-    image: "/product-2-tr.png"
-  },
-  {
-    id: 3,
-    name: "Omega-3 Vegan",
-    price: "99 RON",
-    image: "/product-3-tr.png"
-  },
-  {
-    id: 4,
-    name: "Magneziu Bisglicinat",
-    price: "85 RON",
-    image: "/product-4-tr.png"
-  }
-];
+
 
 export default async function Home() {
   const supabase = await createClient();
   const { data: slides } = await supabase.from('hero_slides').select('*').order('id');
-  const { data: quickCategories } = await supabase.from('categories').select('*').order('sort_order').limit(6);
+  const { data: quickCategories } = await supabase.from('categories').select('*').eq('is_quick_category', true).order('sort_order').limit(6);
+  const { data: products } = await supabase.from('products').select('*').eq('is_bestseller', true).limit(4);
 
   return (
     <>
@@ -68,18 +43,18 @@ export default async function Home() {
             </p>
 
             <div className={styles.productsGrid}>
-              {mockProducts.map((product) => (
+              {products?.map((product) => (
                 <div key={product.id} className={styles.productCard}>
                   <div className={styles.productImage}>
                     <Image 
-                      src={product.image} 
+                      src={product.image_url} 
                       alt={product.name}
                       fill
                       style={{ objectFit: 'contain' }}
                     />
                   </div>
                   <h3 className={styles.productName}>{product.name}</h3>
-                  <div className={styles.productPrice}>{product.price}</div>
+                  <div className={styles.productPrice}>{product.price} RON</div>
                   <button className="btn btn-primary productBtn">Adaugă în coș</button>
                 </div>
               ))}

@@ -133,14 +133,6 @@
   border: 1px solid rgba(39, 79, 56, 0.05);
 }
 
-/* Let's make them alternate colors slightly for that premium vibe like in the screenshot */
-.quickCategoryCard:nth-child(even) {
-  background-color: #f0f4f1;
-}
-
-.quickCategoryCard:nth-child(3n) {
-  background-color: #eef2ec;
-}
 
 .quickCategoryCard:hover {
   background-color: #dcede2;

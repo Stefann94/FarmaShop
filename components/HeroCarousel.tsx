@@ -48,11 +48,11 @@ export default function HeroCarousel({ slides }: HeroCarouselProps) {
 
   const nextSlide = useCallback(() => {
     goToSlide((currentSlide + 1) % slides.length);
-  }, [currentSlide, goToSlide]);
+  }, [currentSlide, goToSlide, slides.length]);
 
   const prevSlide = useCallback(() => {
     goToSlide((currentSlide - 1 + slides.length) % slides.length);
-  }, [currentSlide, goToSlide]);
+  }, [currentSlide, goToSlide, slides.length]);
 
   useEffect(() => {
     if (isPaused) return;
