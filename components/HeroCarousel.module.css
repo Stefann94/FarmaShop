@@ -19,9 +19,13 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+}
+
+.textBlockInner {
+  margin: auto 0;
+  display: flex;
+  flex-direction: column;
   align-items: flex-start;
-  position: relative;
 }
 
 .label {
@@ -62,7 +66,7 @@
 
 /* ---- ACTIONS ---- */
 .actions {
-  display: flex;
+  display: inline-flex; /* Important: inline-flex ensures the width perfectly matches the buttons, fixing the React measurement bug */
   align-items: center;
   gap: 20px;
   animation: fadeInUp 0.5s 0.14s ease-out both;
@@ -116,11 +120,16 @@
 }
 
 /* ---- INDICATORS ---- */
+.indicatorsWrapper {
+  margin-top: auto;
+  padding-top: 35px; /* Ensures a minimum gap so dots are NEVER too close to the buttons */
+  display: flex;
+  justify-content: center;
+  margin-bottom: -6px;
+  animation: fadeInUp 0.5s 0.2s ease-out both;
+}
+
 .indicators {
-  position: absolute;
-  bottom: -2px;
-  left: 215px; /* Magic number perfectly centered between the two buttons */
-  transform: translateX(-50%);
   display: flex;
   gap: 6px;
   align-items: center;
@@ -242,22 +251,23 @@
     aspect-ratio: 16 / 10;
   }
 
-  .textBlock {
+  .textBlockInner {
     align-items: center;
-    padding-bottom: 30px;
+    margin: 0; /* Remove vertical centering on mobile */
   }
 
   .actions {
+    display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
     gap: 16px;
   }
 
-  .indicators {
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: -5px;
+  .indicatorsWrapper {
+    width: 100% !important; /* Full width on mobile */
+    margin-top: 30px;
+    margin-bottom: 0;
   }
 
   .floatingBadges {
