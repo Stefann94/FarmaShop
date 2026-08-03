@@ -1,4 +1,5 @@
 import Image from "next/image";
+import HeroCarousel from "../components/HeroCarousel";
 import styles from "./page.module.css";
 
 // Mock data for products
@@ -122,52 +123,7 @@ export default function Home() {
       </header>
 
       <main>
-        {/* HERO SECTION */}
-        <section className={styles.hero}>
-          <div className={`container ${styles.heroContainer}`}>
-            <div className={styles.heroContent}>
-              <h1 className={styles.heroTitle}>
-                Investește Astăzi în <span className={styles.titleHighlight}>Ziua de Mâine.</span>
-              </h1>
-              <p className={styles.heroDesc}>
-                Suplimente alimentare premium, formulate științific pentru a susține vitalitatea, funcția cognitivă și o îmbătrânire sănătoasă.
-              </p>
-              
-              <div className={styles.heroActions}>
-                <a href="#produse" className={`btn btn-primary`}>Descoperă Produsele</a>
-                <a href="#afla-mai-multe" className={`btn btn-outline`}>Află mai multe</a>
-              </div>
-
-              <div className={styles.heroFeatures}>
-                <div className={styles.featureItem}>
-                  <svg className={styles.featureIcon} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-                  Formule curate
-                </div>
-                <div className={styles.featureItem}>
-                  <svg className={styles.featureIcon} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-                  Fără alergeni
-                </div>
-                <div className={styles.featureItem}>
-                  <svg className={styles.featureIcon} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-                  Validat științific
-                </div>
-              </div>
-            </div>
-
-            <div className={styles.heroImageWrapper}>
-              {/* This is a placeholder for the beautiful image */}
-              <div style={{color: 'rgba(255,255,255,0.7)', fontStyle: 'italic'}}>Imagine Premium Suplimente</div>
-              
-              <div className={styles.qualityBadge}>
-                <svg className={styles.badgeIcon} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
-                <div className={styles.badgeText}>
-                  <span className={styles.badgeTitle}>CALITATE</span>
-                  <span className={styles.badgeSubtitle}>Premium Garantat</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <HeroCarousel />
 
         {/* PRODUCTS SECTION */}
         <section id="produse" className={styles.productsSection}>
