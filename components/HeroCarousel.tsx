@@ -7,21 +7,21 @@ import styles from './HeroCarousel.module.css';
 const slides = [
   {
     id: 1,
-    image: "/hero-1.png",
+    image: "/product-1-tr.png",
     label: "Bestseller",
     title: "Investește Astăzi în Ziua de Mâine",
     description: "Suplimente alimentare premium, formulate științific pentru longevitate celulară și vitalitate zilnică."
   },
   {
     id: 2,
-    image: "/hero-2.png",
+    image: "/product-2-tr.png",
     label: "Nou",
     title: "Extracte Naturale, Puritate Maximă",
     description: "Nutrienți esențiali din plante organice cu biodisponibilitate maximă. Fără alergeni, fără compromisuri."
   },
   {
     id: 3,
-    image: "/hero-3.png",
+    image: "/product-3-tr.png",
     label: "Calitate",
     title: "Știință și Inovație Pentru Longevitate",
     description: "Fiecare lot testat în laboratoare independente. Transparență totală, calitate garantată."
@@ -79,7 +79,7 @@ export default function HeroCarousel() {
             <a href="#calitate" className={styles.ctaOutline}>Calitate & Ingrediente</a>
           </div>
 
-          {/* Slide indicators */}
+          {/* Slide indicators positioned absolutely to align with tags vertically, and centered with buttons horizontally */}
           <div className={styles.indicators}>
             {slides.map((_, index) => (
               <button

@@ -9,7 +9,7 @@
 
 .heroContainer {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   gap: clamp(40px, 5vw, 70px);
 }
 
@@ -17,6 +17,11 @@
 .textBlock {
   flex: 1;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  position: relative;
 }
 
 .label {
@@ -59,8 +64,7 @@
 .actions {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 28px;
+  gap: 20px;
   animation: fadeInUp 0.5s 0.14s ease-out both;
 }
 
@@ -113,9 +117,14 @@
 
 /* ---- INDICATORS ---- */
 .indicators {
+  position: absolute;
+  bottom: -2px;
+  left: 215px; /* Magic number perfectly centered between the two buttons */
+  transform: translateX(-50%);
   display: flex;
   gap: 6px;
-  animation: fadeInUp 0.5s 0.2s ease-out both;
+  align-items: center;
+  padding: 0 10px;
 }
 
 .dot {
@@ -233,9 +242,22 @@
     aspect-ratio: 16 / 10;
   }
 
+  .textBlock {
+    align-items: center;
+    padding-bottom: 30px;
+  }
+
   .actions {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
+    width: 100%;
+    gap: 16px;
+  }
+
+  .indicators {
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -5px;
   }
 
   .floatingBadges {

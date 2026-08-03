@@ -8,25 +8,25 @@ const mockProducts = [
     id: 1,
     name: "NMN Puritate 99%",
     price: "189 RON",
-    image: "/mock-product-1.jpg" // Placeholders, we'll just show a gray box for now
+    image: "/product-1-tr.png"
   },
   {
     id: 2,
     name: "Resveratrol Complex",
     price: "145 RON",
-    image: "/mock-product-2.jpg"
+    image: "/product-2-tr.png"
   },
   {
     id: 3,
     name: "Omega-3 Vegan",
     price: "99 RON",
-    image: "/mock-product-3.jpg"
+    image: "/product-3-tr.png"
   },
   {
     id: 4,
     name: "Magneziu Bisglicinat",
     price: "85 RON",
-    image: "/mock-product-4.jpg"
+    image: "/product-4-tr.png"
   }
 ];
 
@@ -139,7 +139,12 @@ export default function Home() {
               {mockProducts.map((product) => (
                 <div key={product.id} className={styles.productCard}>
                   <div className={styles.productImage}>
-                    Imagine Produs
+                    <Image 
+                      src={product.image} 
+                      alt={product.name}
+                      fill
+                      style={{ objectFit: 'contain' }}
+                    />
                   </div>
                   <h3 className={styles.productName}>{product.name}</h3>
                   <div className={styles.productPrice}>{product.price}</div>
