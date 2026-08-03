@@ -1,6 +1,7 @@
 import Image from "next/image";
 import HeroCarousel from "../components/HeroCarousel";
 import styles from "./page.module.css";
+import { createClient } from "../lib/supabase/server";
 
 // Mock data for products
 const mockProducts = [
@@ -30,11 +31,29 @@ const mockProducts = [
   }
 ];
 
-export default function Home() {
+export default async function Home() {
+  const supabase = await createClient();
+  const { data: slides } = await supabase.from('hero_slides').select('*').order('id');
+  const { data: quickCategories } = await supabase.from('categories').select('*').order('sort_order').limit(6);
+
   return (
     <>
       <main>
-        <HeroCarousel />
+        <HeroCarousel slides={slides || []} />
+
+        {/* QUICK CATEGORIES */}
+        <section className={styles.quickCategoriesSection}>
+          <div className={`container ${styles.quickCategoriesContainer}`}>
+            {quickCategories?.map(cat => (
+              <a key={cat.id} href={`/categorie/${cat.slug}`} className={styles.quickCategoryCard}>
+                <span className={styles.quickCategoryName}>{cat.name}</span>
+                <div className={styles.quickCategoryIcon}>
+                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
 
         {/* PRODUCTS SECTION */}
         <section id="produse" className={styles.productsSection}>

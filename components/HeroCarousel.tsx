@@ -4,31 +4,19 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import Image from 'next/image';
 import styles from './HeroCarousel.module.css';
 
-const slides = [
-  {
-    id: 1,
-    image: "/product-1-tr.png",
-    label: "Bestseller",
-    title: "Investește Astăzi în Ziua de Mâine",
-    description: "Suplimente alimentare premium, formulate științific pentru longevitate celulară și vitalitate zilnică."
-  },
-  {
-    id: 2,
-    image: "/product-2-tr.png",
-    label: "Nou",
-    title: "Extracte Naturale, Puritate Maximă",
-    description: "Nutrienți esențiali din plante organice cu biodisponibilitate maximă. Fără alergeni, fără compromisuri."
-  },
-  {
-    id: 3,
-    image: "/product-3-tr.png",
-    label: "Calitate",
-    title: "Știință și Inovație Pentru Longevitate",
-    description: "Fiecare lot testat în laboratoare independente. Transparență totală, calitate garantată."
-  }
-];
+export type Slide = {
+  id: string | number;
+  image: string;
+  label: string;
+  title: string;
+  description: string;
+};
 
-export default function HeroCarousel() {
+interface HeroCarouselProps {
+  slides: Slide[];
+}
+
+export default function HeroCarousel({ slides }: HeroCarouselProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
@@ -37,17 +25,19 @@ export default function HeroCarousel() {
   const actionsRef = useRef<HTMLDivElement>(null);
   const [actionsWidth, setActionsWidth] = useState(420); // Fallback
 
-  const updateIndicatorPosition = useCallback(() => {
-    if (actionsRef.current) {
-      setActionsWidth(actionsRef.current.offsetWidth);
-    }
-  }, []);
-
   useEffect(() => {
-    updateIndicatorPosition();
-    window.addEventListener('resize', updateIndicatorPosition);
-    return () => window.removeEventListener('resize', updateIndicatorPosition);
-  }, [updateIndicatorPosition]);
+    if (!actionsRef.current) return;
+
+    // Use ResizeObserver for perfect tracking even after web fonts load
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        setActionsWidth(entry.contentRect.width);
+      }
+    });
+
+    observer.observe(actionsRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   const goToSlide = useCallback((index: number) => {
     if (isTransitioning) return;
@@ -70,7 +60,9 @@ export default function HeroCarousel() {
     return () => clearInterval(interval);
   }, [nextSlide, isPaused]);
 
-  const slide = slides[currentSlide];
+  const slide = slides[currentSlide] || slides[0];
+
+  if (!slide) return null;
 
   return (
     <section

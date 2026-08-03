@@ -96,6 +96,87 @@
   line-height: 1;
 }
 
+.titleHighlight {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+/* QUICK CATEGORIES (Pills underneath Hero) */
+.quickCategoriesSection {
+  padding: 30px 0 10px;
+  background-color: var(--color-bg-main);
+  position: relative;
+  z-index: 10;
+}
+
+.quickCategoriesContainer {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding: 10px 20px 20px; /* padding-bottom for shadow and scrollbar */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+}
+
+.quickCategoriesContainer::-webkit-scrollbar {
+  display: none; /* Safari/Chrome */
+}
+
+.quickCategoryCard {
+  flex: 0 0 auto;
+  min-width: 200px;
+  background-color: #e8f0eb; /* Verde pal elegant */
+  border-radius: 16px;
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(39, 79, 56, 0.05);
+}
+
+/* Let's make them alternate colors slightly for that premium vibe like in the screenshot */
+.quickCategoryCard:nth-child(even) {
+  background-color: #f0f4f1;
+}
+
+.quickCategoryCard:nth-child(3n) {
+  background-color: #eef2ec;
+}
+
+.quickCategoryCard:hover {
+  background-color: #dcede2;
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(39, 79, 56, 0.08);
+}
+
+.quickCategoryName {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--color-primary-dark);
+  line-height: 1.2;
+  max-width: 70%;
+}
+
+.quickCategoryIcon {
+  width: 36px;
+  height: 36px;
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-accent-dark);
+  transition: transform 0.3s ease;
+}
+
+.quickCategoryCard:hover .quickCategoryIcon {
+  transform: translateX(4px);
+  background-color: #ffffff;
+}
+
 .logoIcon {
   color: var(--color-accent-dark);
   flex-shrink: 0;
