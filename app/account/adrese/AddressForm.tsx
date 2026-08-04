@@ -4,11 +4,11 @@ import React, { useState } from 'react';
 import styles from '../Account.module.css';
 import { updateAddress } from '../actions';
 
-type AddressData = {
-  street: string;
-  city: string;
-  postal_code: string;
-  country: string;
+interface AddressData {
+  street?: string;
+  city?: string;
+  postal_code?: string;
+  county?: string;
 };
 
 type AddressFormProps = {

@@ -3,6 +3,7 @@ import { Outfit } from "next/font/google";
 import "./globals.css";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { CartProvider } from "./context/CartContext";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -22,9 +23,11 @@ export default function RootLayout({
   return (
     <html lang="ro">
       <body className={`${outfit.variable}`}>
-        <Header />
-        {children}
-        <Footer />
+        <CartProvider>
+          <Header />
+          {children}
+          <Footer />
+        </CartProvider>
       </body>
     </html>
   );

@@ -4,6 +4,7 @@ import React, { useState, Fragment } from 'react';
 import Link from 'next/link';
 import styles from './Header.module.css';
 import { logout } from '@/app/auth/actions';
+import { useCart } from '@/app/context/CartContext';
 
 type Category = { id: string; name: string; slug: string; sort_order: number; group_name?: string };
 type Product = { id: string; name: string; slug: string; image_url: string; price: number };
@@ -19,6 +20,8 @@ interface HeaderClientProps {
 export default function HeaderClient({ categories, featuredProducts, activePromo, user }: HeaderClientProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const { cartCount, cartTotal, isLoading } = useCart();
 
   // Group categories by their group_name
   const groupedCategories = categories?.reduce((acc, cat) => {
@@ -157,13 +160,55 @@ export default function HeaderClient({ categories, featuredProducts, activePromo
                     )}
                   </div>
                 </div>
-                <button className={styles.cartBtn} aria-label="Coș cumpărături">
-                  <div className={styles.cartIconWrapper}>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-                    <span className={styles.cartBadge}>2</span>
+                <div className={styles.profileWrapper}>
+                  <button 
+                    className={`${styles.cartBtn} ${isCartOpen ? styles.iconBtnActive : ''}`} 
+                    aria-label="Coș cumpărături"
+                    onClick={() => setIsCartOpen(!isCartOpen)}
+                  >
+                    <div className={styles.cartIconWrapper}>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                      {cartCount > 0 && <span className={styles.cartBadge}>{cartCount}</span>}
+                    </div>
+                    <span className={styles.cartTotal}>{cartTotal.toFixed(2)} Lei</span>
+                  </button>
+
+                  {isCartOpen && (
+                    <div className={styles.profileBackdrop} onClick={() => setIsCartOpen(false)}></div>
+                  )}
+
+                  <div className={`${styles.profileDropdown} ${isCartOpen ? styles.profileDropdownOpen : ''}`}>
+                    {!user ? (
+                      <>
+                        <div className={styles.profileDropdownHeader}>
+                          <p>Trebuie să fii autentificat pentru a folosi coșul de cumpărături.</p>
+                        </div>
+                        <div className={styles.profileDropdownActions}>
+                          <Link href="/login" className={styles.btnLogin} onClick={() => setIsCartOpen(false)}>Autentificare</Link>
+                          <Link href="/signup" className={styles.btnSignup} onClick={() => setIsCartOpen(false)}>Creare Cont</Link>
+                        </div>
+                      </>
+                    ) : cartCount === 0 ? (
+                      <>
+                        <div className={styles.profileDropdownHeader}>
+                          <p>Coșul tău este momentan gol. Explorează produsele noastre premium!</p>
+                        </div>
+                        <div className={styles.profileDropdownActions}>
+                          <Link href="/" className={styles.btnLogin} onClick={() => setIsCartOpen(false)}>Înapoi la magazin</Link>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className={styles.profileDropdownHeader}>
+                          <p>Ai <strong>{cartCount}</strong> produse în valoare de <strong>{cartTotal.toFixed(2)} Lei</strong>.</p>
+                        </div>
+                        <div className={styles.profileDropdownActions}>
+                          <Link href="/cart" className={styles.btnSignup} onClick={() => setIsCartOpen(false)}>Vezi coșul</Link>
+                        </div>
+                      </>
+                    )}
                   </div>
-                  <span className={styles.cartTotal}>334 Lei</span>
-                </button>
+                </div>
               </div>
             </div>
           </div>
