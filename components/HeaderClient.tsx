@@ -3,6 +3,7 @@
 import React, { useState, Fragment } from 'react';
 import Link from 'next/link';
 import styles from './Header.module.css';
+import { logout } from '@/app/auth/actions';
 
 type Category = { id: string; name: string; slug: string; sort_order: number; group_name?: string };
 type Product = { id: string; name: string; slug: string; image_url: string; price: number };
@@ -12,9 +13,10 @@ interface HeaderClientProps {
   categories: Category[];
   featuredProducts: Product[];
   activePromo: Promo | null;
+  user: any;
 }
 
-export default function HeaderClient({ categories, featuredProducts, activePromo }: HeaderClientProps) {
+export default function HeaderClient({ categories, featuredProducts, activePromo, user }: HeaderClientProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
@@ -132,13 +134,27 @@ export default function HeaderClient({ categories, featuredProducts, activePromo
                   )}
 
                   <div className={`${styles.profileDropdown} ${isProfileOpen ? styles.profileDropdownOpen : ''}`}>
-                    <div className={styles.profileDropdownHeader}>
-                      <p>Deblochează oferte și beneficii exclusive!</p>
-                    </div>
-                    <div className={styles.profileDropdownActions}>
-                      <Link href="/login" className={styles.btnLogin} onClick={() => setIsProfileOpen(false)}>Autentificare</Link>
-                      <Link href="/signup" className={styles.btnSignup} onClick={() => setIsProfileOpen(false)}>Creare Cont</Link>
-                    </div>
+                    {user ? (
+                      <>
+                        <div className={styles.profileDropdownHeader}>
+                          <p>Salut, <strong>{user.user_metadata?.first_name || 'Utilizator'}</strong>!</p>
+                        </div>
+                        <div className={styles.profileDropdownActions}>
+                          <Link href="/account" className={styles.btnLogin} onClick={() => setIsProfileOpen(false)}>Contul meu</Link>
+                          <button onClick={() => { setIsProfileOpen(false); logout(); }} className={styles.btnSignup}>Deconectare</button>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className={styles.profileDropdownHeader}>
+                          <p>Deblochează oferte și beneficii exclusive!</p>
+                        </div>
+                        <div className={styles.profileDropdownActions}>
+                          <Link href="/login" className={styles.btnLogin} onClick={() => setIsProfileOpen(false)}>Autentificare</Link>
+                          <Link href="/signup" className={styles.btnSignup} onClick={() => setIsProfileOpen(false)}>Creare Cont</Link>
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
                 <button className={styles.cartBtn} aria-label="Coș cumpărături">

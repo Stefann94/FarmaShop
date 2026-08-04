@@ -4,12 +4,14 @@ import HeaderClient from './HeaderClient';
 export default async function Header() {
   const supabase = await createClient();
 
-  // Fetch data in parallel
+  // Fetch data in parallel including user session
   const [
+    { data: { user } },
     { data: categories },
     { data: featuredProducts },
     { data: promos }
   ] = await Promise.all([
+    supabase.auth.getUser(),
     supabase.from('categories').select('*').order('sort_order'),
     supabase.from('products').select('*').eq('is_featured', true).limit(4),
     supabase.from('promos').select('*').eq('is_active', true).limit(1)
@@ -19,7 +21,8 @@ export default async function Header() {
     <HeaderClient 
       categories={categories || []} 
       featuredProducts={featuredProducts || []} 
-      activePromo={promos?.[0] || null} 
+      activePromo={promos?.[0] || null}
+      user={user}
     />
   );
 }
