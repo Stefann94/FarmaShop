@@ -17,8 +17,8 @@
   --color-border: #e0e6e2;
   
   /* Fonts will be imported in layout.tsx via Next.js Google Fonts */
-  --font-heading: var(--font-playfair), serif;
-  --font-body: var(--font-inter), sans-serif;
+  --font-heading: var(--font-outfit), sans-serif;
+  --font-body: var(--font-outfit), sans-serif;
   
   /* Layout constraints */
   --max-width: 1200px;
