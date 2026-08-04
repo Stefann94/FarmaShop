@@ -39,12 +39,14 @@ export default function ProductSection({ title, products, viewAllLink, badgeText
                 <button className={styles.favoriteBtn} aria-label="Adauga la favorite">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
                 </button>
-                <Image 
-                  src={product.image_url || '/placeholder.png'} 
-                  alt={product.name}
-                  fill
-                  className={styles.productImage}
-                />
+                <a href={`/produs/${product.slug}`} style={{ display: 'block' }}>
+                  <Image 
+                    src={product.image_url || '/placeholder.png'} 
+                    alt={product.name}
+                    fill
+                    className={styles.productImage}
+                  />
+                </a>
               </div>
               <div className={styles.productInfo}>
                 <h3 className={styles.productName}>
@@ -53,7 +55,11 @@ export default function ProductSection({ title, products, viewAllLink, badgeText
                 <div className={styles.productFooter}>
                   <div className={styles.productPrice}>{product.price} <span className={styles.currency}>RON</span></div>
                   <button className={styles.addToCartBtn} aria-label="Adaugă în coș">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="9" cy="21" r="1"></circle>
+                      <circle cx="20" cy="21" r="1"></circle>
+                      <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
                   </button>
                 </div>
               </div>

@@ -4,22 +4,29 @@ import styles from "./page.module.css";
 import { createClient } from "../lib/supabase/server";
 import ProductSection from "../components/ProductSection";
 
+import ProductCarousel from "../components/ProductCarousel";
+
 export const dynamic = 'force-dynamic';
 export default async function Home() {
   const supabase = await createClient();
   const { data: slides } = await supabase.from('hero_slides').select('*').order('id');
   const { data: quickCategories } = await supabase.from('categories').select('*').eq('is_quick_category', true).order('sort_order').limit(6);
   
-  // Fetch products for all 3 sections
+  // Fetch products for all sections
   const [
     { data: essentials },
     { data: focusEnergy },
-    { data: premiumBundles }
+    { data: premiumBundles },
+    { data: recommendedProducts, error: recommendedError }
   ] = await Promise.all([
     supabase.from('products').select('*').eq('is_bestseller', true).limit(8),
     supabase.from('products').select('*').eq('is_focus_energy', true).limit(8),
-    supabase.from('products').select('*').eq('is_premium_bundle', true).limit(8)
+    supabase.from('products').select('*').eq('is_premium_bundle', true).limit(8),
+    supabase.from('products').select('*').eq('is_recommended', true).limit(10)
   ]);
+
+  // Folosim fallback în caz că coloana 'is_recommended' încă nu a fost creată în baza de date
+  const finalRecommended = recommendedError ? essentials : recommendedProducts;
 
   return (
     <>
@@ -80,6 +87,12 @@ export default async function Home() {
           products={premiumBundles || []}
           viewAllLink="/produse?filter=bundles"
           badgeText="-15% Extra"
+        />
+        
+        {/* RECOMMENDED CAROUSEL */}
+        <ProductCarousel 
+          title={<>Produse <span>Recomandate</span></>}
+          products={finalRecommended || []}
         />
         
       </main>
