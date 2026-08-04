@@ -222,23 +222,69 @@
   background-color: #f4f8f1;
 }
 
-/* DESCRIPTION */
+/* === NEW INFO & LOGISTICS BLOCKS === */
+.infoNotice {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  color: #666;
+  font-size: 0.85rem;
+  margin-top: 0;
+  margin-bottom: 15px;
+  line-height: 1.4;
+}
+
+.infoIcon {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: #888;
+}
+
+.logisticsBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 15px;
+  margin-bottom: 30px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.logisticRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.95rem;
+  color: var(--color-text-main);
+  font-weight: 500;
+}
+
+.logisticIcon {
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.fullDescriptionSection {
+  margin-bottom: 60px;
+}
+
+/* === DESCRIPTION === */
 .descriptionBlock {
-  border-top: 1px solid rgba(0,0,0,0.08);
-  padding-top: 30px;
+  background-color: #f8f9f6;
+  border-radius: 24px;
+  padding: 40px;
 }
 
 .descriptionTitle {
-  font-family: var(--font-heading);
-  font-size: 1.4rem;
-  color: var(--color-primary-dark);
+  font-size: 1.5rem;
+  color: var(--color-text-main);
   margin-bottom: 15px;
 }
 
 .descriptionText {
-  font-size: 1rem;
-  line-height: 1.7;
   color: #555;
+  line-height: 1.8;
+  font-size: 1.05rem;
 }
 
 /* RESPONSIVE */

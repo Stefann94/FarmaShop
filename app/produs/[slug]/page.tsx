@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { createClient } from '../../../lib/supabase/server';
 import styles from './ProductPage.module.css';
 import ProductCarousel from '../../../components/ProductCarousel';
+import ProductImageZoom from '../../../components/ProductImageZoom';
 
 // Generate Metadata for SEO
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
@@ -86,20 +87,18 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         <section className={styles.mainSection}>
           {/* LEFT: IMAGE */}
           <div className={styles.imageColumn}>
-            {tags && tags.length > 0 && (
+            {product.tags && product.tags.length > 0 && (
               <div className={styles.tagsContainer}>
-                {tags.map((tag: string, idx: number) => (
+                {product.tags.map((tag: string, idx: number) => (
                   <span key={idx} className={`${styles.tag} ${tag.includes('%') || tag.toLowerCase().includes('reducere') ? styles.tagDiscount : ''}`}>
                     {tag}
                   </span>
                 ))}
               </div>
             )}
-            <Image 
+            <ProductImageZoom 
               src={product.image_url || '/placeholder.png'} 
               alt={product.name} 
-              fill
-              className={styles.productImage}
             />
           </div>
 
@@ -152,13 +151,33 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
               </button>
             </div>
 
-            {/* DESCRIPTION */}
-            <div className={styles.descriptionBlock}>
-              <h3 className={styles.descriptionTitle}>Informații Produs</h3>
-              <p className={styles.descriptionText}>
-                {product.description || "Informațiile detaliate despre acest produs urmează a fi actualizate în curând. Formulele FarmaShop sunt dezvoltate pentru eficiență și puritate maximă."}
-              </p>
+            {/* INFO & LOGISTICS */}
+            <div className={styles.infoNotice}>
+              <svg className={styles.infoIcon} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+              <span>Ofertă exclusivă online. Prețurile din farmaciile fizice pot fi diferite.</span>
             </div>
+
+            <div className={styles.logisticsBlock}>
+              <div className={styles.logisticRow}>
+                <svg className={styles.logisticIcon} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                <span>{product.in_stock !== false ? 'Disponibil în stoc cu livrare rapidă' : 'Stoc epuizat temporar'}</span>
+              </div>
+              <div className={styles.logisticRow}>
+                <svg className={styles.logisticIcon} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+                <span>Fără costuri de transport la ridicarea din farmacie</span>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        {/* FULL WIDTH DESCRIPTION */}
+        <section className={styles.fullDescriptionSection}>
+          <div className={styles.descriptionBlock}>
+            <h3 className={styles.descriptionTitle}>Informații Produs</h3>
+            <p className={styles.descriptionText}>
+              {product.description || "Informațiile detaliate despre acest produs urmează a fi actualizate în curând. Formulele FarmaShop sunt dezvoltate pentru eficiență și puritate maximă."}
+            </p>
           </div>
         </section>
 
