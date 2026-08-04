@@ -1,0 +1,259 @@
+.productPage {
+  padding: 40px 0 80px 0;
+  background-color: #ffffff;
+}
+
+.breadcrumb {
+  margin-bottom: 30px;
+  font-size: 0.9rem;
+  color: #777;
+}
+
+.breadcrumb a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.mainSection {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  margin-bottom: 80px;
+}
+
+/* LEFT COLUMN - IMAGE */
+.imageColumn {
+  position: relative;
+  background-color: #f8f9f6;
+  border: 1px solid rgba(39, 79, 56, 0.2);
+  border-radius: 24px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  aspect-ratio: 1/1;
+}
+
+.productImage {
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.imageColumn:hover .productImage {
+  transform: scale(1.02);
+}
+
+.tagsContainer {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 2;
+}
+
+.tag {
+  background-color: var(--color-accent);
+  color: var(--color-primary-dark);
+  font-family: var(--font-body);
+  font-weight: 800;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 8px 14px;
+  border-radius: 30px;
+  display: inline-block;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.tagDiscount {
+  background-color: #e74c3c;
+  color: white;
+}
+
+/* RIGHT COLUMN - DETAILS */
+.detailsColumn {
+  display: flex;
+  flex-direction: column;
+}
+
+.productTitle {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 3vw, 2.8rem);
+  color: var(--color-primary-dark);
+  line-height: 1.2;
+  margin: 0 0 15px 0;
+}
+
+.ratingContainer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.stars {
+  display: flex;
+  gap: 2px;
+  color: #f1c40f; /* Auriu */
+}
+
+.reviewsCount {
+  font-size: 0.95rem;
+  color: #666;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.priceBlock {
+  margin-bottom: 30px;
+}
+
+.price {
+  font-family: var(--font-body);
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: var(--color-primary-dark);
+  line-height: 1;
+}
+
+.currency {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #6a7b70;
+}
+
+/* INSTALLMENTS BOX */
+.installmentBox {
+  background-color: #f4f8f1;
+  border: 1px solid rgba(39, 79, 56, 0.1);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.installmentText {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.installmentTitle {
+  font-weight: 700;
+  color: var(--color-primary-dark);
+  font-size: 1.05rem;
+}
+
+.installmentSub {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.installmentBadge {
+  background-color: var(--color-primary);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ACTIONS */
+.actionsBlock {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 15px;
+  margin-bottom: 40px;
+}
+
+.btnAddToCart {
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  padding: 18px;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 20px rgba(39, 79, 56, 0.15);
+}
+
+.btnAddToCart:hover {
+  background-color: var(--color-accent-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 15px 25px rgba(39, 79, 56, 0.25);
+}
+
+.btnFav {
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 2px solid var(--color-primary);
+  border-radius: 30px;
+  padding: 18px;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.3s ease;
+}
+
+.btnFav:hover {
+  background-color: #f4f8f1;
+}
+
+/* DESCRIPTION */
+.descriptionBlock {
+  border-top: 1px solid rgba(0,0,0,0.08);
+  padding-top: 30px;
+}
+
+.descriptionTitle {
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  color: var(--color-primary-dark);
+  margin-bottom: 15px;
+}
+
+.descriptionText {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #555;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .mainSection {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .imageColumn {
+    aspect-ratio: 4/3;
+  }
+}
+
+@media (max-width: 600px) {
+  .actionsBlock {
+    grid-template-columns: 1fr;
+  }
+}

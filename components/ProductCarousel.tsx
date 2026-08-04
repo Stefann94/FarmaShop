@@ -41,6 +41,18 @@ export default function ProductCarousel({ title, products }: ProductCarouselProp
 
   const maxIndex = Math.max(0, products.length - itemsPerView);
 
+  const [isHovered, setIsHovered] = useState(false);
+
+  // Auto-scroll effect (pauses on hover)
+  useEffect(() => {
+    if (isHovered) return;
+
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [maxIndex, isHovered]);
+
   const nextSlide = () => {
     setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
   };
@@ -85,7 +97,11 @@ export default function ProductCarousel({ title, products }: ProductCarouselProp
           </div>
         </div>
 
-        <div className={styles.carouselContainer}>
+        <div 
+          className={styles.carouselContainer}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
           <div 
             className={styles.carouselTrack}
             style={{ transform: `translateX(-${currentIndex * (100 / itemsPerView)}%)` }}

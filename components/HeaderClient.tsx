@@ -94,7 +94,7 @@ export default function HeaderClient({ categories, featuredProducts, activePromo
 
               {/* Center Logo */}
               <div className={styles.logoCenter}>
-                <a href="#" className={styles.logo}>
+                <a href="/" className={styles.logo}>
                   <svg className={styles.logoIcon} width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 1 8.3C19.24 16.46 13.84 20 11 20Z"/>
                     <path d="M11 20c2-5 0-11-2-11"/>
