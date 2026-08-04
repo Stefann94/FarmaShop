@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import Link from 'next/link';
 import styles from './Header.module.css';
 
@@ -27,7 +27,7 @@ export default function HeaderClient({ categories, featuredProducts, activePromo
 
   return (
     <>
-      {/* TOP BAR */}
+      {/* TOP BAR - Infinite marquee */}
       <div className={styles.topBar}>
         <div className={styles.tickerContent}>
           <div className={styles.tickerGroup}>
@@ -39,8 +39,24 @@ export default function HeaderClient({ categories, featuredProducts, activePromo
             <span className={styles.tickerItem}>•</span>
             <span className={styles.tickerItem}>Abonează-te la newsletter și primești <strong>10% OFF</strong></span>
             <span className={styles.tickerItem}>•</span>
+            <span className={styles.tickerItem}>Livrare gratuită la comenzi peste <strong>200 RON</strong></span>
+            <span className={styles.tickerItem}>•</span>
+            <span className={styles.tickerItem}>Folosește codul <strong>LONGEVITY15</strong> pentru 15% reducere</span>
+            <span className={styles.tickerItem}>•</span>
+            <span className={styles.tickerItem}>🌿 <strong>Pachete Imunitate</strong> cu -20% reducere doar săptămâna aceasta</span>
+            <span className={styles.tickerItem}>•</span>
+            <span className={styles.tickerItem}>Abonează-te la newsletter și primești <strong>10% OFF</strong></span>
+            <span className={styles.tickerItem}>•</span>
           </div>
-          <div className={styles.tickerGroup}>
+          <div className={styles.tickerGroup} aria-hidden="true">
+            <span className={styles.tickerItem}>Livrare gratuită la comenzi peste <strong>200 RON</strong></span>
+            <span className={styles.tickerItem}>•</span>
+            <span className={styles.tickerItem}>Folosește codul <strong>LONGEVITY15</strong> pentru 15% reducere</span>
+            <span className={styles.tickerItem}>•</span>
+            <span className={styles.tickerItem}>🌿 <strong>Pachete Imunitate</strong> cu -20% reducere doar săptămâna aceasta</span>
+            <span className={styles.tickerItem}>•</span>
+            <span className={styles.tickerItem}>Abonează-te la newsletter și primești <strong>10% OFF</strong></span>
+            <span className={styles.tickerItem}>•</span>
             <span className={styles.tickerItem}>Livrare gratuită la comenzi peste <strong>200 RON</strong></span>
             <span className={styles.tickerItem}>•</span>
             <span className={styles.tickerItem}>Folosește codul <strong>LONGEVITY15</strong> pentru 15% reducere</span>

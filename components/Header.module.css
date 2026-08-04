@@ -12,7 +12,8 @@
 
 .tickerContent {
   display: flex;
-  animation: scrollTicker 30s linear infinite;
+  width: max-content;
+  animation: scrollTicker 90s linear infinite;
 }
 
 .tickerContent:hover {
@@ -21,9 +22,10 @@
 
 .tickerGroup {
   display: flex;
-  gap: 80px;
-  padding-right: 80px;
+  gap: 60px;
+  padding-right: 60px;
   flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .tickerItem {
@@ -31,6 +33,7 @@
   align-items: center;
   gap: 8px;
   letter-spacing: 0.5px;
+  white-space: nowrap;
 }
 
 .tickerItem strong {
@@ -234,11 +237,11 @@
 /* OVERLAY BACKDROP */
 .menuBackdrop {
   position: absolute;
-  top: 100%; /* Incepe exact sub topRow */
+  top: 100%; /* Incepe exact sub topRow/header */
   left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(39, 79, 56, 0.15); /* Tenta eleganta de verde inchis */
+  width: 100%;
+  height: calc(100vh - 100%); /* Acopera doar restul ecranului de sub header, fara a depasi 100vh */
+  background: rgba(39, 79, 56, 0.15);
   backdrop-filter: blur(5px);
   z-index: 80;
   animation: fadeIn 0.3s ease-out forwards;
