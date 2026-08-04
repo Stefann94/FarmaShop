@@ -133,11 +133,11 @@ export default function HeaderClient({ categories, featuredProducts, activePromo
 
                   <div className={`${styles.profileDropdown} ${isProfileOpen ? styles.profileDropdownOpen : ''}`}>
                     <div className={styles.profileDropdownHeader}>
-                      <p>Bun venit pe FarmaShop!</p>
+                      <p>Deblochează oferte și beneficii exclusive!</p>
                     </div>
                     <div className={styles.profileDropdownActions}>
-                      <Link href="/login" className={styles.btnLogin}>Autentificare</Link>
-                      <Link href="/signup" className={styles.btnSignup}>Creare Cont</Link>
+                      <Link href="/login" className={styles.btnLogin} onClick={() => setIsProfileOpen(false)}>Autentificare</Link>
+                      <Link href="/signup" className={styles.btnSignup} onClick={() => setIsProfileOpen(false)}>Creare Cont</Link>
                     </div>
                   </div>
                 </div>
