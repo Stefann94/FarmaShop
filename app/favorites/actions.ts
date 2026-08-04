@@ -1,0 +1,90 @@
+'use server'
+
+import { createClient } from '@/lib/supabase/server'
+import { revalidatePath } from 'next/cache'
+
+export async function fetchFavorites() {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  
+  if (!user) return { items: [] }
+
+  const { data: favItems, error } = await supabase
+    .from('favorites')
+    .select('*')
+    .eq('user_id', user.id)
+    .order('created_at', { ascending: false })
+
+  if (error) {
+    console.error('Fetch Favorites Error:', error)
+    return { items: [] }
+  }
+
+  if (!favItems || favItems.length === 0) {
+    return { items: [] }
+  }
+
+  // Fetch product details
+  const slugs = favItems.map(item => item.product_slug)
+  const { data: products } = await supabase
+    .from('products')
+    .select('slug, name, image_url, price')
+    .in('slug', slugs)
+
+  const productsMap = new Map(products?.map(p => [p.slug, p]))
+
+  const enrichedItems = favItems.map(item => {
+    const product = productsMap.get(item.product_slug)
+    return {
+      ...item,
+      name: product?.name || item.product_slug,
+      image_url: product?.image_url || '/placeholder.png',
+      price: product?.price || 0
+    }
+  })
+
+  return { items: enrichedItems }
+}
+
+export async function toggleFavoriteDB(productSlug: string) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  
+  if (!user) return { error: 'Trebuie să fii autentificat pentru a adăuga la favorite.' }
+
+  // Check if item already exists
+  const { data: existing } = await supabase
+    .from('favorites')
+    .select('id')
+    .eq('user_id', user.id)
+    .eq('product_slug', productSlug)
+    .single()
+
+  if (existing) {
+    // Remove it
+    const { error: removeError } = await supabase
+      .from('favorites')
+      .delete()
+      .eq('id', existing.id)
+      
+    if (removeError) {
+      return { error: `Eroare ștergere: ${removeError.message}` }
+    }
+    revalidatePath('/')
+    return { success: true, action: 'removed' }
+  } else {
+    // Add it
+    const { error: insertError } = await supabase
+      .from('favorites')
+      .insert({
+        user_id: user.id,
+        product_slug: productSlug
+      })
+      
+    if (insertError) {
+      return { error: `Eroare adăugare: ${insertError.message}` }
+    }
+    revalidatePath('/')
+    return { success: true, action: 'added' }
+  }
+}

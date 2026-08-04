@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { CartProvider } from "./context/CartContext";
+import { FavoritesProvider } from "./context/FavoritesContext";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -23,11 +24,13 @@ export default function RootLayout({
   return (
     <html lang="ro">
       <body className={`${outfit.variable}`}>
-        <CartProvider>
-          <Header />
-          {children}
-          <Footer />
-        </CartProvider>
+        <FavoritesProvider>
+          <CartProvider>
+            <Header />
+            {children}
+            <Footer />
+          </CartProvider>
+        </FavoritesProvider>
       </body>
     </html>
   );

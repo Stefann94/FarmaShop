@@ -2,9 +2,11 @@
 
 import React, { useState, Fragment } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import styles from './Header.module.css';
 import { logout } from '@/app/auth/actions';
 import { useCart } from '@/app/context/CartContext';
+import { useFavorites } from '@/app/context/FavoritesContext';
 
 type Category = { id: string; name: string; slug: string; sort_order: number; group_name?: string };
 type Product = { id: string; name: string; slug: string; image_url: string; price: number };
@@ -21,7 +23,9 @@ export default function HeaderClient({ categories, featuredProducts, activePromo
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isFavOpen, setIsFavOpen] = useState(false);
   const { cartCount, cartTotal, isLoading } = useCart();
+  const { favoriteItems, favoriteCount, toggleFavorite } = useFavorites();
 
   // Group categories by their group_name
   const groupedCategories = categories?.reduce((acc, cat) => {
@@ -120,9 +124,43 @@ export default function HeaderClient({ categories, featuredProducts, activePromo
 
               {/* Right side */}
               <div className={styles.rightActions}>
-                <button className={styles.iconBtn} aria-label="Favorite">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-                </button>
+                <div className={styles.favWrapper} onMouseEnter={() => setIsFavOpen(true)} onMouseLeave={() => setIsFavOpen(false)}>
+                  <button className={`${styles.iconBtn} ${isFavOpen ? styles.iconBtnActive : ''}`} aria-label="Favorite">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    {favoriteCount > 0 && (
+                      <span className={styles.favBadge}>{favoriteCount}</span>
+                    )}
+                  </button>
+                  
+                  <div className={`${styles.favDropdown} ${isFavOpen ? styles.favDropdownOpen : ''}`}>
+                    <div className={styles.favHeader}>Ultimele adăugate</div>
+                    <div className={styles.favList}>
+                      {favoriteItems.length === 0 ? (
+                        <div style={{ padding: '20px', textAlign: 'center', color: '#666' }}>Nu ai niciun produs favorit.</div>
+                      ) : (
+                        favoriteItems.slice(0, 4).map(item => (
+                          <div key={item.id} className={styles.favItem}>
+                            <div className={styles.favItemImage}>
+                              <Image src={item.image_url || '/placeholder.png'} alt={item.name || ''} fill style={{ objectFit: 'cover' }} />
+                            </div>
+                            <div className={styles.favItemInfo}>
+                              <div className={styles.favItemName}>{item.name}</div>
+                              <div className={styles.favItemPrice}>{item.price} Lei</div>
+                            </div>
+                            <button aria-label="Șterge de la favorite" onClick={(e) => { e.stopPropagation(); toggleFavorite(item.product_slug) }} style={{ alignSelf: 'center', background: 'none', border: 'none', cursor: 'pointer', color: '#999' }}>
+                              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                            </button>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                    <div className={styles.favFooter}>
+                      <Link href="/account/favorite" className={styles.btnViewAllFavs} onClick={() => setIsFavOpen(false)}>
+                        Vezi toate produsele favorite
+                      </Link>
+                    </div>
+                  </div>
+                </div>
                 <div className={styles.profileWrapper}>
                   <button 
                     className={`${styles.iconBtn} ${isProfileOpen ? styles.iconBtnActive : ''}`} 

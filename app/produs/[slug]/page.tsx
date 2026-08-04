@@ -3,9 +3,10 @@ import Image from 'next/image';
 import { createClient } from '../../../lib/supabase/server';
 import styles from './ProductPage.module.css';
 import ProductCarousel from '../../../components/ProductCarousel';
-import ProductImageZoom from '../../../components/ProductImageZoom';
+import ProductImageZoom from '@/components/ProductImageZoom';
 import FAQAccordion from './FAQAccordion';
-import AddToCartButton from '../../../components/AddToCartButton';
+import AddToCartButton from '@/components/AddToCartButton';
+import FavoriteButton from '@/components/FavoriteButton';
 
 // Generate Metadata for SEO
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
@@ -139,11 +140,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             {/* BUTTONS */}
             <div className={styles.actionsBlock}>
               <AddToCartButton productSlug={product.slug} price={product.price} />
-              <button className={styles.btnFav}>
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                </svg>
-              </button>
+              <FavoriteButton productSlug={product.slug} className={styles.btnFav} />
             </div>
 
             {/* INFO & LOGISTICS */}

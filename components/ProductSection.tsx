@@ -1,6 +1,9 @@
+"use client";
+
 import Image from "next/image";
 import styles from "../app/page.module.css";
 import AddToCartButton from './AddToCartButton';
+import { useFavorites } from '@/app/context/FavoritesContext';
 
 interface Product {
   id: string;
@@ -18,6 +21,8 @@ interface ProductSectionProps {
 }
 
 export default function ProductSection({ title, products, viewAllLink, badgeText }: ProductSectionProps) {
+  const { favoriteItems, toggleFavorite } = useFavorites();
+
   if (!products || products.length === 0) return null;
 
   return (
@@ -33,12 +38,18 @@ export default function ProductSection({ title, products, viewAllLink, badgeText
         </div>
 
         <div className={styles.productsGrid}>
-          {products.map((product) => (
+          {products.map((product) => {
+            const isFav = favoriteItems.some(f => f.product_slug === product.slug);
+            return (
             <div key={product.id} className={styles.productCard}>
               <div className={styles.productImageWrapper}>
                 {badgeText && <div className={styles.productBadge}>{badgeText}</div>}
-                <button className={styles.favoriteBtn} aria-label="Adauga la favorite">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                <button 
+                  className={styles.favoriteBtn} 
+                  aria-label="Adauga la favorite"
+                  onClick={(e) => { e.preventDefault(); toggleFavorite(product.slug); }}
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill={isFav ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
                 </button>
                 <a href={`/produs/${product.slug}`} style={{ display: 'block' }}>
                   <Image 
@@ -63,7 +74,8 @@ export default function ProductSection({ title, products, viewAllLink, badgeText
                 </div>
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
