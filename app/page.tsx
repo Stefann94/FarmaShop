@@ -50,6 +50,25 @@ export default async function Home() {
           badgeText="Bestseller"
         />
 
+        {/* PROMO BANNER (Între Esențiale și Focus) */}
+        <section className={styles.promoBannerSection}>
+          <div className="container">
+            <a href="/produse?filter=promo" className={styles.promoBannerLink}>
+              {/* Folosim un tag standard <img> pentru a evita restricțiile stricte de domenii din Next.js Image */}
+              <img 
+                src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=1200&auto=format&fit=crop" 
+                alt="Promo Banner" 
+                className={styles.promoBannerImage}
+              />
+              <div className={styles.promoBannerOverlay}>
+                <h3>Performanță Mentală Absolută</h3>
+                <p>Descoperă noile extracte standardizate pentru focus și energie curată.</p>
+                <span className={styles.promoBannerBtn}>Vezi Colecția</span>
+              </div>
+            </a>
+          </div>
+        </section>
+
         <ProductSection 
           title={<>Focus & <span>Claritate Mentală</span></>}
           products={focusEnergy || []}
