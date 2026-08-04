@@ -22,9 +22,10 @@
   background: transparent;
   padding: 0;
   border: none;
+  position: -webkit-sticky;
   position: sticky;
-  top: 90px; /* Aliniere mai sus, fix sub meniul principal */
-  height: fit-content;
+  top: 160px;
+  align-self: flex-start;
 }
 
 .sidebarTitle {
