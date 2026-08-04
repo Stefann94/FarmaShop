@@ -4,6 +4,7 @@ import { createClient } from '../../../lib/supabase/server';
 import styles from './ProductPage.module.css';
 import ProductCarousel from '../../../components/ProductCarousel';
 import ProductImageZoom from '../../../components/ProductImageZoom';
+import FAQAccordion from './FAQAccordion';
 
 // Generate Metadata for SEO
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
@@ -255,17 +256,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                 <div className={styles.richBlock}>
                   <h3 className={styles.richTitle}>Întrebări Frecvente</h3>
                   <div className={styles.faqContainer}>
-                    {product.rich_content.faq.map((item: any, idx: number) => (
-                      <details key={idx} className={styles.faqDetails} name="productFaq">
-                        <summary className={styles.faqSummary}>
-                          {item.question}
-                          <span className={styles.faqIcon}></span>
-                        </summary>
-                        <div className={styles.faqAnswer}>
-                          <p>{item.answer}</p>
-                        </div>
-                      </details>
-                    ))}
+                    <FAQAccordion faqs={product.rich_content.faq} />
                   </div>
                 </div>
               )}

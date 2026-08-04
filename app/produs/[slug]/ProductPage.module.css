@@ -410,34 +410,34 @@
   gap: 10px;
 }
 
-.faqDetails {
+.faqItem {
   background-color: #fff;
-  border: 1px solid #dcebdf; /* Verde deschis */
+  border: 2px solid #dcebdf; /* Verde deschis, mai groase conform cerințelor anterioare */
   border-radius: 8px;
   overflow: hidden;
   transition: border-color 0.3s ease;
 }
 
-.faqDetails[open] {
-  border-color: var(--color-primary-dark); /* Verde închis */
+.faqItemOpen {
+  border-color: var(--color-primary-dark); /* Verde închis la deschidere */
 }
 
-.faqSummary {
+.faqSummaryBtn {
+  width: 100%;
+  text-align: left;
   padding: 20px;
   font-weight: 600;
   font-size: 1.1rem;
   color: var(--color-text-main);
+  background: none;
+  border: none;
   cursor: pointer;
-  list-style: none; /* Hide default triangle */
   position: relative;
   transition: background-color 0.2s ease;
+  font-family: inherit;
 }
 
-.faqSummary::-webkit-details-marker {
-  display: none; /* Hide for Safari */
-}
-
-.faqSummary:hover {
+.faqSummaryBtn:hover {
   background-color: #fcfdfc;
 }
 
@@ -471,27 +471,30 @@
   left: 6px;
 }
 
-.faqDetails[open] .faqIcon::after {
+.faqItemOpen .faqIcon::after {
   transform: scaleY(0); /* Turn + into - */
 }
 
-.faqAnswer {
+.faqAnswerWrapper {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.faqItemOpen .faqAnswerWrapper {
+  grid-template-rows: 1fr;
+}
+
+.faqAnswerInner {
+  overflow: hidden;
+}
+
+.faqAnswerInner p {
   padding: 0 20px 20px 20px;
   color: #555;
   line-height: 1.7;
   font-size: 1.05rem;
-  animation: slideDown 0.3s ease-out forwards;
-}
-
-@keyframes slideDown {
-  0% {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  margin: 0;
 }
 
 /* REVIEWS MARQUEE */
