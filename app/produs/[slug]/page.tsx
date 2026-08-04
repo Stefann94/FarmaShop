@@ -171,14 +171,157 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           </div>
         </section>
 
-        {/* FULL WIDTH DESCRIPTION */}
+        {/* FULL WIDTH STORY/DESCRIPTION */}
         <section className={styles.fullDescriptionSection}>
-          <div className={styles.descriptionBlock}>
-            <h3 className={styles.descriptionTitle}>Informații Produs</h3>
-            <p className={styles.descriptionText}>
-              {product.description || "Informațiile detaliate despre acest produs urmează a fi actualizate în curând. Formulele FarmaShop sunt dezvoltate pentru eficiență și puritate maximă."}
-            </p>
-          </div>
+          {product.rich_content ? (
+            <div className={styles.richContentWrapper}>
+              
+              {/* 1. Descriere Extinsă */}
+              {product.rich_content.intro_description && (
+                <div className={styles.richBlock}>
+                  <h3 className={styles.richTitle}>Despre Produs</h3>
+                  <div 
+                    className={styles.richText}
+                    dangerouslySetInnerHTML={{ __html: product.rich_content.intro_description }}
+                  />
+                </div>
+              )}
+
+              {/* 2. Tabel Nutrițional / Ingrediente */}
+              {product.rich_content.ingredients_table && product.rich_content.ingredients_table.length > 0 && (
+                <div className={styles.richBlock}>
+                  <h3 className={styles.richTitle}>Ingrediente & Compoziție</h3>
+                  <div className={styles.tableWrapper}>
+                    <table className={styles.ingredientsTable}>
+                      <thead>
+                        <tr>
+                          <th>Ingredient Activ</th>
+                          <th>Cantitate / Doză</th>
+                          <th>VNR %</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {product.rich_content.ingredients_table.map((row: any, idx: number) => (
+                          <tr key={idx}>
+                            <td>{row.name}</td>
+                            <td>{row.quantity}</td>
+                            <td>{row.vnr || '-'}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+
+              {/* 3. Imagine Secundară Contextuală */}
+              {product.rich_content.content_image && (
+                <div className={styles.richImageWrapper}>
+                  <Image 
+                    src={product.rich_content.content_image} 
+                    alt="Prezentare produs"
+                    fill
+                    className={styles.richImage}
+                  />
+                </div>
+              )}
+
+              {/* 4. Banner Comercial */}
+              {product.rich_content.banner_text && (
+                <div className={styles.richBanner}>
+                  <h4 className={styles.bannerText}>{product.rich_content.banner_text}</h4>
+                </div>
+              )}
+
+              {/* 5. De ce recomandăm? */}
+              {product.rich_content.why_recommend && product.rich_content.why_recommend.length > 0 && (
+                <div className={styles.richBlockCentered}>
+                  <h3 className={styles.richTitle}>De ce recomandăm acest produs?</h3>
+                  <ul className={styles.recommendList}>
+                    {product.rich_content.why_recommend.map((reason: string, idx: number) => (
+                      <li key={idx} className={styles.recommendItem}>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={styles.checkIcon}>
+                          <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>{reason}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* 6. FAQ (Întrebări frecvente) */}
+              {product.rich_content.faq && product.rich_content.faq.length > 0 && (
+                <div className={styles.richBlock}>
+                  <h3 className={styles.richTitle}>Întrebări Frecvente</h3>
+                  <div className={styles.faqContainer}>
+                    {product.rich_content.faq.map((item: any, idx: number) => (
+                      <details key={idx} className={styles.faqDetails} name="productFaq">
+                        <summary className={styles.faqSummary}>
+                          {item.question}
+                          <span className={styles.faqIcon}></span>
+                        </summary>
+                        <div className={styles.faqAnswer}>
+                          <p>{item.answer}</p>
+                        </div>
+                      </details>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* 7. Recenzii Clienți (Infinite Marquee) */}
+              {product.rich_content.reviews && product.rich_content.reviews.length > 0 && (
+                <div className={styles.richBlock}>
+                  <h3 className={styles.richTitle}>Părerile Clienților</h3>
+                  <div className={styles.marqueeContainer}>
+                    <div className={styles.marqueeTrack}>
+                      {/* Generăm 6 seturi identice (grupuri) pentru a ne asigura că acoperim lățimea oricărui ecran, 
+                          chiar dacă produsul are doar 1 sau 2 recenzii în baza de date. 
+                          Deoarece fiecare grup se mișcă la stânga exact cu lățimea sa, bucla va fi perfect infinită. */}
+                      {[...Array(6)].map((_, groupIndex) => (
+                        <div key={`group-${groupIndex}`} className={styles.marqueeGroup} aria-hidden={groupIndex > 0 ? "true" : "false"}>
+                          {product.rich_content.reviews.map((rev: any, idx: number) => (
+                            <div key={`rev-${groupIndex}-${idx}`} className={styles.reviewCard}>
+                              <div className={styles.reviewHeader}>
+                                <div className={styles.reviewStars}>
+                                  {[...Array(5)].map((_, i) => (
+                                    <svg key={i} width="16" height="16" viewBox="0 0 24 24" fill={i < (rev.rating || 5) ? "#FFC107" : "#E0E0E0"} stroke="none">
+                                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                    </svg>
+                                  ))}
+                                </div>
+                                <span className={styles.reviewDate}>{rev.date}</span>
+                              </div>
+                              <div className={styles.reviewAuthorBlock}>
+                                <span className={styles.reviewAuthor}>{rev.author}</span>
+                                <span className={styles.verifiedBadge}>
+                                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                  </svg>
+                                  Cumpărător Verificat
+                                </span>
+                              </div>
+                              <p className={styles.reviewText}>"{rev.comment}"</p>
+                            </div>
+                          ))}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+            </div>
+          ) : (
+            /* FALLBACK Dacă nu există rich_content */
+            <div className={styles.descriptionBlock}>
+              <h3 className={styles.descriptionTitle}>Informații Produs</h3>
+              <p className={styles.descriptionText}>
+                {product.description || "Informațiile detaliate despre acest produs urmează a fi actualizate în curând. Formulele FarmaShop sunt dezvoltate pentru eficiență și puritate maximă."}
+              </p>
+            </div>
+          )}
         </section>
 
         {/* SIMILAR PRODUCTS */}

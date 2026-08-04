@@ -265,7 +265,332 @@
 }
 
 .fullDescriptionSection {
-  margin-bottom: 60px;
+  margin-bottom: 80px;
+}
+
+/* === RICH CONTENT === */
+.richContentWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  width: 100%; /* Să ocupe tot spațiul, începând din stânga */
+}
+
+.richBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Modificăm blocul "De ce recomandăm" să fie centrat */
+.richBlockCentered {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center; /* Centrează conținutul */
+  text-align: center;
+}
+
+.richTitle {
+  font-size: 1.8rem;
+  color: var(--color-primary-dark);
+  font-weight: 700;
+  border-bottom: 2px solid var(--color-primary);
+  padding-bottom: 10px;
+  display: inline-block;
+  align-self: flex-start;
+}
+
+.richBlockCentered .richTitle {
+  align-self: center; /* Centrează doar acest titlu */
+}
+
+.richText {
+  color: #444;
+  line-height: 1.8;
+  font-size: 1.1rem;
+}
+
+.richText p {
+  margin-bottom: 15px;
+}
+
+/* TABLE */
+.tableWrapper {
+  width: 100%;
+  overflow-x: auto;
+  border: 2px solid #d4ddd7; /* Margini mai pronunțate */
+  border-radius: 0; /* Pătrățos */
+}
+
+.ingredientsTable {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 1.05rem;
+}
+
+.ingredientsTable th,
+.ingredientsTable td {
+  padding: 15px 20px;
+  border: 1px solid #d4ddd7; /* Linii mai pronunțate între celule */
+}
+
+.ingredientsTable th {
+  background-color: #6a9c78; /* Verde mai deschis */
+  color: white;
+  font-weight: 600;
+}
+
+.ingredientsTable td {
+  background-color: #ffffff; /* Toate rândurile albe */
+}
+
+/* IMAGE */
+.richImageWrapper {
+  position: relative;
+  width: 100%;
+  max-width: 800px; /* Păstrăm pe mijloc, limitând lățimea */
+  margin: 0 auto; /* Centrare */
+  aspect-ratio: 16/9;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.richImage {
+  object-fit: cover;
+}
+
+/* BANNER */
+.richBanner {
+  background-color: #f0f7f2; /* Verde pal deschis */
+  border: 1px solid #dcebdf; /* Chenar fin ton în ton */
+  border-radius: 8px; /* Mai puțin rotunjit */
+  padding: 20px 30px; /* Mult mai subțire */
+  text-align: center;
+  max-width: 800px; /* Mai mic */
+  margin: 0 auto; /* Centrat */
+}
+
+.bannerText {
+  font-size: 1.15rem; /* Text mai mic, nu țipător */
+  color: var(--color-text-main); /* Text normal, nu alb */
+  font-weight: 600;
+}
+
+/* RECOMMENDATIONS */
+.recommendList {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  text-align: left; /* Textul recomandărilor în sine rămâne aliniat la stânga pentru citire, dar blocul e centrat */
+}
+
+.recommendItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  font-size: 1.1rem;
+  color: #333;
+  line-height: 1.6;
+}
+
+.checkIcon {
+  color: var(--color-primary);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* FAQ (Accordion) */
+.faqContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.faqDetails {
+  background-color: #fff;
+  border: 1px solid #dcebdf; /* Verde deschis */
+  border-radius: 8px;
+  overflow: hidden;
+  transition: border-color 0.3s ease;
+}
+
+.faqDetails[open] {
+  border-color: var(--color-primary-dark); /* Verde închis */
+}
+
+.faqSummary {
+  padding: 20px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--color-text-main);
+  cursor: pointer;
+  list-style: none; /* Hide default triangle */
+  position: relative;
+  transition: background-color 0.2s ease;
+}
+
+.faqSummary::-webkit-details-marker {
+  display: none; /* Hide for Safari */
+}
+
+.faqSummary:hover {
+  background-color: #fcfdfc;
+}
+
+.faqIcon {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+}
+
+.faqIcon::before, .faqIcon::after {
+  content: '';
+  position: absolute;
+  background-color: var(--color-primary);
+  transition: transform 0.3s ease;
+}
+
+.faqIcon::before {
+  width: 14px;
+  height: 2px;
+  top: 6px;
+  left: 0;
+}
+
+.faqIcon::after {
+  width: 2px;
+  height: 14px;
+  top: 0;
+  left: 6px;
+}
+
+.faqDetails[open] .faqIcon::after {
+  transform: scaleY(0); /* Turn + into - */
+}
+
+.faqAnswer {
+  padding: 0 20px 20px 20px;
+  color: #555;
+  line-height: 1.7;
+  font-size: 1.05rem;
+  animation: slideDown 0.3s ease-out forwards;
+}
+
+@keyframes slideDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* REVIEWS MARQUEE */
+.marqueeContainer {
+  overflow: hidden;
+  width: 100%;
+  display: flex;
+  -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+  padding: 10px 0; /* Spațiu pentru shadow */
+}
+
+.marqueeTrack {
+  display: flex;
+  width: max-content;
+}
+
+.marqueeGroup {
+  display: flex;
+  gap: 20px;
+  animation: scrollMarquee 30s linear infinite;
+  width: max-content;
+  flex-shrink: 0;
+  padding-right: 20px; /* Acesta este spațiul dintre grupuri (egal cu gap) */
+}
+
+.marqueeTrack:hover .marqueeGroup {
+  animation-play-state: paused; /* Pauză la hover */
+}
+
+@keyframes scrollMarquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); } /* Se mută exact cu lățimea unui grup */
+}
+
+.reviewCard {
+  width: 350px;
+  flex-shrink: 0;
+  background-color: #fff;
+  border: 2px solid #dcebdf; /* Verde deschis, mai groase */
+  border-radius: 12px;
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.reviewCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+}
+
+.reviewHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.reviewStars {
+  display: flex;
+  gap: 2px;
+}
+
+.reviewDate {
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.reviewAuthorBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.reviewAuthor {
+  font-weight: 700;
+  color: var(--color-text-main);
+  font-size: 1.1rem;
+}
+
+.verifiedBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  background-color: #eaf3ed;
+  padding: 4px 8px;
+  border-radius: 4px;
+  align-self: flex-start;
+}
+
+.reviewText {
+  color: #444;
+  line-height: 1.6;
+  font-style: italic;
 }
 
 /* === DESCRIPTION === */
