@@ -5,6 +5,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { CartProvider } from "./context/CartContext";
 import { FavoritesProvider } from "./context/FavoritesContext";
+import ScrollToTop from "@/components/ScrollToTop";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -24,6 +25,7 @@ export default function RootLayout({
   return (
     <html lang="ro">
       <body className={`${outfit.variable}`}>
+        <ScrollToTop />
         <FavoritesProvider>
           <CartProvider>
             <Header />

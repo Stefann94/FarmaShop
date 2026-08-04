@@ -155,7 +155,7 @@ export default function HeaderClient({ categories, featuredProducts, activePromo
                       )}
                     </div>
                     <div className={styles.favFooter}>
-                      <Link href="/account/favorite" className={styles.btnViewAllFavs} onClick={() => setIsFavOpen(false)}>
+                      <Link href="/account/favorite" className={styles.btnViewAllFavs} onClick={() => { setIsFavOpen(false); window.scrollTo(0, 0); }}>
                         Vezi toate produsele favorite
                       </Link>
                     </div>
