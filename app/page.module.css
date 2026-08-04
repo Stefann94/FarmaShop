@@ -456,6 +456,9 @@
 
 .productInfo {
   padding: 0 10px 10px;
+  display: flex;
+  flex-direction: column;
+  flex: 1; /* Ocupă tot spațiul rămas din card */
 }
 
 .productName {
@@ -480,6 +483,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: auto; /* Împinge footer-ul mereu jos de tot */
 }
 
 .productPrice {
@@ -642,5 +646,65 @@
 @media (max-width: 768px) {
   .promoBannerLink {
     aspect-ratio: 16/9;
+  }
+}
+
+/* TRUST BADGES SECTION */
+.trustBadgesSection {
+  padding: 30px 0 60px 0;
+  background-color: #ffffff;
+  width: 100%;
+}
+
+.trustGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  text-align: center;
+  background-color: #f4f8f1; /* Verde foarte deschis pal */
+  border-radius: 20px;
+  padding: 40px 20px;
+}
+
+.trustItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+}
+
+.trustIcon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 18px;
+  color: var(--color-primary); /* Verde clasic pentru iconițe */
+}
+
+.trustTitle {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  margin-bottom: 10px;
+  color: var(--color-primary-dark);
+}
+
+.trustDesc {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: #555555;
+  line-height: 1.4;
+}
+
+@media (max-width: 900px) {
+  .trustGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px 20px;
+  }
+}
+
+@media (max-width: 600px) {
+  .trustGrid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding: 30px 20px;
   }
 }
