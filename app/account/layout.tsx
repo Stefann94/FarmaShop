@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server';
+import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import SidebarClient from './SidebarClient';
 import styles from './Account.module.css';
