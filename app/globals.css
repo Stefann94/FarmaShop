@@ -36,7 +36,6 @@ html, body {
   color: var(--color-text-main);
   background-color: #f0f5e9;
   line-height: 1.6;
-  scroll-behavior: smooth;
 }
 
 h1, h2, h3, h4, h5, h6 {

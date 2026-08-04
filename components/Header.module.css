@@ -219,8 +219,121 @@
 }
 
 .cartTotal {
-  font-weight: 700;
+  font-weight: 600;
   font-size: 0.95rem;
+}
+
+/* PROFILE DROPDOWN */
+.profileWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.profileDropdown {
+  position: absolute;
+  top: 100%;
+  right: -10px;
+  margin-top: 12px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12); /* Umbră mai pronunțată */
+  width: 250px;
+  padding: 20px;
+  z-index: 101; /* Peste backdrop */
+  border: 2px solid #2E7D32; /* Ramă verde smarald */
+  
+  /* Starea închisă */
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+              transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+              visibility 0.25s;
+}
+
+.profileDropdownOpen {
+  /* Starea deschisă */
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.profileBackdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  cursor: default;
+}
+
+/* Mica săgeată orientată în sus pentru dropdown */
+.profileDropdown::before {
+  content: '';
+  position: absolute;
+  top: -7px;
+  right: 18px;
+  width: 12px;
+  height: 12px;
+  background-color: #fff;
+  border-left: 2px solid #2E7D32; /* Sincronizat cu rama verde */
+  border-top: 2px solid #2E7D32;
+  transform: rotate(45deg);
+}
+
+.profileDropdownHeader {
+  margin-bottom: 15px;
+  text-align: center;
+  border-bottom: 1px solid #f0f5f1;
+  padding-bottom: 12px;
+}
+
+.profileDropdownHeader p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #222;
+  font-weight: 700; /* Titlu mai îngroșat */
+}
+
+.profileDropdownActions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.btnLogin, .btnSignup {
+  display: block;
+  text-align: center;
+  padding: 10px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.btnLogin {
+  background-color: #2E7D32; /* Verde vibrant */
+  color: #fff;
+  border: 2px solid transparent;
+}
+
+.btnLogin:hover {
+  background-color: #1B5E20;
+}
+
+.btnSignup {
+  background-color: #fff; /* Fundal alb */
+  color: #2E7D32; /* Text verde aprins */
+  border: 2px solid #2E7D32; /* Ramă verde aprins */
+}
+
+.btnSignup:hover {
+  background-color: #f0f8f1;
+  border-color: #1B5E20;
+  color: #1B5E20;
 }
 
 .cartBadge {
