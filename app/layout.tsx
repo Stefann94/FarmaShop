@@ -6,6 +6,7 @@ import Footer from "../components/Footer";
 import { CartProvider } from "./context/CartContext";
 import { FavoritesProvider } from "./context/FavoritesContext";
 import ScrollToTop from "@/components/ScrollToTop";
+import { createClient } from '@/lib/supabase/server';
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -17,17 +18,21 @@ export const metadata: Metadata = {
   description: "Investește Astăzi în Ziua de Mâine. Suplimente alimentare premium pentru vitalitate și funcția cognitivă.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  const userKey = user?.id || 'guest';
+
   return (
     <html lang="ro">
       <body className={`${outfit.variable}`}>
         <ScrollToTop />
-        <FavoritesProvider>
-          <CartProvider>
+        <FavoritesProvider key={userKey}>
+          <CartProvider key={userKey}>
             <Header />
             {children}
             <Footer />
