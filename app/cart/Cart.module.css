@@ -31,6 +31,7 @@
   border-radius: 12px;
   padding: 20px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+  border: 1.5px solid #c8d6cb;
 }
 
 .freeShippingText {
@@ -77,6 +78,7 @@
   border-radius: 12px;
   padding: 20px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+  border: 1.5px solid #c8d6cb;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -239,6 +241,7 @@
   border-radius: 12px;
   padding: 25px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+  border: 1.5px solid #c8d6cb;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -379,6 +382,7 @@
   background: white;
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+  border: 1.5px solid #c8d6cb;
 }
 
 .emptyIcon {
