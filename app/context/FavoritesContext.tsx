@@ -17,6 +17,7 @@ interface FavoritesContextType {
   isLoading: boolean
   toggleFavorite: (productSlug: string) => Promise<{ error?: string; success?: boolean; action?: string }>
   refreshFavorites: () => Promise<void>
+  clearFavorites: () => void
 }
 
 const FavoritesContext = createContext<FavoritesContextType | undefined>(undefined)
@@ -44,13 +45,18 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
     return result
   }
 
+  const clearFavorites = () => {
+    setFavoriteItems([])
+  }
+
   return (
     <FavoritesContext.Provider value={{
       favoriteItems,
       favoriteCount: favoriteItems.length,
       isLoading,
       toggleFavorite,
-      refreshFavorites
+      refreshFavorites,
+      clearFavorites
     }}>
       {children}
     </FavoritesContext.Provider>

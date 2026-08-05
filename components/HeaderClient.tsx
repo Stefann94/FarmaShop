@@ -24,8 +24,8 @@ export default function HeaderClient({ categories, featuredProducts, activePromo
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isFavOpen, setIsFavOpen] = useState(false);
-  const { cartCount, cartTotal, isLoading } = useCart();
-  const { favoriteItems, favoriteCount, toggleFavorite } = useFavorites();
+  const { cartCount, cartTotal, isLoading, clearCart } = useCart();
+  const { favoriteItems, favoriteCount, toggleFavorite, clearFavorites } = useFavorites();
 
   // Group categories by their group_name
   const groupedCategories = categories?.reduce((acc, cat) => {
@@ -34,6 +34,13 @@ export default function HeaderClient({ categories, featuredProducts, activePromo
     acc[group].push(cat);
     return acc;
   }, {} as Record<string, Category[]>) || {};
+
+  const handleLogout = async () => {
+    setIsProfileOpen(false);
+    clearCart();
+    clearFavorites();
+    await logout();
+  };
 
   return (
     <>
@@ -182,7 +189,7 @@ export default function HeaderClient({ categories, featuredProducts, activePromo
                         </div>
                         <div className={styles.profileDropdownActions}>
                           <Link href="/account" className={styles.btnLogin} onClick={() => setIsProfileOpen(false)}>Contul meu</Link>
-                          <button onClick={() => { setIsProfileOpen(false); logout(); }} className={styles.btnSignup}>Deconectare</button>
+                          <button onClick={handleLogout} className={styles.btnSignup}>Deconectare</button>
                         </div>
                       </>
                     ) : (
