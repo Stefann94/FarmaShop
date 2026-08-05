@@ -17,6 +17,7 @@ interface Product {
   is_bestseller?: boolean;
   brand?: string;
   created_at?: string;
+  tags?: string[];
 }
 
 interface Category {
