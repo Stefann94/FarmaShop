@@ -571,6 +571,151 @@
   }
 }
 
+/* DISCOVER CARDS - "Descoperă după nevoie" */
+.discoverCardsSection {
+  padding: 40px 0 60px 0;
+  background-color: #ffffff;
+  width: 100%;
+}
+
+.discoverSectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.discoverSectionTitle {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 3vw, 2.8rem);
+  color: var(--color-primary-dark);
+  margin: 0;
+  line-height: 1.1;
+}
+
+.discoverSectionTitle span {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--color-accent-dark);
+}
+
+.discoverCardsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+}
+
+.discoverCard {
+  background-color: #ffffff;
+  border-radius: 16px;
+  border: 1px solid rgba(39, 79, 56, 0.35);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  cursor: default; /* Doar butonul și imaginea vor avea cursor pointer */
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.discoverCard:hover {
+  border-color: rgba(39, 79, 56, 0.9);
+  box-shadow: 0 0 0 1px rgba(39, 79, 56, 0.9);
+}
+
+.discoverCardImageWrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/10;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.discoverCardImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.9;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+}
+
+.discoverCardImageWrapper:hover .discoverCardImage {
+  transform: scale(1.05);
+  opacity: 1;
+}
+
+.discoverCardContent {
+  padding: 25px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-grow: 1;
+}
+
+.discoverCardLabel {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--color-accent-dark);
+}
+
+.discoverCardTitle {
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--color-primary-dark);
+  line-height: 1.2;
+}
+
+.discoverCardSubtitle {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: #555555;
+  line-height: 1.4;
+  margin-bottom: 5px;
+}
+
+.discoverCardBtn {
+  display: inline-block;
+  margin-top: auto;
+  padding: 10px 20px;
+  background-color: var(--color-primary);
+  color: #ffffff;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.9rem;
+  border-radius: 30px;
+  border: none;
+  text-align: center;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  cursor: pointer;
+  width: fit-content;
+}
+
+.discoverCardBtn:hover {
+  background-color: var(--color-accent-dark);
+  color: #ffffff;
+}
+
+@media (max-width: 900px) {
+  .discoverCardsGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+  }
+}
+
+@media (max-width: 600px) {
+  .discoverCardsGrid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .discoverCardImageWrapper {
+    aspect-ratio: 16/9;
+  }
+}
+
 /* PROMO BANNER - SAFE CSS */
 .promoBannerSection {
   padding: 40px 0 20px 0;

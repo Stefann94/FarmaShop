@@ -69,7 +69,6 @@ export default async function Home() {
         <section className={styles.promoBannerSection}>
           <div className="container">
             <a href="/produse?filter=promo" className={styles.promoBannerLink}>
-              {/* Folosim un tag standard <img> pentru a evita restricțiile stricte de domenii din Next.js Image */}
               <img 
                 src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=1200&auto=format&fit=crop" 
                 alt="Promo Banner" 
@@ -90,41 +89,67 @@ export default async function Home() {
           viewAllLink="/produse?filter=focus"
         />
 
-        {/* TRUST BADGES SECTION */}
-        <section className={styles.trustBadgesSection}>
+        {/* DISCOVER CARDS - "Descoperă după nevoie" */}
+        <section className={styles.discoverCardsSection}>
           <div className="container">
-            <div className={styles.trustGrid}>
-              <div className={styles.trustItem}>
-                <svg className={styles.trustIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path>
-                </svg>
-                <h4 className={styles.trustTitle}>100% Naturale</h4>
-                <p className={styles.trustDesc}>Ingrediente pure, extrase din plante medicinale, fără excipienți sintetici.</p>
-              </div>
-              
-              <div className={styles.trustItem}>
-                <svg className={styles.trustIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                </svg>
-                <h4 className={styles.trustTitle}>Fără Aditivi</h4>
-                <p className={styles.trustDesc}>Formule curate, încapsulate fără aditivi de umplutură sau conservanți.</p>
-              </div>
+            <div className={styles.discoverSectionHeader}>
+              <h2 className={styles.discoverSectionTitle}>
+                Descoperă <span>după obiectiv</span>
+              </h2>
+            </div>
+            <div className={styles.discoverCardsGrid}>
 
-              <div className={styles.trustItem}>
-                <svg className={styles.trustIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                </svg>
-                <h4 className={styles.trustTitle}>Standard Premium</h4>
-                <p className={styles.trustDesc}>Dezvoltate pe baza ultimelor studii din domeniul longevității și anti-aging.</p>
-              </div>
+              <a href="/categorie/energie-focus" className={styles.discoverCard}>
+                <div className={styles.discoverCardImageWrapper}>
+                  <img 
+                    src="/images/cards/energie-focus.png" 
+                    alt="Energie și Focus" 
+                    className={styles.discoverCardImage}
+                    loading="lazy"
+                  />
+                </div>
+                <div className={styles.discoverCardContent}>
+                  <span className={styles.discoverCardLabel}>Performanță</span>
+                  <h3 className={styles.discoverCardTitle}>Energie & Focus</h3>
+                  <p className={styles.discoverCardSubtitle}>Concentrare maximă și energie curată, fără crash.</p>
+                  <span className={styles.discoverCardBtn}>Descoperă</span>
+                </div>
+              </a>
 
-              <div className={styles.trustItem}>
-                <svg className={styles.trustIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M9 2v2"></path><path d="M15 2v2"></path><path d="M12 2v2"></path><path d="M5.13 14.12 3 22h18l-2.13-7.88a1.98 1.98 0 0 0-1.87-1.46H7c-.89 0-1.68.6-1.87 1.46Z"></path><path d="M21 22v-2"></path><path d="M3 22v-2"></path><path d="M10 10V6a2 2 0 1 1 4 0v4"></path>
-                </svg>
-                <h4 className={styles.trustTitle}>Testat în Laborator</h4>
-                <p className={styles.trustDesc}>Calitate certificată și riguros testată de laboratoare terțe independente.</p>
-              </div>
+              <a href="/categorie/anti-aging" className={styles.discoverCard}>
+                <div className={styles.discoverCardImageWrapper}>
+                  <img 
+                    src="/images/cards/anti-aging.png" 
+                    alt="Anti-Aging și Longevitate" 
+                    className={styles.discoverCardImage}
+                    loading="lazy"
+                  />
+                </div>
+                <div className={styles.discoverCardContent}>
+                  <span className={styles.discoverCardLabel}>Longevitate</span>
+                  <h3 className={styles.discoverCardTitle}>Anti-Aging</h3>
+                  <p className={styles.discoverCardSubtitle}>Formule avansate pentru regenerare celulară și vitalitate.</p>
+                  <span className={styles.discoverCardBtn}>Descoperă</span>
+                </div>
+              </a>
+
+              <a href="/categorie/imunitate" className={styles.discoverCard}>
+                <div className={styles.discoverCardImageWrapper}>
+                  <img 
+                    src="/images/cards/imunitate.png" 
+                    alt="Imunitate și Detox" 
+                    className={styles.discoverCardImage}
+                    loading="lazy"
+                  />
+                </div>
+                <div className={styles.discoverCardContent}>
+                  <span className={styles.discoverCardLabel}>Protecție</span>
+                  <h3 className={styles.discoverCardTitle}>Imunitate & Detox</h3>
+                  <p className={styles.discoverCardSubtitle}>Susține apărarea naturală a organismului tău.</p>
+                  <span className={styles.discoverCardBtn}>Descoperă</span>
+                </div>
+              </a>
+
             </div>
           </div>
         </section>
