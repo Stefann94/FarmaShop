@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, Fragment, useEffect } from 'react';
+import React, { useState, Fragment, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter, usePathname } from 'next/navigation';
@@ -38,8 +38,24 @@ export default function HeaderClient({ categories, featuredProducts, activePromo
 
   const router = useRouter();
   const pathname = usePathname();
-  const { cartCount, cartTotal, isLoading, clearCart } = useCart();
+  const { cartItems, cartCount, cartTotal, isLoading, clearCart, removeFromCart } = useCart();
   const { favoriteItems, favoriteCount, toggleFavorite, clearFavorites } = useFavorites();
+
+  const favListRef = useRef<HTMLDivElement>(null);
+  const cartListRef = useRef<HTMLDivElement>(null);
+
+  // Reset scroll position when popups open
+  useEffect(() => {
+    if (isFavOpen && favListRef.current) {
+      favListRef.current.scrollTop = 0;
+    }
+  }, [isFavOpen]);
+
+  useEffect(() => {
+    if (isCartOpen && cartListRef.current) {
+      cartListRef.current.scrollTop = 0;
+    }
+  }, [isCartOpen]);
 
   // Close all menus when navigating to a new page
   useEffect(() => {
@@ -206,11 +222,11 @@ export default function HeaderClient({ categories, featuredProducts, activePromo
                   
                   <div className={`${styles.favDropdown} ${isFavOpen ? styles.favDropdownOpen : ''}`}>
                     <div className={styles.favHeader}>Ultimele adăugate</div>
-                    <div className={styles.favList}>
+                    <div className={styles.favList} ref={favListRef}>
                       {favoriteItems.length === 0 ? (
                         <div style={{ padding: '20px', textAlign: 'center', color: '#666' }}>Nu ai niciun produs favorit.</div>
                       ) : (
-                        favoriteItems.slice(0, 4).map(item => (
+                        favoriteItems.map(item => (
                           <Link 
                             href={`/produs/${item.product_slug}`} 
                             key={item.id} 
@@ -303,33 +319,53 @@ export default function HeaderClient({ categories, featuredProducts, activePromo
                     <div className={styles.profileBackdrop} onClick={() => setIsCartOpen(false)}></div>
                   )}
 
-                  <div className={`${styles.profileDropdown} ${isCartOpen ? styles.profileDropdownOpen : ''}`}>
+                  <div className={`${styles.favDropdown} ${isCartOpen ? styles.favDropdownOpen : ''}`}>
                     {!user ? (
-                      <>
-                        <div className={styles.profileDropdownHeader}>
-                          <p>Trebuie să fii autentificat pentru a folosi coșul de cumpărături.</p>
+                      <div className={styles.favHeader} style={{ padding: '20px' }}>
+                        Trebuie să fii autentificat pentru a folosi coșul.
+                        <div style={{ marginTop: '15px' }}>
+                          <Link href="/login" className={styles.btnViewAllFavs} onClick={() => setIsCartOpen(false)}>Autentificare</Link>
                         </div>
-                        <div className={styles.profileDropdownActions}>
-                          <Link href="/login" className={styles.btnLogin} onClick={() => setIsCartOpen(false)}>Autentificare</Link>
-                          <Link href="/signup" className={styles.btnSignup} onClick={() => setIsCartOpen(false)}>Creare Cont</Link>
-                        </div>
-                      </>
+                      </div>
                     ) : cartCount === 0 ? (
-                      <>
-                        <div className={styles.profileDropdownHeader}>
-                          <p>Coșul tău este momentan gol. Explorează produsele noastre premium!</p>
+                      <div className={styles.favHeader} style={{ padding: '20px' }}>
+                        Coșul tău este gol.
+                        <div style={{ marginTop: '15px' }}>
+                          <Link href="/" className={styles.btnViewAllFavs} onClick={() => setIsCartOpen(false)}>Înapoi la magazin</Link>
                         </div>
-                        <div className={styles.profileDropdownActions}>
-                          <Link href="/" className={styles.btnLogin} onClick={() => setIsCartOpen(false)}>Înapoi la magazin</Link>
-                        </div>
-                      </>
+                      </div>
                     ) : (
                       <>
-                        <div className={styles.profileDropdownHeader}>
-                          <p>Ai <strong>{cartCount}</strong> produse în valoare de <strong>{cartTotal.toFixed(2)} Lei</strong>.</p>
+                        <div className={styles.favHeader}>Produse în coș ({cartCount})</div>
+                        <div className={styles.favList} ref={cartListRef}>
+                          {cartItems.map(item => (
+                            <Link 
+                              href={`/produs/${item.product_slug}`} 
+                              key={item.id} 
+                              className={styles.favItem}
+                              style={{ textDecoration: 'none', color: 'inherit' }}
+                              onClick={() => setIsCartOpen(false)}
+                            >
+                              <div className={styles.favItemImage}>
+                                <Image src={item.image_url || '/placeholder.png'} alt={item.name || ''} fill style={{ objectFit: 'cover' }} />
+                              </div>
+                              <div className={styles.favItemInfo}>
+                                <div className={styles.favItemName}>{item.name}</div>
+                                <div className={styles.favItemPrice}>{item.price} Lei <span style={{fontSize: '0.8rem', color: '#666', fontWeight: 500}}>x {item.quantity}</span></div>
+                              </div>
+                              <button aria-label="Șterge din coș" onClick={(e) => { e.preventDefault(); e.stopPropagation(); removeFromCart(item.product_slug) }} style={{ alignSelf: 'center', background: 'none', border: 'none', cursor: 'pointer', color: '#999', zIndex: 2 }}>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                              </button>
+                            </Link>
+                          ))}
                         </div>
-                        <div className={styles.profileDropdownActions}>
-                          <Link href="/cart" className={styles.btnSignup} onClick={() => setIsCartOpen(false)}>Vezi coșul</Link>
+                        <div className={styles.favFooter}>
+                          <div style={{ textAlign: 'center', marginBottom: '15px', fontSize: '1.05rem', color: '#222' }}>
+                            Total: <strong>{cartTotal.toFixed(2)} Lei</strong>
+                          </div>
+                          <Link href="/cart" className={styles.btnViewAllFavs} onClick={() => setIsCartOpen(false)}>
+                            Vezi coșul
+                          </Link>
                         </div>
                       </>
                     )}
