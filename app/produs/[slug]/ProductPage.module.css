@@ -477,7 +477,7 @@
 }
 
 .richImage {
-  object-fit: cover;
+  object-fit: contain;
 }
 
 /* BANNER */
