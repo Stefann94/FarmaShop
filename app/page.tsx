@@ -61,7 +61,7 @@ export default async function Home() {
         <ProductSection 
           title={<>Esențiale <span>pentru</span> Longevitate</>}
           products={essentials || []}
-          viewAllLink="/categorie/esentiale"
+          viewAllLink="/categorie/longevitate"
           badgeText="Bestseller"
         />
 
@@ -157,7 +157,6 @@ export default async function Home() {
         <ProductSection 
           title={<>Protocoale & <span>Pachete Premium</span></>}
           products={premiumBundles || []}
-          viewAllLink="/categorie/pachete"
           badgeText="-15% Extra"
         />
         
