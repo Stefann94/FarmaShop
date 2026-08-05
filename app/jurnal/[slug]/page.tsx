@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { getJournalArticleBySlug } from '../actions';
 import styles from './Article.module.css';
 import ProductSection from '@/components/ProductSection';
+import { createClient } from '@/lib/supabase/server';
 
 export const revalidate = 60;
 
@@ -32,6 +33,12 @@ export default async function ArticlePage({ params }: { params: { slug: string }
   if (!article) {
     notFound();
   }
+
+  const supabase = await createClient();
+  const { data: recommendedProducts } = await supabase
+    .from('products')
+    .select('id, name, slug, image_url, price')
+    .limit(4);
 
   // Format paragraphs from plain text content
   const paragraphs = article.content.split('\n\n').filter(p => p.trim() !== '');
@@ -108,7 +115,10 @@ export default async function ArticlePage({ params }: { params: { slug: string }
 
       {/* Recomandari produse */}
       <div className={styles.recommendedSection}>
-        <ProductSection title="Produse recomandate pentru tine" filter="Bestseller" />
+        <ProductSection 
+          title="Produse recomandate pentru tine" 
+          products={recommendedProducts || []} 
+        />
       </div>
     </div>
   );
