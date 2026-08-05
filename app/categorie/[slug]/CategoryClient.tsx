@@ -39,10 +39,41 @@ export default function CategoryClient({ category, products, allCategories }: Ca
   const [sortBy, setSortBy] = useState<SortOption>('popular');
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  // Sort products client-side
+  // Filter states
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 500]);
+  const [brandSearchTerm, setBrandSearchTerm] = useState('');
+
+  // Filter and Sort products client-side
   const sortedProducts = useMemo(() => {
     if (!products) return [];
-    const sorted = [...products];
+    
+    // 1. Filter
+    const filtered = products.filter(p => {
+      // Tags filter
+      if (selectedTags.length > 0) {
+        const hasBestseller = selectedTags.includes('Bestseller') && p.is_bestseller;
+        const hasProdusNou = selectedTags.includes('Produs Nou') && p.tags?.includes('Produs Nou');
+        const hasTransportGratuit = selectedTags.includes('Transport Gratuit') && p.tags?.includes('Transport Gratuit');
+        
+        // Match ANY selected tag
+        if (!hasBestseller && !hasProdusNou && !hasTransportGratuit) return false;
+      }
+
+      // Brands filter
+      if (selectedBrands.length > 0) {
+        if (!p.brand || !selectedBrands.includes(p.brand)) return false;
+      }
+
+      // Price filter
+      if (p.price < priceRange[0] || p.price > priceRange[1]) return false;
+
+      return true;
+    });
+
+    // 2. Sort
+    const sorted = [...filtered];
     switch (sortBy) {
       case 'price_asc':
         sorted.sort((a, b) => a.price - b.price);
@@ -64,7 +95,7 @@ export default function CategoryClient({ category, products, allCategories }: Ca
         break;
     }
     return sorted;
-  }, [products, sortBy]);
+  }, [products, sortBy, selectedTags, selectedBrands, priceRange]);
 
   // Dynamic Tags calculation
   const tagsCount = useMemo(() => {
@@ -166,17 +197,29 @@ export default function CategoryClient({ category, products, allCategories }: Ca
               </div>
               <div className={styles.filterList}>
                 <label className={styles.filterItem}>
-                  <span className={styles.customCheckbox} />
+                  <input type="checkbox" style={{ display: 'none' }} checked={selectedTags.includes('Bestseller')} onChange={(e) => {
+                    if (e.target.checked) setSelectedTags([...selectedTags, 'Bestseller']);
+                    else setSelectedTags(selectedTags.filter(t => t !== 'Bestseller'));
+                  }} />
+                  <span className={`${styles.customCheckbox} ${selectedTags.includes('Bestseller') ? styles.customCheckboxChecked : ''}`} />
                   Bestseller
-                  <span className={styles.filterItemCount}>({products?.filter(p => p.is_bestseller || (p.tags && Array.isArray(p.tags) && p.tags.includes('Bestseller'))).length || 0})</span>
+                  <span className={styles.filterItemCount}>({products?.filter(p => p.is_bestseller).length || 0})</span>
                 </label>
                 <label className={styles.filterItem}>
-                  <span className={styles.customCheckbox} />
+                  <input type="checkbox" style={{ display: 'none' }} checked={selectedTags.includes('Produs Nou')} onChange={(e) => {
+                    if (e.target.checked) setSelectedTags([...selectedTags, 'Produs Nou']);
+                    else setSelectedTags(selectedTags.filter(t => t !== 'Produs Nou'));
+                  }} />
+                  <span className={`${styles.customCheckbox} ${selectedTags.includes('Produs Nou') ? styles.customCheckboxChecked : ''}`} />
                   Produs Nou
                   <span className={styles.filterItemCount}>({tagsCount.new})</span>
                 </label>
                 <label className={styles.filterItem}>
-                  <span className={styles.customCheckbox} />
+                  <input type="checkbox" style={{ display: 'none' }} checked={selectedTags.includes('Transport Gratuit')} onChange={(e) => {
+                    if (e.target.checked) setSelectedTags([...selectedTags, 'Transport Gratuit']);
+                    else setSelectedTags(selectedTags.filter(t => t !== 'Transport Gratuit'));
+                  }} />
+                  <span className={`${styles.customCheckbox} ${selectedTags.includes('Transport Gratuit') ? styles.customCheckboxChecked : ''}`} />
                   Transport Gratuit
                   <span className={styles.filterItemCount}>({tagsCount.freeShipping})</span>
                 </label>
@@ -201,12 +244,20 @@ export default function CategoryClient({ category, products, allCategories }: Ca
                   type="text"
                   placeholder="Caută brand..."
                   className={styles.brandSearchInput}
+                  value={brandSearchTerm}
+                  onChange={(e) => setBrandSearchTerm(e.target.value)}
                 />
               </div>
               <div className={styles.brandList}>
-                {dynamicBrands.map((brandObj) => (
+                {dynamicBrands
+                  .filter(b => b.name.toLowerCase().includes(brandSearchTerm.toLowerCase()))
+                  .map((brandObj) => (
                   <label key={brandObj.name} className={styles.filterItem}>
-                    <span className={styles.customCheckbox} />
+                    <input type="checkbox" style={{ display: 'none' }} checked={selectedBrands.includes(brandObj.name)} onChange={(e) => {
+                      if (e.target.checked) setSelectedBrands([...selectedBrands, brandObj.name]);
+                      else setSelectedBrands(selectedBrands.filter(b => b !== brandObj.name));
+                    }} />
+                    <span className={`${styles.customCheckbox} ${selectedBrands.includes(brandObj.name) ? styles.customCheckboxChecked : ''}`} />
                     {brandObj.name}
                     <span className={styles.filterItemCount}>({brandObj.count})</span>
                   </label>
@@ -224,11 +275,19 @@ export default function CategoryClient({ category, products, allCategories }: Ca
               </div>
               <div className={styles.priceRangeWrapper}>
                 <div className={styles.priceInputRow}>
-                  <input type="text" className={styles.priceInput} defaultValue="0" placeholder="Min" />
+                  <input type="text" className={styles.priceInput} value={priceRange[0]} onChange={(e) => {
+                    const val = parseInt(e.target.value) || 0;
+                    setPriceRange([val, priceRange[1]]);
+                  }} />
                   <span className={styles.priceSeparator}>—</span>
-                  <input type="text" className={styles.priceInput} defaultValue="500" placeholder="Max" />
+                  <input type="text" className={styles.priceInput} value={priceRange[1]} onChange={(e) => {
+                    const val = parseInt(e.target.value) || 500;
+                    setPriceRange([priceRange[0], val]);
+                  }} />
                 </div>
-                <input type="range" className={styles.priceSlider} min="0" max="500" defaultValue="500" />
+                <input type="range" className={styles.priceSlider} min="0" max="500" value={priceRange[1]} onChange={(e) => {
+                  setPriceRange([priceRange[0], parseInt(e.target.value)]);
+                }} />
               </div>
             </div>
 
