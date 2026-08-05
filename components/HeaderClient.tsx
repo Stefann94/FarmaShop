@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState, Fragment } from 'react';
+import React, { useState, Fragment, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter, usePathname } from 'next/navigation';
 import styles from './Header.module.css';
 import { logout } from '@/app/auth/actions';
 import { useCart } from '@/app/context/CartContext';
@@ -24,8 +25,21 @@ export default function HeaderClient({ categories, featuredProducts, activePromo
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isFavOpen, setIsFavOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const router = useRouter();
+  const pathname = usePathname();
   const { cartCount, cartTotal, isLoading, clearCart } = useCart();
   const { favoriteItems, favoriteCount, toggleFavorite, clearFavorites } = useFavorites();
+
+  // Close all menus when navigating to a new page
+  useEffect(() => {
+    setIsMenuOpen(false);
+    setIsProfileOpen(false);
+    setIsCartOpen(false);
+    setIsFavOpen(false);
+    setIsSearchOpen(false);
+  }, [pathname]);
 
   // Group categories by their group_name
   const groupedCategories = categories?.reduce((acc, cat) => {
@@ -40,6 +54,14 @@ export default function HeaderClient({ categories, featuredProducts, activePromo
     clearCart();
     clearFavorites();
     await logout();
+  };
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      setIsSearchOpen(false);
+      router.push(`/produse?q=${encodeURIComponent(searchTerm.trim())}`);
+    }
   };
 
   return (
@@ -96,7 +118,12 @@ export default function HeaderClient({ categories, featuredProducts, activePromo
                 <button 
                   className={`${styles.iconBtn} ${isMenuOpen ? styles.iconBtnActive : ''}`} 
                   aria-label="Meniu Categorii"
-                  onClick={() => setIsMenuOpen(!isMenuOpen)}
+                  onClick={() => {
+                    setIsMenuOpen(!isMenuOpen);
+                    setIsSearchOpen(false);
+                    setIsProfileOpen(false);
+                    setIsCartOpen(false);
+                  }}
                 >
                   {isMenuOpen ? (
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
@@ -104,7 +131,16 @@ export default function HeaderClient({ categories, featuredProducts, activePromo
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
                   )}
                 </button>
-                <button className={styles.iconBtn} aria-label="Căutare">
+                <button 
+                  className={`${styles.iconBtn} ${isSearchOpen ? styles.iconBtnActive : ''}`} 
+                  aria-label="Căutare"
+                  onClick={() => {
+                    setIsSearchOpen(!isSearchOpen);
+                    setIsMenuOpen(false);
+                    setIsProfileOpen(false);
+                    setIsCartOpen(false);
+                  }}
+                >
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                 </button>
               </div>
@@ -172,7 +208,12 @@ export default function HeaderClient({ categories, featuredProducts, activePromo
                   <button 
                     className={`${styles.iconBtn} ${isProfileOpen ? styles.iconBtnActive : ''}`} 
                     aria-label="Cont utilizator"
-                    onClick={() => setIsProfileOpen(!isProfileOpen)}
+                    onClick={() => {
+                      setIsProfileOpen(!isProfileOpen);
+                      setIsCartOpen(false);
+                      setIsMenuOpen(false);
+                      setIsSearchOpen(false);
+                    }}
                   >
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                   </button>
@@ -209,7 +250,12 @@ export default function HeaderClient({ categories, featuredProducts, activePromo
                   <button 
                     className={`${styles.cartBtn} ${isCartOpen ? styles.iconBtnActive : ''}`} 
                     aria-label="Coș cumpărături"
-                    onClick={() => setIsCartOpen(!isCartOpen)}
+                    onClick={() => {
+                      setIsCartOpen(!isCartOpen);
+                      setIsProfileOpen(false);
+                      setIsMenuOpen(false);
+                      setIsSearchOpen(false);
+                    }}
                   >
                     <div className={styles.cartIconWrapper}>
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
@@ -258,9 +304,39 @@ export default function HeaderClient({ categories, featuredProducts, activePromo
             </div>
           </div>
 
-          {/* OVERLAY BACKDROP */}
-          {isMenuOpen && (
-            <div className={styles.menuBackdrop} onClick={() => setIsMenuOpen(false)}></div>
+          {/* OVERLAY BACKDROP FOR MEGA MENU OR SEARCH */}
+          {(isMenuOpen || isSearchOpen) && (
+            <div className={styles.menuBackdrop} onClick={() => {setIsMenuOpen(false); setIsSearchOpen(false);}}></div>
+          )}
+
+          {/* SEARCH DROPDOWN */}
+          {isSearchOpen && (
+            <div className={styles.searchDropdown}>
+              <div className="container">
+                <form onSubmit={handleSearchSubmit} className={styles.searchForm}>
+                  <div className={styles.searchInputWrapper}>
+                    <svg className={styles.searchIcon} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <input 
+                      type="text" 
+                      className={styles.searchInput}
+                      placeholder="Caută suplimente, vitamine, pachete..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      autoFocus
+                    />
+                    <button type="submit" className={styles.searchSubmitBtn}>Căutare</button>
+                  </div>
+                </form>
+                
+                <div className={styles.searchQuickLinks}>
+                  <span>Descoperă rapid:</span>
+                  <Link href="/categorie/longevitate" className={styles.quickLinkBtn} onClick={() => setIsSearchOpen(false)}>Anti-Aging</Link>
+                  <Link href="/categorie/focus" className={styles.quickLinkBtn} onClick={() => setIsSearchOpen(false)}>Energie & Focus</Link>
+                  <Link href="/categorie/somn" className={styles.quickLinkBtn} onClick={() => setIsSearchOpen(false)}>Somn Adânc</Link>
+                  <Link href="/categorie/pachete" className={styles.quickLinkBtn} onClick={() => setIsSearchOpen(false)}>Protocoale</Link>
+                </div>
+              </div>
+            </div>
           )}
 
           {/* DROPDOWN MENU - Overlays the bottomMenu and page content */}

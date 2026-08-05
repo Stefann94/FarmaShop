@@ -636,3 +636,102 @@
   .topRow { padding: 15px 0; }
   .dropdownContent { grid-template-columns: 1fr; }
 }
+
+/* =========================================
+   SEARCH DROPDOWN
+   ========================================= */
+.searchDropdown {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  background-color: #ffffff;
+  border-top: 1px solid var(--color-border);
+  box-shadow: 0 15px 30px rgba(39, 79, 56, 0.08);
+  padding: 30px 0;
+  z-index: 90;
+  animation: slideDown 0.3s ease-out forwards;
+}
+
+.searchForm {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.searchInputWrapper {
+  display: flex;
+  align-items: center;
+  border-bottom: 2px solid var(--color-primary);
+  padding-bottom: 10px;
+}
+
+.searchIcon {
+  color: var(--color-primary);
+  margin-right: 15px;
+}
+
+.searchInput {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 1.5rem;
+  font-family: var(--font-body);
+  color: var(--color-primary-dark);
+  outline: none;
+}
+
+.searchInput::placeholder {
+  color: rgba(39, 79, 56, 0.4);
+}
+
+.searchSubmitBtn {
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 30px;
+  font-weight: 600;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: 1rem;
+}
+
+.searchSubmitBtn:hover {
+  background-color: var(--color-accent-dark);
+}
+
+.searchQuickLinks {
+  margin: 20px auto 0;
+  max-width: 800px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.searchQuickLinks span {
+  font-family: var(--font-body);
+  color: #666;
+  font-size: 0.9rem;
+  margin-right: 10px;
+}
+
+.searchQuickLinks .quickLinkBtn {
+  background: rgba(39, 79, 56, 0.05);
+  border: 1px solid rgba(39, 79, 56, 0.1);
+  padding: 6px 16px;
+  border-radius: 20px;
+  color: var(--color-primary);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.searchQuickLinks .quickLinkBtn:hover {
+  background: var(--color-primary);
+  color: white;
+}

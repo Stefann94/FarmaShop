@@ -61,14 +61,14 @@ export default async function Home() {
         <ProductSection 
           title={<>Esențiale <span>pentru</span> Longevitate</>}
           products={essentials || []}
-          viewAllLink="/produse?filter=essentials"
+          viewAllLink="/categorie/esentiale"
           badgeText="Bestseller"
         />
 
         {/* PROMO BANNER (Între Esențiale și Focus) */}
         <section className={styles.promoBannerSection}>
           <div className="container">
-            <a href="/produse?filter=promo" className={styles.promoBannerLink}>
+            <a href="/categorie/focus" className={styles.promoBannerLink}>
               <img 
                 src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=1200&auto=format&fit=crop" 
                 alt="Promo Banner" 
@@ -86,7 +86,7 @@ export default async function Home() {
         <ProductSection 
           title={<>Focus & <span>Claritate Mentală</span></>}
           products={focusEnergy || []}
-          viewAllLink="/produse?filter=focus"
+          viewAllLink="/categorie/focus"
         />
 
         {/* DISCOVER CARDS - "Descoperă după nevoie" */}
@@ -99,7 +99,7 @@ export default async function Home() {
             </div>
             <div className={styles.discoverCardsGrid}>
 
-              <a href="/categorie/energie-focus" className={styles.discoverCard}>
+              <a href="/categorie/focus" className={styles.discoverCard}>
                 <div className={styles.discoverCardImageWrapper}>
                   <img 
                     src="/images/cards/energie-focus.png" 
@@ -116,7 +116,7 @@ export default async function Home() {
                 </div>
               </a>
 
-              <a href="/categorie/anti-aging" className={styles.discoverCard}>
+              <a href="/categorie/longevitate" className={styles.discoverCard}>
                 <div className={styles.discoverCardImageWrapper}>
                   <img 
                     src="/images/cards/anti-aging.png" 
@@ -157,7 +157,7 @@ export default async function Home() {
         <ProductSection 
           title={<>Protocoale & <span>Pachete Premium</span></>}
           products={premiumBundles || []}
-          viewAllLink="/produse?filter=bundles"
+          viewAllLink="/categorie/pachete"
           badgeText="-15% Extra"
         />
         
