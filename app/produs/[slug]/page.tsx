@@ -92,7 +92,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           <div className={styles.imageColumn}>
             {product.tags && product.tags.length > 0 && (
               <div className={styles.tagsContainer}>
-                {product.tags.map((tag: string, idx: number) => (
+                {[...product.tags].sort((a: string, b: string) => b.length - a.length).map((tag: string, idx: number) => (
                   <span key={idx} className={`${styles.tag} ${tag.includes('%') || tag.toLowerCase().includes('reducere') ? styles.tagDiscount : ''}`}>
                     {tag}
                   </span>
