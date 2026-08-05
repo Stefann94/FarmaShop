@@ -485,9 +485,9 @@ export default function HeaderClient({ categories, featuredProducts, activePromo
             <nav className={styles.bottomMenu}>
               <Link href="/bestsellers" className={styles.menuLink}>Bestsellers</Link>
               <Link href="/pachete" className={styles.menuLink}>Pachete & Oferte</Link>
-              <Link href="/calitate" className={styles.menuLink}>Calitate & Ingrediente</Link>
               <Link href="/abonamente" className={styles.menuLink}>Abonamente</Link>
-              <Link href="#jurnal" className={styles.menuLink}>Jurnal Științific</Link>
+              <Link href="/calitate" className={styles.menuLink}>Calitate & Ingrediente</Link>
+              <Link href="/jurnal" className={styles.menuLink}>Jurnal Științific</Link>
               <Link href="#despre-noi" className={styles.menuLink}>Despre Noi</Link>
             </nav>
           </div>

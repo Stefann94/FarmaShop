@@ -117,70 +117,64 @@ export default async function CalitatePage() {
           </div>
         </section>
 
-        {/* 4. INGREDIENTE DE BAZĂ */}
-        <section className={styles.cardsSection}>
+        {/* 4. INGREDIENTE DE BAZĂ - ZIGZAG LAYOUT */}
+        <section className={styles.zigzagSection}>
           <div className={styles.sectionHeader}>
             <h2 className={styles.sectionTitle}>
               Pilonii <span>Formulelor Noastre</span>
             </h2>
           </div>
           
-          <div className={pageStyles.discoverCardsGrid}>
+          <div className={styles.zigzagContainer}>
             
-            {/* Card 1 */}
-            <div className={pageStyles.discoverCard}>
-              <div className={pageStyles.discoverCardImageWrapper}>
+            {/* Card 1 - Text Left, Image Right */}
+            <div className={styles.zigzagItem}>
+              <div className={styles.zigzagContent}>
+                <span className={styles.zigzagLabel}>{card1.label}</span>
+                <h3 className={styles.zigzagTitle}>{card1.title}</h3>
+                <p className={styles.zigzagDesc}>{card1.description}</p>
+              </div>
+              <div className={styles.zigzagImageWrapper}>
                 <Image 
                   src={card1.image_url} 
                   alt={card1.title}
                   fill
-                  className={pageStyles.discoverCardImage}
+                  className={styles.zigzagImage}
                 />
-              </div>
-              <div className={pageStyles.discoverCardContent}>
-                <span className={pageStyles.discoverCardLabel}>{card1.label}</span>
-                <h3 className={pageStyles.discoverCardTitle}>{card1.title}</h3>
-                <p className={pageStyles.discoverCardSubtitle}>
-                  {card1.description}
-                </p>
               </div>
             </div>
 
-            {/* Card 2 */}
-            <div className={pageStyles.discoverCard}>
-              <div className={pageStyles.discoverCardImageWrapper}>
+            {/* Card 2 - Image Left, Text Right (Reversed) */}
+            <div className={`${styles.zigzagItem} ${styles.reversed}`}>
+              <div className={styles.zigzagContent}>
+                <span className={styles.zigzagLabel}>{card2.label}</span>
+                <h3 className={styles.zigzagTitle}>{card2.title}</h3>
+                <p className={styles.zigzagDesc}>{card2.description}</p>
+              </div>
+              <div className={styles.zigzagImageWrapper}>
                 <Image 
-                  src={card2.image_url}
+                  src={card2.image_url} 
                   alt={card2.title}
                   fill
-                  className={pageStyles.discoverCardImage}
+                  className={styles.zigzagImage}
                 />
-              </div>
-              <div className={pageStyles.discoverCardContent}>
-                <span className={pageStyles.discoverCardLabel}>{card2.label}</span>
-                <h3 className={pageStyles.discoverCardTitle}>{card2.title}</h3>
-                <p className={pageStyles.discoverCardSubtitle}>
-                  {card2.description}
-                </p>
               </div>
             </div>
 
-            {/* Card 3 */}
-            <div className={pageStyles.discoverCard}>
-              <div className={pageStyles.discoverCardImageWrapper}>
+            {/* Card 3 - Text Left, Image Right */}
+            <div className={styles.zigzagItem}>
+              <div className={styles.zigzagContent}>
+                <span className={styles.zigzagLabel}>{card3.label}</span>
+                <h3 className={styles.zigzagTitle}>{card3.title}</h3>
+                <p className={styles.zigzagDesc}>{card3.description}</p>
+              </div>
+              <div className={styles.zigzagImageWrapper}>
                 <Image 
-                  src={card3.image_url}
+                  src={card3.image_url} 
                   alt={card3.title}
                   fill
-                  className={pageStyles.discoverCardImage}
+                  className={styles.zigzagImage}
                 />
-              </div>
-              <div className={pageStyles.discoverCardContent}>
-                <span className={pageStyles.discoverCardLabel}>{card3.label}</span>
-                <h3 className={pageStyles.discoverCardTitle}>{card3.title}</h3>
-                <p className={pageStyles.discoverCardSubtitle}>
-                  {card3.description}
-                </p>
               </div>
             </div>
 
