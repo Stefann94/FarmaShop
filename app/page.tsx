@@ -9,7 +9,15 @@ import ProductCarousel from "../components/ProductCarousel";
 export const dynamic = 'force-dynamic';
 export default async function Home() {
   const supabase = await createClient();
-  const { data: slides } = await supabase.from('hero_slides').select('*').order('id');
+  const { data: slidesDb } = await supabase.from('hero_slides').select('*').order('id');
+  
+  let slides = slidesDb || [];
+  if (slides.length >= 3) {
+    // Current order by id: [slide1, slide2, slide3]
+    // Desired order: [slide2, slide3, slide1]
+    slides = [slides[1], slides[2], slides[0], ...slides.slice(3)];
+  }
+
   const { data: quickCategories } = await supabase.from('categories').select('*').eq('is_quick_category', true).order('sort_order').limit(6);
   
   // Fetch products for all sections
