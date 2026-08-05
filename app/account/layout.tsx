@@ -17,14 +17,16 @@ export default async function AccountLayout({
   }
 
   return (
-    <div className={styles.accountWrapper}>
-      
-      <div className={styles.accountGrid}>
-        <SidebarClient />
+    <div className={styles.pageBackground}>
+      <div className={styles.accountWrapper}>
         
-        <main className={styles.contentArea}>
-          {children}
-        </main>
+        <div className={styles.accountGrid}>
+          <SidebarClient />
+          
+          <main className={styles.contentArea}>
+            {children}
+          </main>
+        </div>
       </div>
     </div>
   );

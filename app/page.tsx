@@ -165,6 +165,23 @@ export default async function Home() {
           title={<>Produse <span>Recomandate</span></>}
           products={finalRecommended || []}
         />
+
+        {/* CONTACT BANNER SECTION */}
+        <section className={styles.contactBannerSection}>
+          <div className="container">
+            <div className={styles.contactBannerWrapper}>
+              <div className={styles.contactBannerContent}>
+                <h3 className={styles.contactBannerTitle}>Ai nevoie de îndrumare?</h3>
+                <p className={styles.contactBannerDesc}>
+                  Fiecare organism este unic. Dacă nu ești sigur ce suplimente ți se potrivesc cel mai bine pentru a-ți atinge obiectivele de sănătate, specialiștii noștri sunt aici să te ajute cu o recomandare personalizată.
+                </p>
+                <a href="/contact" className={styles.contactBannerBtn}>
+                  Contactează-ne
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
         
       </main>
     </>

@@ -11,7 +11,7 @@
   --color-text-main: #1d3324;
   --color-text-light: #ffffff;
   
-  --color-bg-main: #f8f9f6; /* Off-white with a hint of green */
+  --color-bg-main: #ffffff; /* Off-white with a hint of green */
   --color-bg-dark: #274f38;
   
   --color-border: #e0e6e2;
@@ -54,7 +54,7 @@
 html, body {
   font-family: var(--font-body);
   color: var(--color-text-main);
-  background-color: #f0f5e9;
+  background-color: #ffffff;
   line-height: 1.6;
 }
 
