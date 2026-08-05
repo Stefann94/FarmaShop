@@ -14,8 +14,17 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "Longevity Farma | Suplimente Premium",
-  description: "Investește Astăzi în Ziua de Mâine. Suplimente alimentare premium pentru vitalitate și funcția cognitivă.",
+  title: "Longevity Farma | Suplimente Premium pentru Sănătate",
+  description: "Investește Astăzi în Ziua de Mâine. Suplimente alimentare premium, formulate științific pentru vitalitate, energie și funcția cognitivă.",
+  keywords: ["suplimente", "longevitate", "anti-aging", "nootropice", "sanatate", "vitamine premium"],
+  openGraph: {
+    title: "Longevity Farma | Suplimente Premium",
+    description: "Investește Astăzi în Ziua de Mâine cu cele mai bune suplimente pentru corpul tău.",
+    url: "https://longevityfarma.ro",
+    siteName: "Longevity Farma",
+    locale: "ro_RO",
+    type: "website",
+  },
 };
 
 export default async function RootLayout({
