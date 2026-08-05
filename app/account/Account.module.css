@@ -29,10 +29,12 @@
 
 /* Premium Sidebar */
 .sidebar {
-  background: transparent;
-  padding: 0;
-  border: none;
+  background: #ffffff;
+  padding: 20px 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
   align-self: flex-start;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.04);
 }
 
 .sidebarTitle {
@@ -62,9 +64,9 @@
 }
 
 .menuLink:hover {
-  background-color: #fff;
+  background-color: #f4f8f1;
   color: var(--color-primary);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+  box-shadow: none;
   transform: translateX(4px);
 }
 
@@ -204,7 +206,8 @@
 .iconWrapper {
   width: 54px;
   height: 54px;
-  background-color: #ffffff;
+  background-color: #f4f8f1;
+  border: 1px solid #d6e4d9;
   border-radius: 16px;
   display: flex;
   align-items: center;

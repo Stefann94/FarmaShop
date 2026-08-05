@@ -65,25 +65,23 @@ export default function ProfileForm({ initialData }: ProfileFormProps) {
             onClick={() => setIsEditing(true)} 
             style={{ 
               color: '#fff', 
-              fontWeight: 500, 
+              fontWeight: 600, 
               border: 'none', 
               background: 'var(--color-primary)', 
               cursor: 'pointer', 
-              fontSize: '0.95rem',
+              fontSize: '0.9rem',
               padding: '10px 20px',
               borderRadius: '8px',
               transition: 'all 0.3s ease',
-              boxShadow: '0 4px 10px rgba(39, 79, 56, 0.2)'
+              boxShadow: '0 4px 12px rgba(39, 79, 56, 0.2)'
             }}
             onMouseOver={(e) => {
               e.currentTarget.style.backgroundColor = 'var(--color-primary-dark)';
               e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.boxShadow = '0 6px 15px rgba(39, 79, 56, 0.3)';
             }}
             onMouseOut={(e) => {
               e.currentTarget.style.backgroundColor = 'var(--color-primary)';
               e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = '0 4px 10px rgba(39, 79, 56, 0.2)';
             }}
           >
             Editează datele

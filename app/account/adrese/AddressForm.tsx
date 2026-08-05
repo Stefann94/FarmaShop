@@ -74,23 +74,24 @@ export default function AddressForm({ type, title, description, initialData }: A
           <button 
             onClick={() => setIsEditing(true)} 
             style={{ 
-              color: 'var(--color-primary)', 
-              fontWeight: 500, 
-              border: '1px solid var(--color-primary)', 
-              background: 'transparent', 
+              color: '#fff', 
+              fontWeight: 600, 
+              border: 'none', 
+              background: 'var(--color-primary)', 
               cursor: 'pointer', 
-              fontSize: '0.95rem',
-              padding: '8px 16px',
+              fontSize: '0.9rem',
+              padding: '10px 20px',
               borderRadius: '8px',
-              transition: 'all 0.3s ease'
+              transition: 'all 0.3s ease',
+              boxShadow: '0 4px 12px rgba(39, 79, 56, 0.2)'
             }}
             onMouseOver={(e) => {
-              e.currentTarget.style.backgroundColor = 'var(--color-primary)';
-              e.currentTarget.style.color = '#fff';
+              e.currentTarget.style.backgroundColor = 'var(--color-primary-dark)';
+              e.currentTarget.style.transform = 'translateY(-2px)';
             }}
             onMouseOut={(e) => {
-              e.currentTarget.style.backgroundColor = 'transparent';
-              e.currentTarget.style.color = 'var(--color-primary)';
+              e.currentTarget.style.backgroundColor = 'var(--color-primary)';
+              e.currentTarget.style.transform = 'translateY(0)';
             }}
           >
             {hasData ? 'Editează adresa' : 'Adaugă adresa'}
