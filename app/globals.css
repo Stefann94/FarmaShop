@@ -125,3 +125,10 @@ ul {
   background-color: rgba(212, 175, 55, 0.1);
   transform: translateY(-2px);
 }
+
+/* Make favorite buttons permanently visible and colored if they are active */
+.is-favorite-active {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+  color: var(--color-primary) !important;
+}

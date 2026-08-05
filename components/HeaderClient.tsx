@@ -8,6 +8,7 @@ import styles from './Header.module.css';
 import { logout } from '@/app/auth/actions';
 import { useCart } from '@/app/context/CartContext';
 import { useFavorites } from '@/app/context/FavoritesContext';
+import { createBrowserClient } from '@supabase/ssr';
 
 type Category = { id: string; name: string; slug: string; sort_order: number; group_name?: string };
 type Product = { id: string; name: string; slug: string; image_url: string; price: number };
@@ -27,6 +28,14 @@ export default function HeaderClient({ categories, featuredProducts, activePromo
   const [isFavOpen, setIsFavOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState<Product[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+  
+  const supabase = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
+
   const router = useRouter();
   const pathname = usePathname();
   const { cartCount, cartTotal, isLoading, clearCart } = useCart();
@@ -39,7 +48,27 @@ export default function HeaderClient({ categories, featuredProducts, activePromo
     setIsCartOpen(false);
     setIsFavOpen(false);
     setIsSearchOpen(false);
+    setSearchTerm('');
   }, [pathname]);
+
+  // Debounced Live Search
+  useEffect(() => {
+    if (!searchTerm.trim()) {
+      setSearchResults([]);
+      return;
+    }
+
+    const delayDebounceFn = setTimeout(async () => {
+      setIsSearching(true);
+      const { data, error } = await supabase.rpc('search_products', { search_term: searchTerm.trim() });
+      if (!error && data) {
+        setSearchResults(data);
+      }
+      setIsSearching(false);
+    }, 300);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchTerm, supabase]);
 
   // Group categories by their group_name
   const groupedCategories = categories?.reduce((acc, cat) => {
@@ -182,7 +211,13 @@ export default function HeaderClient({ categories, featuredProducts, activePromo
                         <div style={{ padding: '20px', textAlign: 'center', color: '#666' }}>Nu ai niciun produs favorit.</div>
                       ) : (
                         favoriteItems.slice(0, 4).map(item => (
-                          <div key={item.id} className={styles.favItem}>
+                          <Link 
+                            href={`/produs/${item.product_slug}`} 
+                            key={item.id} 
+                            className={styles.favItem}
+                            style={{ textDecoration: 'none', color: 'inherit' }}
+                            onClick={() => setIsFavOpen(false)}
+                          >
                             <div className={styles.favItemImage}>
                               <Image src={item.image_url || '/placeholder.png'} alt={item.name || ''} fill style={{ objectFit: 'cover' }} />
                             </div>
@@ -190,10 +225,10 @@ export default function HeaderClient({ categories, featuredProducts, activePromo
                               <div className={styles.favItemName}>{item.name}</div>
                               <div className={styles.favItemPrice}>{item.price} Lei</div>
                             </div>
-                            <button aria-label="Șterge de la favorite" onClick={(e) => { e.stopPropagation(); toggleFavorite(item.product_slug) }} style={{ alignSelf: 'center', background: 'none', border: 'none', cursor: 'pointer', color: '#999' }}>
+                            <button aria-label="Șterge de la favorite" onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleFavorite(item.product_slug) }} style={{ alignSelf: 'center', background: 'none', border: 'none', cursor: 'pointer', color: '#999', zIndex: 2 }}>
                               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                             </button>
-                          </div>
+                          </Link>
                         ))
                       )}
                     </div>
@@ -328,13 +363,44 @@ export default function HeaderClient({ categories, featuredProducts, activePromo
                   </div>
                 </form>
                 
-                <div className={styles.searchQuickLinks}>
-                  <span>Descoperă rapid:</span>
-                  <Link href="/categorie/longevitate" className={styles.quickLinkBtn} onClick={() => setIsSearchOpen(false)}>Anti-Aging</Link>
-                  <Link href="/categorie/focus" className={styles.quickLinkBtn} onClick={() => setIsSearchOpen(false)}>Energie & Focus</Link>
-                  <Link href="/categorie/somn" className={styles.quickLinkBtn} onClick={() => setIsSearchOpen(false)}>Somn Adânc</Link>
-                  <Link href="/categorie/pachete" className={styles.quickLinkBtn} onClick={() => setIsSearchOpen(false)}>Protocoale</Link>
-                </div>
+                {!searchTerm.trim() ? (
+                  <div className={styles.searchQuickLinks}>
+                    <span>Descoperă rapid:</span>
+                    <Link href="/categorie/longevitate" className={styles.quickLinkBtn} onClick={() => setIsSearchOpen(false)}>Anti-Aging</Link>
+                    <Link href="/categorie/focus" className={styles.quickLinkBtn} onClick={() => setIsSearchOpen(false)}>Focus & Memorie</Link>
+                    <Link href="/categorie/somn-stres" className={styles.quickLinkBtn} onClick={() => setIsSearchOpen(false)}>Somn & Stres</Link>
+                    <Link href="/categorie/imunitate" className={styles.quickLinkBtn} onClick={() => setIsSearchOpen(false)}>Imunitate</Link>
+                  </div>
+                ) : (
+                  <div className={styles.searchResults}>
+                    {isSearching ? (
+                      <div className={styles.searchEmpty}>Se caută...</div>
+                    ) : searchResults.length > 0 ? (
+                      searchResults.map((prod) => (
+                        <Link 
+                          href={`/produs/${prod.slug}`} 
+                          key={prod.id} 
+                          className={styles.searchResultItem}
+                          onClick={() => setIsSearchOpen(false)}
+                        >
+                          <Image 
+                            src={prod.image_url || '/placeholder.png'} 
+                            alt={prod.name}
+                            width={50}
+                            height={50}
+                            className={styles.searchResultImage}
+                          />
+                          <div className={styles.searchResultInfo}>
+                            <span className={styles.searchResultName}>{prod.name}</span>
+                            <span className={styles.searchResultPrice}>{prod.price} Lei</span>
+                          </div>
+                        </Link>
+                      ))
+                    ) : (
+                      <div className={styles.searchEmpty}>Nu am găsit produse pentru "{searchTerm}"</div>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           )}

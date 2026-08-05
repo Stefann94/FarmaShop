@@ -735,3 +735,66 @@
   background: var(--color-primary);
   color: white;
 }
+
+/* =========================================
+   SEARCH RESULTS (LIVE SEARCH)
+   ========================================= */
+.searchResults {
+  margin: 20px auto 0;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 350px;
+  overflow-y: auto;
+}
+
+.searchResultItem {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #f9fbf9;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.searchResultItem:hover {
+  background-color: #f0f5f1;
+  border-color: #dcebdf;
+}
+
+.searchResultImage {
+  border-radius: 6px;
+  object-fit: contain;
+  background-color: #fff;
+}
+
+.searchResultInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.searchResultName {
+  font-weight: 600;
+  color: var(--color-primary-dark);
+  font-size: 1rem;
+}
+
+.searchResultPrice {
+  color: var(--color-primary);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.searchEmpty {
+  text-align: center;
+  padding: 30px;
+  color: #666;
+  font-size: 1rem;
+  background: #f9fbf9;
+  border-radius: 8px;
+}
