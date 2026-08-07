@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import styles from './HeroCarousel.module.css';
 
 export type Slide = {
@@ -94,11 +95,10 @@ export default function HeroCarousel({ slides }: HeroCarouselProps) {
             </p>
 
             <div className={styles.actions} ref={actionsRef}>
-              <a href="#produse" className={styles.ctaPrimary}>
+              <Link href="/bestsellers" className={styles.ctaPrimary}>
                 Descoperă Produsele
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-              </a>
-              <a href="#calitate" className={styles.ctaOutline}>Calitate & Ingrediente</a>
+              </Link>
+              <Link href="/calitate" className={styles.ctaOutline}>Calitate & Ingrediente</Link>
             </div>
           </div>
 
