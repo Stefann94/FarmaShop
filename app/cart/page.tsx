@@ -14,9 +14,8 @@ export default async function CartPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  if (!user) {
-    redirect('/login')
-  }
+  // We allow guests now, so no redirect here
+
 
   // Fetch Recommended Products for the Carousel below the cart
   const { data: recommendedProducts } = await supabase

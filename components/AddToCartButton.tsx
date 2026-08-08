@@ -31,7 +31,7 @@ export default function AddToCartButton({ productSlug, price, variant = 'full' }
     setLoading(true);
     const result = await addToCart(productSlug, price, 1);
     
-    if (result.error) {
+    if (result.error && !result.notAuthenticated) {
       alert(result.error);
     } else {
       setShowPopup(true);

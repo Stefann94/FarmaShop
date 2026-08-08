@@ -7,7 +7,7 @@ export async function fetchCart() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   
-  if (!user) return { items: [] }
+  if (!user) return { items: [], error: 'Not authenticated' }
 
   const { data: cartItems, error } = await supabase
     .from('cart_items')
@@ -49,7 +49,7 @@ export async function addToCartDB(productSlug: string, price: number, quantity: 
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   
-  if (!user) return { error: 'Trebuie să fii autentificat pentru a adăuga în coș.' }
+  if (!user) return { error: 'Trebuie să fii autentificat pentru a adăuga în coș.', notAuthenticated: true }
 
   // Check if item already exists
   const { data: existing } = await supabase
@@ -92,7 +92,7 @@ export async function removeCartItemDB(productSlug: string) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   
-  if (!user) return { error: 'Not authenticated' }
+  if (!user) return { error: 'Not authenticated', notAuthenticated: true }
 
   const { error } = await supabase
     .from('cart_items')
@@ -108,7 +108,7 @@ export async function updateCartItemQuantityDB(productSlug: string, quantity: nu
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   
-  if (!user) return { error: 'Not authenticated' }
+  if (!user) return { error: 'Not authenticated', notAuthenticated: true }
 
   if (quantity <= 0) {
     return removeCartItemDB(productSlug)
@@ -122,4 +122,16 @@ export async function updateCartItemQuantityDB(productSlug: string, quantity: nu
 
   if (error) return { error: error.message }
   return { success: true }
+}
+
+export async function fetchProductsDetailsBySlugs(slugs: string[]) {
+  if (!slugs || slugs.length === 0) return [];
+  
+  const supabase = await createClient()
+  const { data: products } = await supabase
+    .from('products')
+    .select('slug, name, image_url, price')
+    .in('slug', slugs)
+
+  return products || [];
 }

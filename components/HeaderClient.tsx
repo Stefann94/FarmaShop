@@ -320,14 +320,7 @@ export default function HeaderClient({ categories, featuredProducts, activePromo
                   )}
 
                   <div className={`${styles.favDropdown} ${isCartOpen ? styles.favDropdownOpen : ''}`}>
-                    {!user ? (
-                      <div className={styles.favHeader} style={{ padding: '20px' }}>
-                        Trebuie să fii autentificat pentru a folosi coșul.
-                        <div style={{ marginTop: '15px' }}>
-                          <Link href="/login" className={styles.btnViewAllFavs} onClick={() => setIsCartOpen(false)}>Autentificare</Link>
-                        </div>
-                      </div>
-                    ) : cartCount === 0 ? (
+                    {cartCount === 0 ? (
                       <div className={styles.favHeader} style={{ padding: '20px' }}>
                         Coșul tău este gol.
                         <div style={{ marginTop: '15px' }}>
