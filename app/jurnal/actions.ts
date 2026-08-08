@@ -32,11 +32,12 @@ export async function getJournalArticles(): Promise<JournalArticle[]> {
 
 // Fetch a single article by slug
 export async function getJournalArticleBySlug(slug: string): Promise<JournalArticle | null> {
+  const decodedSlug = decodeURIComponent(slug);
   const supabase = await createClient();
   const { data, error } = await supabase
     .from('journal_articles')
     .select('*')
-    .eq('slug', slug)
+    .eq('slug', decodedSlug)
     .single();
 
   if (error) {

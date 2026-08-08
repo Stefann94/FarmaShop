@@ -11,8 +11,9 @@ import FavoriteButton from '@/components/FavoriteButton';
 // Generate Metadata for SEO
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const decodedSlug = decodeURIComponent(slug);
   const supabase = await createClient();
-  const { data: product } = await supabase.from('products').select('*').eq('slug', slug).single();
+  const { data: product } = await supabase.from('products').select('*').eq('slug', decodedSlug).single();
 
   if (!product) {
     return { title: 'Produs Neregasit | FarmaShop' };
@@ -31,8 +32,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const decodedSlug = decodeURIComponent(slug);
   const supabase = await createClient();
-  const { data: product } = await supabase.from('products').select('*').eq('slug', slug).single();
+  const { data: product } = await supabase.from('products').select('*').eq('slug', decodedSlug).single();
 
   if (!product) {
     notFound();

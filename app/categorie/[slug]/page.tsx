@@ -7,12 +7,13 @@ export const dynamic = 'force-dynamic';
 export default async function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {
   const supabase = await createClient();
   const { slug } = await params;
+  const decodedSlug = decodeURIComponent(slug);
 
   // 1. Fetch current category
   const { data: category } = await supabase
     .from('categories')
     .select('*')
-    .eq('slug', slug)
+    .eq('slug', decodedSlug)
     .single();
 
   if (!category) {
@@ -23,7 +24,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
   const { data: products } = await supabase
     .from('products')
     .select('*')
-    .eq('category_slug', slug)
+    .eq('category_slug', decodedSlug)
     .order('created_at', { ascending: false });
 
   // 3. Fetch all categories (for subcategory chips navigation)
