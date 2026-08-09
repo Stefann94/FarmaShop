@@ -3,8 +3,9 @@ import type { NextConfig } from "next";
 const isDev = process.env.NODE_ENV !== 'production';
 
 // Politica de securitate a conținutului (CSP).
-// Rulează deocamdată în modul "Report-Only": browserul doar raportează în consolă
-// ce ar fi blocat, fără să blocheze efectiv nimic. Se comută pe activ după validare.
+// A rulat întâi în modul "Report-Only" și a fost validată în producție, cu un
+// browser real, pe fluxul complet: pagină produs -> adăugare în coș -> apel
+// direct către Supabase -> coș. Zero violări raportate, deci este acum activă.
 const contentSecurityPolicy = [
   "default-src 'self'",
   // 'unsafe-inline' e necesar pentru scripturile inline injectate de App Router (inclusiv JSON-LD).
@@ -39,7 +40,7 @@ const securityHeaders = [
   // Dezactivează API-uri de browser pe care site-ul nu le folosește
   { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
   { key: 'X-DNS-Prefetch-Control', value: 'on' },
-  { key: 'Content-Security-Policy-Report-Only', value: contentSecurityPolicy },
+  { key: 'Content-Security-Policy', value: contentSecurityPolicy },
 ];
 
 const nextConfig: NextConfig = {
