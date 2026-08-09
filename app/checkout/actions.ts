@@ -3,13 +3,22 @@
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 
+// Forma unui produs așa cum vine din coșul clientului (localStorage sau context).
+// Adnotare pură de tip: TypeScript o șterge la compilare, codul executat nu se schimbă.
+type ClientCartItem = {
+  product_slug: string
+  quantity: number
+  price?: number
+  name?: string
+}
+
 export async function processCheckout(formData: FormData) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
   // 1. Get cart items from form data (JSON string passed from client)
   const guestCartRaw = formData.get('guestCartItems') as string
-  let clientCartItems = []
+  let clientCartItems: ClientCartItem[] = []
   if (guestCartRaw) {
     try {
       clientCartItems = JSON.parse(guestCartRaw)

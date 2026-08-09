@@ -3,7 +3,15 @@
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 
-export async function fetchCart() {
+// Tipul returnat de fetchCart. `notAuthenticated` era deja citit în CartContext,
+// dar nu apărea în tipul inferat — de aici eroarea de compilare.
+type FetchCartResult = {
+  items: any[]
+  error?: string
+  notAuthenticated?: boolean
+}
+
+export async function fetchCart(): Promise<FetchCartResult> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   
