@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 
 import { useCart } from '@/app/context/CartContext'
+import FavoriteButton from '@/components/FavoriteButton'
 import styles from './Cart.module.css'
 
 export default function CartClient() {
@@ -105,9 +106,15 @@ export default function CartClient() {
                     >
                       <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg> Șterge
                     </button>
-                    <button className={`${styles.actionButton} ${styles.favorite}`}>
-                      <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg> Adaugă la favorite
-                    </button>
+                    {/* Butonul era decorativ, fără acțiune. Acum refolosește
+                        componenta de favorite, împreună cu modalul de
+                        autentificare pentru vizitatorii nelogați. */}
+                    <FavoriteButton
+                      productSlug={item.product_slug}
+                      className={`${styles.actionButton} ${styles.favorite}`}
+                      label="Adaugă la favorite"
+                      activeLabel="Salvat la favorite"
+                    />
                   </div>
                 </div>
 

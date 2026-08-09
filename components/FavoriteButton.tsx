@@ -9,9 +9,13 @@ import styles from '@/app/produs/[slug]/ProductPage.module.css';
 interface FavoriteButtonProps {
   productSlug: string;
   className?: string;
+  /** Text afișat lângă inimă. Fără el, butonul rămâne doar iconiță. */
+  label?: string;
+  /** Text folosit când produsul este deja la favorite. */
+  activeLabel?: string;
 }
 
-export default function FavoriteButton({ productSlug, className }: FavoriteButtonProps) {
+export default function FavoriteButton({ productSlug, className, label, activeLabel }: FavoriteButtonProps) {
   const { favoriteItems, toggleFavorite } = useFavorites();
   const isFav = favoriteItems.some(f => f.product_slug === productSlug);
 
@@ -53,15 +57,20 @@ export default function FavoriteButton({ productSlug, className }: FavoriteButto
         onClick={handleClick}
       >
         <svg
-          width="18"
-          height="18"
+          /* Cu text alături, iconița se scalează după mărimea fontului,
+             ca să se alinieze cu celelalte acțiuni din rând. */
+          width={label ? '1em' : 18}
+          height={label ? '1em' : 18}
           viewBox="0 0 24 24"
           fill={isFav ? "var(--color-primary)" : "none"}
           stroke={isFav ? "var(--color-primary)" : "currentColor"}
           strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         >
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
         </svg>
+        {label ? <span>{isFav ? (activeLabel ?? label) : label}</span> : null}
       </button>
 
       {showAuthModal && mounted && createPortal(
