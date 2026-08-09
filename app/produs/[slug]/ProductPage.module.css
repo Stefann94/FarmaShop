@@ -331,6 +331,40 @@
   gap: 15px;
 }
 
+/* Numărul de recenzii, când duce la secțiunea de recenzii */
+.reviewsLink {
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: rgba(39, 79, 56, 0.35);
+  text-underline-offset: 3px;
+  transition: color 0.2s ease, text-decoration-color 0.2s ease;
+}
+
+.reviewsLink:hover {
+  color: var(--color-primary);
+  text-decoration-color: var(--color-primary);
+}
+
+.reviewsLink:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Antetul este sticky, deci saltul pe ancoră trebuie oprit sub el.
+   Înălțimi măsurate în browser: 185px la 1280px lățime, 205px în jur de
+   900px (bannerul se desface pe două rânduri), 121px sub 768px, unde
+   meniul de jos este ascuns. Valorile de mai jos includ o marjă de aer. */
+.reviewsAnchor {
+  scroll-margin-top: 225px;
+}
+
+@media (max-width: 768px) {
+  .reviewsAnchor {
+    scroll-margin-top: 145px;
+  }
+}
+
 /* Text explicativ sub titlul modalului (folosit de modalul de favorite) */
 .modalText {
   margin: -14px 0 0 0;

@@ -58,6 +58,15 @@ html, body {
   line-height: 1.6;
 }
 
+/* Derulare lină la salturile pe ancore din aceeași pagină.
+   Nu afectează apelurile care își declară explicit comportamentul
+   (ScrollToTop folosește 'auto', butonul "înapoi sus" folosește 'smooth'). */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
   font-weight: 700;

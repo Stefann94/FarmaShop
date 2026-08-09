@@ -128,6 +128,10 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
   const tags = product.tags || [];
 
+  // Secțiunea de recenzii se randează condiționat mai jos; folosim aceeași
+  // verificare ca să decidem dacă numărul de recenzii devine link către ea.
+  const hasReviews = Boolean(product.rich_content?.reviews?.length);
+
   return (
     <main className={styles.productPage}>
       {/* Inject JSON-LD Script for SEO */}
@@ -180,9 +184,17 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                   </svg>
                 ))}
               </div>
-              <span className={styles.reviewsCount}>
-                {product.rating || "5.0"} ({product.reviews_count || "0"} review-uri)
-              </span>
+              {/* Devine link doar dacă există efectiv o secțiune de recenzii mai jos,
+                  ca să nu ducem utilizatorul spre o ancoră inexistentă. */}
+              {hasReviews ? (
+                <a href="#recenzii" className={`${styles.reviewsCount} ${styles.reviewsLink}`}>
+                  {product.rating || "5.0"} ({product.reviews_count || "0"} review-uri)
+                </a>
+              ) : (
+                <span className={styles.reviewsCount}>
+                  {product.rating || "5.0"} ({product.reviews_count || "0"} review-uri)
+                </span>
+              )}
             </div>
 
             <div className={styles.priceBlock}>
@@ -316,7 +328,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
               {/* 7. Recenzii Clienți (Infinite Marquee) */}
               {product.rich_content.reviews && product.rich_content.reviews.length > 0 && (
-                <div className={styles.richBlock}>
+                <div className={`${styles.richBlock} ${styles.reviewsAnchor}`} id="recenzii">
                   <h3 className={styles.richTitle}>Părerile Clienților</h3>
                   <div className={styles.marqueeContainer}>
                     <div className={styles.marqueeTrack}>
