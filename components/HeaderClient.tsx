@@ -240,7 +240,10 @@ export default function HeaderClient({ categories, featuredProducts, activePromo
                           </p>
                         </div>
                         <div className={styles.favFooter}>
-                          <Link href="/login" className={styles.btnFavPrimary} onClick={() => setIsFavOpen(false)}>
+                          {/* Aceeași clasă cu butonul din starea autentificată a
+                              acestui panou: conturat, pe verdele #2E7D32 folosit
+                              și de panoul de cont. */}
+                          <Link href="/login" className={styles.btnViewAllFavs} onClick={() => setIsFavOpen(false)}>
                             Autentifică-te
                           </Link>
                           <Link href="/signup" className={styles.favSignupLink} onClick={() => setIsFavOpen(false)}>
