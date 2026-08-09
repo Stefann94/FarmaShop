@@ -309,13 +309,31 @@ export default function HeaderClient({ categories, featuredProducts, activePromo
 
                   <div className={`${styles.profileDropdown} ${isProfileOpen ? styles.profileDropdownOpen : ''}`}>
                     {user ? (
+                      /* Aceeași structură ca starea de vizitator: bandă de antet,
+                         iconiță în cerc, text, apoi acțiunile. */
                       <>
-                        <div className={styles.profileDropdownHeader}>
-                          <p>Salut, <strong>{user.user_metadata?.first_name || 'Utilizator'}</strong>!</p>
+                        <div className={styles.favHeader}>Contul meu</div>
+                        <div className={styles.favAuthPrompt}>
+                          <div className={styles.favAuthIcon}>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                              <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                          </div>
+                          <p className={styles.profileGreeting}>
+                            Salut, {user.user_metadata?.first_name || 'Utilizator'}!
+                          </p>
+                          <p className={styles.favAuthText}>
+                            Comenzile, adresele și datele tale, într-un singur loc.
+                          </p>
                         </div>
-                        <div className={styles.profileDropdownActions}>
-                          <Link href="/account" className={styles.btnLogin} onClick={() => setIsProfileOpen(false)}>Contul meu</Link>
-                          <button onClick={handleLogout} className={styles.btnSignup}>Deconectare</button>
+                        <div className={styles.favFooter}>
+                          <Link href="/account" className={styles.btnViewAllFavs} onClick={() => setIsProfileOpen(false)}>
+                            Mergi la contul meu
+                          </Link>
+                          <button onClick={handleLogout} className={styles.profileLogout}>
+                            Deconectare
+                          </button>
                         </div>
                       </>
                     ) : (

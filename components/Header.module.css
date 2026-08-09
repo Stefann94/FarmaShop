@@ -430,6 +430,35 @@
   color: #5c6f61;
 }
 
+/* Salutul din panoul de cont, pentru utilizatorii autentificați */
+.profileGreeting {
+  margin: 0 0 6px 0;
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+}
+
+/* Deconectarea este o acțiune secundară: același rol vizual ca linkul
+   discret din starea de vizitator, dar pe un element <button>. */
+.profileLogout {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 6px;
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #8a9a8f;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.profileLogout:hover {
+  color: #b3261e;
+}
+
 .favSignupLink {
   display: block;
   margin-top: 10px;
