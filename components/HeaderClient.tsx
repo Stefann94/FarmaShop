@@ -319,13 +319,29 @@ export default function HeaderClient({ categories, featuredProducts, activePromo
                         </div>
                       </>
                     ) : (
+                      /* Aceleași clase ca panoul de favorite, ca cele două să rămână
+                         identice prin construcție, nu prin stiluri duplicate. */
                       <>
-                        <div className={styles.profileDropdownHeader}>
-                          <p>Deblochează oferte și beneficii exclusive!</p>
+                        <div className={styles.favHeader}>Contul meu</div>
+                        <div className={styles.favAuthPrompt}>
+                          <div className={styles.favAuthIcon}>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                              <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                          </div>
+                          <p className={styles.favAuthText}>
+                            Urmărește-ți comenzile, salvează-ți adresele de livrare
+                            și primește oferte dedicate.
+                          </p>
                         </div>
-                        <div className={styles.profileDropdownActions}>
-                          <Link href="/login" className={styles.btnLogin} onClick={() => setIsProfileOpen(false)}>Autentificare</Link>
-                          <Link href="/signup" className={styles.btnSignup} onClick={() => setIsProfileOpen(false)}>Creare Cont</Link>
+                        <div className={styles.favFooter}>
+                          <Link href="/login" className={styles.btnViewAllFavs} onClick={() => setIsProfileOpen(false)}>
+                            Autentificare
+                          </Link>
+                          <Link href="/signup" className={styles.favSignupLink} onClick={() => setIsProfileOpen(false)}>
+                            Nu ai cont încă? Creează unul
+                          </Link>
                         </div>
                       </>
                     )}
