@@ -50,7 +50,9 @@ export async function toggleFavoriteDB(productSlug: string) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   
-  if (!user) return { error: 'Trebuie să fii autentificat pentru a adăuga la favorite.' }
+  // Indicatorul explicit evită verificarea după textul erorii — același
+  // tipar folosit deja de acțiunile coșului.
+  if (!user) return { error: 'Trebuie să fii autentificat pentru a adăuga la favorite.', notAuthenticated: true }
 
   // Check if item already exists
   const { data: existing } = await supabase

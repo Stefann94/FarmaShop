@@ -15,7 +15,7 @@ interface FavoritesContextType {
   favoriteItems: FavoriteItem[]
   favoriteCount: number
   isLoading: boolean
-  toggleFavorite: (productSlug: string) => Promise<{ error?: string; success?: boolean; action?: string }>
+  toggleFavorite: (productSlug: string) => Promise<{ error?: string; success?: boolean; action?: string; notAuthenticated?: boolean }>
   refreshFavorites: () => Promise<void>
   clearFavorites: () => void
 }
