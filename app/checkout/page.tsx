@@ -3,7 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import CheckoutClient from './CheckoutClient'
 
 export const metadata = {
-  title: 'Finalizare Comandă | FarmaShop',
+  title: 'Finalizare Comandă | Longevity Farma',
 }
 
 export default async function CheckoutPage() {

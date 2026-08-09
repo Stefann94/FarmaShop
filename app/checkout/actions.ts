@@ -132,7 +132,7 @@ export async function processCheckout(formData: FormData) {
 
     const emailHtml = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <h2 style="color: #2e8b57;">Confirmare Comandă FarmaShop</h2>
+        <h2 style="color: #2e8b57;">Confirmare Comandă Longevity Farma</h2>
         <p>Salut, <strong>${firstName}</strong>!</p>
         <p>Îți mulțumim pentru comandă. Mai jos regăsești detaliile cumpărăturilor tale:</p>
         
@@ -161,9 +161,9 @@ export async function processCheckout(formData: FormData) {
     `;
 
     const { data: emailData, error: emailError } = await resend.emails.send({
-      from: 'FarmaShop <onboarding@resend.dev>',
+      from: 'Longevity Farma <onboarding@resend.dev>',
       to: [email],
-      subject: `Confirmare Comandă #${orderId.split('-')[0]} - FarmaShop`,
+      subject: `Confirmare Comandă #${orderId.split('-')[0]} - Longevity Farma`,
       html: emailHtml,
     });
 

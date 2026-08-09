@@ -6,8 +6,8 @@ import ProductCarousel from '@/components/ProductCarousel'
 import styles from './Cart.module.css'
 
 export const metadata = {
-  title: 'Coșul meu | FarmaShop',
-  description: 'Coșul tău de cumpărături FarmaShop',
+  title: 'Coșul meu | Longevity Farma',
+  description: 'Coșul tău de cumpărături Longevity Farma',
 }
 
 export default async function CartPage() {

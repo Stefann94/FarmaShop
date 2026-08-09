@@ -6,7 +6,9 @@ import Footer from "../components/Footer";
 import { CartProvider } from "./context/CartContext";
 import { FavoritesProvider } from "./context/FavoritesContext";
 import ScrollToTop from "@/components/ScrollToTop";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 import { createClient } from '@/lib/supabase/server';
+import { getSiteUrl } from '@/lib/site';
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -14,13 +16,17 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
+  // Baza pentru toate URL-urile relative din metadate (og:image, og:url etc.).
+  // Fără ea, imaginile Open Graph rămân căi relative pe care Facebook/WhatsApp
+  // nu le pot rezolva, iar previzualizarea la distribuire apare goală.
+  metadataBase: new URL(getSiteUrl()),
   title: "Longevity Farma | Suplimente Premium pentru Sănătate",
   description: "Investește Astăzi în Ziua de Mâine. Suplimente alimentare premium, formulate științific pentru vitalitate, energie și funcția cognitivă.",
   keywords: ["suplimente", "longevitate", "anti-aging", "nootropice", "sanatate", "vitamine premium"],
   openGraph: {
     title: "Longevity Farma | Suplimente Premium",
     description: "Investește Astăzi în Ziua de Mâine cu cele mai bune suplimente pentru corpul tău.",
-    url: "https://longevityfarma.ro",
+    url: "/",
     siteName: "Longevity Farma",
     locale: "ro_RO",
     type: "website",
@@ -39,6 +45,7 @@ export default async function RootLayout({
   return (
     <html lang="ro">
       <body className={`${outfit.variable}`}>
+        <GoogleAnalytics />
         <ScrollToTop />
         <FavoritesProvider key={userKey}>
           <CartProvider key={userKey}>

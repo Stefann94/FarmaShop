@@ -16,14 +16,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { data: product } = await supabase.from('products').select('*').eq('slug', decodedSlug).single();
 
   if (!product) {
-    return { title: 'Produs Neregasit | FarmaShop' };
+    return { title: 'Produs Neregasit | Longevity Farma' };
   }
 
   return {
-    title: `${product.name} | FarmaShop`,
+    title: `${product.name} | Longevity Farma`,
     description: product.description || `Comandă ${product.name} la doar ${product.price} RON. Livrare rapidă.`,
     openGraph: {
-      title: `${product.name} | FarmaShop`,
+      title: `${product.name} | Longevity Farma`,
       description: product.description,
       images: [product.image_url],
     }
@@ -302,7 +302,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             <div className={styles.descriptionBlock}>
               <h3 className={styles.descriptionTitle}>Informații Produs</h3>
               <p className={styles.descriptionText}>
-                {product.description || "Informațiile detaliate despre acest produs urmează a fi actualizate în curând. Formulele FarmaShop sunt dezvoltate pentru eficiență și puritate maximă."}
+                {product.description || "Informațiile detaliate despre acest produs urmează a fi actualizate în curând. Formulele Longevity Farma sunt dezvoltate pentru eficiență și puritate maximă."}
               </p>
             </div>
           )}

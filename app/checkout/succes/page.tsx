@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { FiCheckCircle } from 'react-icons/fi'
 
 export const metadata = {
-  title: 'Comandă finalizată | FarmaShop',
+  title: 'Comandă finalizată | Longevity Farma',
 }
 
 export default function CheckoutSuccessPage() {

@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/server';
 import Link from 'next/link';
 
 export const metadata = {
-  title: 'Comenzile Mele | FarmaShop',
+  title: 'Comenzile Mele | Longevity Farma',
 };
 
 export default async function OrdersPage() {

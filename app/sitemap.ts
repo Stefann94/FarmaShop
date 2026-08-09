@@ -1,12 +1,17 @@
 import { MetadataRoute } from 'next';
 import { createClient } from '@supabase/supabase-js';
+import { getSiteUrl } from '@/lib/site';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
+// Standardul sitemap cere ca URL-urile să fie percent-encoded.
+// Slug-urile pot conține diacritice, deci codificăm fiecare segment.
+const encodeSlug = (slug: string) => encodeURIComponent(slug);
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://longevityfarma.ro'; // Replace with actual domain later
+  const baseUrl = getSiteUrl();
 
   // Static routes
   const routes = [
@@ -26,7 +31,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Fetch categories
   const { data: categories } = await supabase.from('categories').select('slug');
   const categoryRoutes = (categories || []).map((cat) => ({
-    url: `${baseUrl}/categorie/${cat.slug}`,
+    url: `${baseUrl}/categorie/${encodeSlug(cat.slug)}`,
     lastModified: new Date(),
     changeFrequency: 'weekly' as const,
     priority: 0.8,
@@ -35,16 +40,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Fetch products
   const { data: products } = await supabase.from('products').select('slug');
   const productRoutes = (products || []).map((prod) => ({
-    url: `${baseUrl}/produs/${prod.slug}`,
+    url: `${baseUrl}/produs/${encodeSlug(prod.slug)}`,
     lastModified: new Date(),
     changeFrequency: 'monthly' as const,
     priority: 0.6,
   }));
 
-  // Fetch articles (jurnal)
-  const { data: articles } = await supabase.from('articles').select('slug');
+  // Fetch articles (jurnal) — tabelul se numește `journal_articles`, nu `articles`
+  const { data: articles } = await supabase.from('journal_articles').select('slug');
   const articleRoutes = (articles || []).map((article) => ({
-    url: `${baseUrl}/jurnal/${article.slug}`,
+    url: `${baseUrl}/jurnal/${encodeSlug(article.slug)}`,
     lastModified: new Date(),
     changeFrequency: 'monthly' as const,
     priority: 0.7,
