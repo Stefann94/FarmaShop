@@ -223,6 +223,33 @@ export default function HeaderClient({ categories, featuredProducts, activePromo
                   </button>
                   
                   <div className={`${styles.favDropdown} ${isFavOpen ? styles.favDropdownOpen : ''}`}>
+                    {!user ? (
+                      /* Vizitator neautentificat: favoritele se salvează în cont,
+                         deci îi explicăm de ce merită și îi oferim ambele căi. */
+                      <>
+                        <div className={styles.favHeader}>Produse favorite</div>
+                        <div className={styles.favAuthPrompt}>
+                          <div className={styles.favAuthIcon}>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                          </div>
+                          <p className={styles.favAuthText}>
+                            Creează-ți un cont ca să salvezi produsele care îți plac.
+                            Le vei regăsi oricând, de pe orice dispozitiv.
+                          </p>
+                        </div>
+                        <div className={styles.favFooter}>
+                          <Link href="/login" className={styles.btnFavPrimary} onClick={() => setIsFavOpen(false)}>
+                            Autentifică-te
+                          </Link>
+                          <Link href="/signup" className={styles.favSignupLink} onClick={() => setIsFavOpen(false)}>
+                            Nu ai cont încă? Creează unul
+                          </Link>
+                        </div>
+                      </>
+                    ) : (
+                    <>
                     <div className={styles.favHeader}>Ultimele adăugate</div>
                     <div className={styles.favList} ref={favListRef}>
                       {favoriteItems.length === 0 ? (
@@ -255,6 +282,8 @@ export default function HeaderClient({ categories, featuredProducts, activePromo
                         Vezi toate produsele favorite
                       </Link>
                     </div>
+                    </>
+                    )}
                   </div>
                 </div>
                 <div className={styles.profileWrapper}>
