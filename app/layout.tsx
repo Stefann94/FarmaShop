@@ -7,6 +7,7 @@ import { CartProvider } from "./context/CartContext";
 import { FavoritesProvider } from "./context/FavoritesContext";
 import ScrollToTop from "@/components/ScrollToTop";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
+import BackToTopButton from "@/components/BackToTopButton";
 import { createClient } from '@/lib/supabase/server';
 import { getSiteUrl } from '@/lib/site';
 
@@ -52,6 +53,7 @@ export default async function RootLayout({
             <Header />
             {children}
             <Footer />
+            <BackToTopButton />
           </CartProvider>
         </FavoritesProvider>
       </body>
