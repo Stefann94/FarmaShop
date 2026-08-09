@@ -2,6 +2,7 @@ import React from 'react';
 import styles from '../Account.module.css';
 import { createClient } from '@/lib/supabase/server';
 import Link from 'next/link';
+import RemoveFavoriteButton from './RemoveFavoriteButton';
 
 export const metadata = {
   title: 'Produse Favorite | Longevity Farma',
@@ -68,8 +69,9 @@ export default async function FavoritesPage() {
                 </div>
                 <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: '#333', marginBottom: '10px', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{product.name}</h3>
               </Link>
-              <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px' }}>
                 <span style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--color-primary)' }}>{product.price} Lei</span>
+                <RemoveFavoriteButton productSlug={product.product_slug} productName={product.name} />
               </div>
             </div>
           ))}
