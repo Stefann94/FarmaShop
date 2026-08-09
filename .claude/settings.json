@@ -1,8 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(sed -i \"s|clip: { x: 880, y: 0, width: 400, height: 400 }|clip: { x: 700, y: 0, width: 580, height: 460 }|\" fav-hover.mjs)",
-      "Bash(node fav-hover.mjs)"
-    ]
-  }
-}
