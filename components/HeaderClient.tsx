@@ -12,7 +12,9 @@ import { createBrowserClient } from '@supabase/ssr';
 
 type Category = { id: string; name: string; slug: string; sort_order: number; group_name?: string };
 type Product = { id: string; name: string; slug: string; image_url: string; price: number };
-type Promo = { id: string; title: string; description: string; image_url: string; tag: string };
+// link_url este opțional: dacă lipsește din baza de date, promoția
+// rămâne un bloc simplu, neclicabil, exact ca înainte.
+type Promo = { id: string; title: string; description: string; image_url: string; tag: string; link_url?: string | null };
 
 interface HeaderClientProps {
   categories: Category[];
@@ -459,15 +461,28 @@ export default function HeaderClient({ categories, featuredProducts, activePromo
                     </ul>
                   </div>
                   <div className={styles.dropdownColumn}>
-                    {activePromo && (
-                      <div className={styles.dropdownPromo}>
-                        <div className={styles.promoImage} style={activePromo.image_url ? { backgroundImage: `url(${activePromo.image_url})` } : {}}>
-                          {activePromo.tag && <span className={styles.promoTag}>{activePromo.tag}</span>}
-                        </div>
-                        <h4>{activePromo.title}</h4>
-                        <p>{activePromo.description}</p>
-                      </div>
-                    )}
+                    {activePromo && (() => {
+                      const promoBody = (
+                        <>
+                          <div className={styles.promoImage} style={activePromo.image_url ? { backgroundImage: `url(${activePromo.image_url})` } : {}}>
+                            {activePromo.tag && <span className={styles.promoTag}>{activePromo.tag}</span>}
+                          </div>
+                          <h4>{activePromo.title}</h4>
+                          <p>{activePromo.description}</p>
+                        </>
+                      );
+
+                      // Devine clicabil doar dacă promoția are o destinație setată în baza de date
+                      return activePromo.link_url ? (
+                        // Nu închidem meniul aici: efectul care ascultă schimbarea
+                        // rutei o face deja, pentru toate meniurile deodată.
+                        <Link href={activePromo.link_url} className={styles.dropdownPromo}>
+                          {promoBody}
+                        </Link>
+                      ) : (
+                        <div className={styles.dropdownPromo}>{promoBody}</div>
+                      );
+                    })()}
                   </div>
                 </div>
               </div>

@@ -589,6 +589,18 @@
   transform: translateX(5px);
 }
 
+/* Promoția din meniu poate fi acum un link către produsul ei.
+   Regulile generice `.dropdownColumn a` de mai sus sunt mai specifice decât
+   `.dropdownPromo` și i-ar suprascrie layoutul (display) și efectul de hover,
+   așa că le restaurăm aici pentru acest caz. */
+.dropdownColumn a.dropdownPromo {
+  display: flex;
+}
+
+.dropdownColumn a.dropdownPromo:hover {
+  transform: translateY(-5px);
+}
+
 .dropdownPromo {
   display: flex;
   flex-direction: column;
