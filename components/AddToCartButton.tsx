@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useCart } from '@/app/context/CartContext';
 import styles from '@/app/produs/[slug]/ProductPage.module.css';
 
@@ -16,6 +17,7 @@ interface AddToCartButtonProps {
 
 export default function AddToCartButton({ productSlug, price, variant = 'full' }: AddToCartButtonProps) {
   const { addToCart } = useCart();
+  const pathname = usePathname();
   const [loading, setLoading] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -92,7 +94,21 @@ export default function AddToCartButton({ productSlug, price, variant = 'full' }
             </div>
             
             <div className={styles.modalButtons}>
-              <Link href="/cart" className={styles.btnCart}>
+              {/* Închiderea explicită este necesară pentru cazul în care
+                  utilizatorul este deja pe /cart (de exemplu, adaugă din
+                  caruselul de recomandări): acolo nu are loc nicio navigare
+                  care să demonteze modalul, deci ar rămâne pe ecran.
+                  Tot atunci derulăm sus, ca să vadă coșul actualizat. */}
+              <Link
+                href="/cart"
+                className={styles.btnCart}
+                onClick={() => {
+                  setShowPopup(false);
+                  if (pathname === '/cart') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }
+                }}
+              >
                 Spre coșul meu
               </Link>
               <button className={styles.btnContinue} onClick={() => setShowPopup(false)}>
