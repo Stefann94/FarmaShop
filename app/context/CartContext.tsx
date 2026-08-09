@@ -47,8 +47,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   }
 
-  const refreshCart = async () => {
-    setIsLoading(true)
+  // `silent` sare peste starea de încărcare: o folosim după o modificare,
+  // când coșul este deja actualizat optimist. Altfel, `isLoading` înlocuiește
+  // tot conținutul paginii cu un schelet, ceea ce arată ca o reîncărcare.
+  const refreshCart = async (options?: { silent?: boolean }) => {
+    if (!options?.silent) setIsLoading(true)
     const result = await fetchCart()
     
     if (result.notAuthenticated || result.error === 'Not authenticated') {
@@ -79,7 +82,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       setIsGuest(false)
       setCartItems(result.items || [])
     }
-    setIsLoading(false)
+    if (!options?.silent) setIsLoading(false)
   }
 
   useEffect(() => {
@@ -104,29 +107,35 @@ export function CartProvider({ children }: { children: ReactNode }) {
         })
       }
       saveLocalCart(localCart)
-      await refreshCart() // this will enrich with name/image
+      await refreshCart({ silent: true }) // completează nume/imagine
       return { success: true }
     }
 
     if (result.success) {
-      await refreshCart()
+      await refreshCart({ silent: true })
     }
     return result
   }
 
   const removeFromCart = async (productSlug: string) => {
+    const stareAnterioara = cartItems
+
+    // Actualizare optimistă, la fel ca la modificarea cantității: produsul
+    // dispare imediat, fără schelet de încărcare peste tot coșul.
+    setCartItems(prev => prev.filter(item => item.product_slug !== productSlug))
+
     const result = await removeCartItemDB(productSlug)
-    
+
     if (result.notAuthenticated) {
       let localCart = getLocalCart()
       localCart = localCart.filter(item => item.product_slug !== productSlug)
       saveLocalCart(localCart)
-      await refreshCart()
       return { success: true }
     }
 
-    if (result.success) {
-      await refreshCart()
+    if (!result.success) {
+      // Serverul a refuzat: punem produsul la loc.
+      setCartItems(stareAnterioara)
     }
     return result
   }

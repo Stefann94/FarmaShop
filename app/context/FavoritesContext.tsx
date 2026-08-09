@@ -26,11 +26,13 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
   const [favoriteItems, setFavoriteItems] = useState<FavoriteItem[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
-  const refreshFavorites = async () => {
-    setIsLoading(true)
+  // `silent` sare peste starea de încărcare: o folosim după o modificare,
+  // când lista este deja actualizată optimist și un schelet ar fi doar o clipire.
+  const refreshFavorites = async (options?: { silent?: boolean }) => {
+    if (!options?.silent) setIsLoading(true)
     const result = await fetchFavorites()
     setFavoriteItems(result.items || [])
-    setIsLoading(false)
+    if (!options?.silent) setIsLoading(false)
   }
 
   useEffect(() => {
@@ -38,10 +40,28 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const toggleFavorite = async (productSlug: string) => {
+    const eraFavorit = favoriteItems.some(f => f.product_slug === productSlug)
+    const stareAnterioara = favoriteItems
+
+    // Actualizare optimistă: inima și insigna din antet reacționează imediat,
+    // fără să aștepte răspunsul serverului.
+    setFavoriteItems(prev =>
+      eraFavorit
+        ? prev.filter(f => f.product_slug !== productSlug)
+        : [...prev, { id: `pending-${productSlug}`, product_slug: productSlug }]
+    )
+
     const result = await toggleFavoriteDB(productSlug)
-    if (result.success) {
-      await refreshFavorites()
+
+    if (!result.success) {
+      // Serverul a refuzat (inclusiv cazul „neautentificat"): revenim la starea reală.
+      setFavoriteItems(stareAnterioara)
+      return result
     }
+
+    // Detaliile complete (nume, imagine, preț) pentru panoul din antet vin în
+    // fundal. Interfața nu mai așteaptă după acest al doilea drum la server.
+    void refreshFavorites({ silent: true })
     return result
   }
 

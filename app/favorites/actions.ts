@@ -72,7 +72,10 @@ export async function toggleFavoriteDB(productSlug: string) {
     if (removeError) {
       return { error: `Eroare ștergere: ${removeError.message}` }
     }
-    revalidatePath('/')
+    // Fără revalidatePath: starea favoritelor este ținută în context, pe client.
+    // Nicio pagină randată pe server nu depinde de ea, iar pagina principală
+    // este oricum dinamică — deci revalidarea era muncă pură în plus, care
+    // forța o reîncărcare a rutei curente la fiecare click pe inimă.
     return { success: true, action: 'removed' }
   } else {
     // Add it
@@ -86,7 +89,10 @@ export async function toggleFavoriteDB(productSlug: string) {
     if (insertError) {
       return { error: `Eroare adăugare: ${insertError.message}` }
     }
-    revalidatePath('/')
+    // Fără revalidatePath: starea favoritelor este ținută în context, pe client.
+    // Nicio pagină randată pe server nu depinde de ea, iar pagina principală
+    // este oricum dinamică — deci revalidarea era muncă pură în plus, care
+    // forța o reîncărcare a rutei curente la fiecare click pe inimă.
     return { success: true, action: 'added' }
   }
 }
