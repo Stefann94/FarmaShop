@@ -9,13 +9,28 @@ import { createClient } from '@/lib/supabase/server';
 
 export const revalidate = 60;
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const article = await getJournalArticleBySlug(params.slug);
+// În Next 16, `params` este o promisiune și trebuie așteptată.
+// Citirea sincronă (`params.slug`) returna `undefined`, articolul nu era găsit
+// și fiecare pagină de articol răspundea cu 404.
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const article = await getJournalArticleBySlug(slug);
   if (!article) return { title: 'Articol inexistent' };
 
   return {
     title: `${article.title} | Longevity Farma`,
     description: article.summary,
+    alternates: {
+      canonical: `/jurnal/${encodeURIComponent(article.slug)}`,
+    },
+    openGraph: {
+      title: article.title,
+      description: article.summary,
+      type: 'article',
+      publishedTime: article.published_at,
+      authors: article.author ? [article.author] : undefined,
+      images: article.image_url ? [article.image_url] : undefined,
+    },
   };
 }
 
@@ -27,9 +42,10 @@ function formatDate(dateStr: string) {
   });
 }
 
-export default async function ArticlePage({ params }: { params: { slug: string } }) {
-  const article = await getJournalArticleBySlug(params.slug);
-  
+export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const article = await getJournalArticleBySlug(slug);
+
   if (!article) {
     notFound();
   }

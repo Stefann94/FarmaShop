@@ -1,5 +1,7 @@
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
+import Link from 'next/link';
+import { getSiteUrl } from '@/lib/site';
 import { createClient } from '../../../lib/supabase/server';
 import styles from './ProductPage.module.css';
 import ProductCarousel from '../../../components/ProductCarousel';
@@ -22,6 +24,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: `${product.name} | Longevity Farma`,
     description: product.description || `Comandă ${product.name} la doar ${product.price} RON. Livrare rapidă.`,
+    // URL-ul canonic: spune motoarelor de căutare care este adresa "oficială" a paginii.
+    // Fără el, o vizită venită din reclamă (/produs/x?utm_source=google) ar putea fi
+    // indexată ca pagină separată, ceea ce înseamnă conținut duplicat.
+    alternates: {
+      canonical: `/produs/${encodeURIComponent(decodedSlug)}`,
+    },
     openGraph: {
       title: `${product.name} | Longevity Farma`,
       description: product.description,
@@ -40,6 +48,12 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     notFound();
   }
 
+  // Categoria produsului, pentru firul Ariadnei (breadcrumb) și datele structurate.
+  // Dacă lipsește, firul rămâne Acasă / Produs, fără link mort.
+  const { data: category } = product.category_slug
+    ? await supabase.from('categories').select('name, slug').eq('slug', product.category_slug).single()
+    : { data: null };
+
   // Fetch similar products for the carousel based on category_slug
   let similarProductsQuery = supabase.from('products').select('*').neq('slug', product.slug);
   
@@ -54,6 +68,9 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   const shuffledProducts = rawSimilarProducts ? [...rawSimilarProducts].sort(() => 0.5 - Math.random()) : [];
   const similarProducts = shuffledProducts.slice(0, 8);
 
+  const siteUrl = getSiteUrl();
+  const productUrl = `${siteUrl}/produs/${encodeURIComponent(decodedSlug)}`;
+
   // Generate Structured Data (JSON-LD) for SEO
   const jsonLd = {
     "@context": "https://schema.org",
@@ -61,12 +78,22 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     "name": product.name,
     "image": product.image_url,
     "description": product.description || `Descoperă beneficiile ${product.name}.`,
+    "url": productUrl,
+    "brand": {
+      "@type": "Brand",
+      "name": product.brand || "Longevity Farma"
+    },
     "offers": {
       "@type": "Offer",
+      "url": productUrl,
       "priceCurrency": "RON",
       "price": product.price,
       "itemCondition": "https://schema.org/NewCondition",
-      "availability": "https://schema.org/InStock"
+      // Disponibilitatea reală, nu "InStock" fix: datele structurate false
+      // sunt penalizate de Google.
+      "availability": product.in_stock !== false
+        ? "https://schema.org/InStock"
+        : "https://schema.org/OutOfStock"
     },
     "aggregateRating": product.rating ? {
       "@type": "AggregateRating",
@@ -75,17 +102,50 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     } : undefined
   };
 
+  // Firul Ariadnei, în format înțeles de Google: poate afișa
+  // "Acasă › Categorie › Produs" direct în rezultatele căutării.
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Acasă", "item": siteUrl },
+      ...(category
+        ? [{
+            "@type": "ListItem",
+            "position": 2,
+            "name": category.name,
+            "item": `${siteUrl}/categorie/${encodeURIComponent(category.slug)}`,
+          }]
+        : []),
+      {
+        "@type": "ListItem",
+        "position": category ? 3 : 2,
+        "name": product.name,
+        "item": productUrl,
+      },
+    ],
+  };
+
   const tags = product.tags || [];
 
   return (
     <main className={styles.productPage}>
       {/* Inject JSON-LD Script for SEO */}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
 
       <div className="container">
         {/* BREADCRUMB */}
         <div className={styles.breadcrumb}>
-          <a href="/">Acasă</a> / <a href="/produse">Produse</a> / <span>{product.name}</span>
+          <Link href="/">Acasă</Link>
+          {category ? (
+            <>
+              {' / '}
+              <Link href={`/categorie/${encodeURIComponent(category.slug)}`}>{category.name}</Link>
+            </>
+          ) : null}
+          {' / '}
+          <span>{product.name}</span>
         </div>
 
         {/* MAIN SECTION (2 COLUMNS) */}
