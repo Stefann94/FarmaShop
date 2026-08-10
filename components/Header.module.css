@@ -192,10 +192,13 @@
 .cartBtn {
   display: flex;
   align-items: center;
-  gap: 12px;
+  /* Spațiul dintre iconiță și sumă e mai mic decât înainte: rezerva de lățime
+     de pe `.cartTotal` adaugă oricum aer, iar cele două cumulate lăsau butonul
+     să pară gol la sume scurte. */
+  gap: 8px;
   background: var(--color-primary);
   color: white;
-  padding: 8px 16px 8px 8px;
+  padding: 8px 14px 8px 8px;
   border-radius: 30px;
   transition: all 0.3s ease;
   border: none;
@@ -218,9 +221,25 @@
   border-radius: 50%;
 }
 
+/* Suma se schimbă la fiecare adăugare, iar `.rightActions` este aliniat la
+   dreapta: dacă textul își schimbă lățimea, butonul crește spre stânga și
+   împinge toate celelalte iconițe.
+
+   `tabular-nums` face ca toate cifrele să aibă aceeași lățime, deci un total
+   nu mai tremură când trece de la 111 la 999. Face treaba grea, gratis.
+
+   Lățimea este fixă, nu minimă: la totaluri mari se micșorează scrisul, nu
+   crește butonul. Astfel bara din dreapta rămâne nemișcată la orice sumă, fără
+   să fie nevoie de o rezervă generoasă care ar lăsa un gol la coșul gol.
+   Treapta de mărime o alege componenta, după lungimea textului. */
 .cartTotal {
   font-weight: 600;
   font-size: 0.95rem;
+  width: 74px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 /* PROFILE DROPDOWN */
@@ -399,6 +418,67 @@
   font-weight: 700;
   color: var(--color-primary);
   margin-top: auto;
+}
+
+/* Rândul de jos al unui produs din coș: prețul unitar la stânga, butoanele de
+   cantitate la dreapta. Folosit doar în panoul coșului; panoul de favorite
+   păstrează prețul singur, cu `margin-top: auto`. */
+.favItemRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.favItemRow .favItemPrice {
+  margin-top: 0;
+}
+
+.favItemQty {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fff;
+  flex-shrink: 0;
+}
+
+.favQtyBtn {
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border: none;
+  color: var(--color-primary-dark);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  transition: background-color 0.2s ease;
+}
+
+.favQtyBtn:hover:not(:disabled) {
+  background: #f0f5f1;
+}
+
+.favQtyBtn:disabled {
+  color: #c5d0c8;
+  cursor: not-allowed;
+}
+
+.favQtyValue {
+  min-width: 28px;
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+  line-height: 26px;
+  border-left: 1px solid var(--color-border);
+  border-right: 1px solid var(--color-border);
 }
 
 .favFooter {

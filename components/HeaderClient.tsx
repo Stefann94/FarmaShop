@@ -23,6 +23,23 @@ interface HeaderClientProps {
   user: any;
 }
 
+/**
+ * Mărimea sumei din butonul coșului, în funcție de cât de lung este textul.
+ *
+ * Butonul are lățime fixă, ca bara de iconițe din dreapta să nu se miște
+ * niciodată. Totalurile obișnuite (până la „999.99 Lei") încap la mărimea
+ * normală; peste ele se micșorează scrisul, în loc să crească butonul.
+ *
+ * Pragurile sunt pe lungimea șirului, nu pe lățimea măsurată în browser:
+ * cifrele folosesc `tabular-nums`, deci au toate aceeași lățime, iar rezultatul
+ * este identic fără să fie nevoie de vreo măsurătoare și de un reflow.
+ */
+function cartTotalFontSize(text: string): string | undefined {
+  if (text.length >= 12) return '0.76rem'; // de la 10.000 Lei în sus
+  if (text.length >= 11) return '0.86rem'; // 1.000 – 9.999 Lei
+  return undefined;                        // mărimea din CSS
+}
+
 // Linkurile din bara de sub antet. Pe desktop apar în `.bottomMenu`; pe
 // telefon bara este ascunsă, iar aceeași listă este randată în meniul
 // hamburger, ca destinațiile să nu devină inaccesibile.
@@ -34,26 +51,6 @@ const MAIN_NAV_LINKS = [
   { href: '/jurnal', label: 'Jurnal Științific' },
   { href: '/contact', label: 'Contact' },
 ];
-
-/**
- * Spune dacă dispozitivul are un pointer care poate face hover (mouse).
- * Panoul de favorite se deschide pe hover, ceea ce pe touch înseamnă că nu
- * se deschide deloc. Pornim de la `true`, deci desktopul se comportă identic
- * de la primul randat, iar pe telefon efectul comută valoarea după montare.
- */
-function useCanHover() {
-  const [canHover, setCanHover] = useState(true);
-
-  useEffect(() => {
-    const query = window.matchMedia('(hover: hover)');
-    const sync = () => setCanHover(query.matches);
-    sync();
-    query.addEventListener('change', sync);
-    return () => query.removeEventListener('change', sync);
-  }, []);
-
-  return canHover;
-}
 
 export default function HeaderClient({ categories, featuredProducts, activePromo, user }: HeaderClientProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -70,10 +67,13 @@ export default function HeaderClient({ categories, featuredProducts, activePromo
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   );
 
-  const canHover = useCanHover();
+  // Reține dacă panoul de favorite a fost deschis cu degetul: doar atunci are
+  // nevoie de un strat de închidere, pentru că nu există hover care să-l ia.
+  const [favOpenedByTouch, setFavOpenedByTouch] = useState(false);
+
   const router = useRouter();
   const pathname = usePathname();
-  const { cartItems, cartCount, cartTotal, isLoading, clearCart, removeFromCart } = useCart();
+  const { cartItems, cartCount, cartTotal, isLoading, clearCart, removeFromCart, updateQuantity } = useCart();
   const { favoriteItems, favoriteCount, toggleFavorite, clearFavorites } = useFavorites();
 
   const favListRef = useRef<HTMLDivElement>(null);
@@ -247,18 +247,32 @@ export default function HeaderClient({ categories, featuredProducts, activePromo
 
               {/* Right side */}
               <div className={styles.rightActions}>
+                {/* Deschiderea se decide după tipul real al pointerului, nu după
+                    o interogare media despre dispozitiv: `pointerType` vine din
+                    evenimentul propriu-zis, deci nu poate fi ghicit greșit.
+                    `onPointerLeave` este mereu atașat, așa că panoul nu poate
+                    rămâne blocat deschis sub mouse. */}
                 <div
                   className={styles.favWrapper}
-                  onMouseEnter={canHover ? () => setIsFavOpen(true) : undefined}
-                  onMouseLeave={canHover ? () => setIsFavOpen(false) : undefined}
+                  onPointerEnter={(e) => {
+                    if (e.pointerType !== 'mouse') return;
+                    setFavOpenedByTouch(false);
+                    setIsFavOpen(true);
+                  }}
+                  onPointerLeave={(e) => {
+                    if (e.pointerType !== 'mouse') return;
+                    setIsFavOpen(false);
+                  }}
                 >
-                  {/* Fără mouse nu există hover, deci pe touch panoul se
-                      deschide la apăsare. Pe desktop butonul rămâne inert,
-                      exact ca înainte. */}
                   <button
                     className={`${styles.iconBtn} ${isFavOpen ? styles.iconBtnActive : ''}`}
                     aria-label="Favorite"
-                    onClick={canHover ? undefined : () => {
+                    onClick={(e) => {
+                      // Cu mouse, panoul este deja controlat de hover: un click
+                      // l-ar închide imediat după ce hoverul l-a deschis.
+                      // Degetul, stiloul și tastatura (pointerType gol) comută.
+                      if ((e.nativeEvent as PointerEvent).pointerType === 'mouse') return;
+                      setFavOpenedByTouch(!isFavOpen);
                       setIsFavOpen(!isFavOpen);
                       setIsProfileOpen(false);
                       setIsCartOpen(false);
@@ -272,10 +286,14 @@ export default function HeaderClient({ categories, featuredProducts, activePromo
                     )}
                   </button>
 
-                  {/* Pe touch panoul rămâne deschis până la o apăsare în afara
-                      lui, la fel ca panourile de cont și de coș. */}
-                  {!canHover && isFavOpen && (
-                    <div className={styles.profileBackdrop} onClick={() => setIsFavOpen(false)}></div>
+                  {/* Doar când panoul a fost deschis cu degetul: acolo nu există
+                      hover care să-l închidă. Cu mouse nu se randează deloc,
+                      deci nu poate intercepta clickuri pe desktop. */}
+                  {isFavOpen && favOpenedByTouch && (
+                    <div
+                      className={styles.profileBackdrop}
+                      onClick={() => { setIsFavOpen(false); setFavOpenedByTouch(false); }}
+                    ></div>
                   )}
 
                   <div className={`${styles.favDropdown} ${isFavOpen ? styles.favDropdownOpen : ''}`}>
@@ -436,7 +454,17 @@ export default function HeaderClient({ categories, featuredProducts, activePromo
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
                       {cartCount > 0 && <span className={styles.cartBadge}>{cartCount}</span>}
                     </div>
-                    <span className={styles.cartTotal}>{cartTotal.toFixed(2)} Lei</span>
+                    {(() => {
+                      const totalText = `${cartTotal.toFixed(2)} Lei`;
+                      return (
+                        <span
+                          className={styles.cartTotal}
+                          style={{ fontSize: cartTotalFontSize(totalText) }}
+                        >
+                          {totalText}
+                        </span>
+                      );
+                    })()}
                   </button>
 
                   {isCartOpen && (
@@ -468,7 +496,40 @@ export default function HeaderClient({ categories, featuredProducts, activePromo
                               </div>
                               <div className={styles.favItemInfo}>
                                 <div className={styles.favItemName}>{item.name}</div>
-                                <div className={styles.favItemPrice}>{item.price} Lei <span style={{fontSize: '0.8rem', color: '#666', fontWeight: 500}}>x {item.quantity}</span></div>
+                                {/* Produsul este învelit într-un Link, deci fiecare buton
+                                    trebuie să oprească navigarea, la fel ca butonul de
+                                    ștergere de mai jos. */}
+                                <div className={styles.favItemRow}>
+                                  <div className={styles.favItemPrice}>{item.price} Lei</div>
+                                  <div className={styles.favItemQty}>
+                                    <button
+                                      type="button"
+                                      className={styles.favQtyBtn}
+                                      aria-label="Scade cantitatea"
+                                      disabled={item.quantity <= 1}
+                                      onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        updateQuantity(item.product_slug, item.quantity - 1);
+                                      }}
+                                    >
+                                      −
+                                    </button>
+                                    <span className={styles.favQtyValue}>{item.quantity}</span>
+                                    <button
+                                      type="button"
+                                      className={styles.favQtyBtn}
+                                      aria-label="Crește cantitatea"
+                                      onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        updateQuantity(item.product_slug, item.quantity + 1);
+                                      }}
+                                    >
+                                      +
+                                    </button>
+                                  </div>
+                                </div>
                               </div>
                               <button aria-label="Șterge din coș" onClick={(e) => { e.preventDefault(); e.stopPropagation(); removeFromCart(item.product_slug) }} style={{ alignSelf: 'center', background: 'none', border: 'none', cursor: 'pointer', color: '#999', zIndex: 2 }}>
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
