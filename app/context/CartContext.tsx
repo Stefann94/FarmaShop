@@ -1,6 +1,6 @@
 'use client'
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import React, { createContext, useContext, useState, useEffect, useRef, ReactNode } from 'react'
 import { fetchCart, addToCartDB, removeCartItemDB, updateCartItemQuantityDB, fetchProductsDetailsBySlugs } from '@/app/cart/actions'
 
 export type CartItem = {
@@ -47,6 +47,45 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   }
 
+  // Fuziunea are voie să pornească o singură dată per montare a providerului.
+  // Fără această poartă s-ar executa de două ori în development, unde React
+  // rulează efectele dublu, iar `addToCartDB` adună cantitatea la cea existentă
+  // — deci produsele chiar s-ar dubla.
+  const mergeAttempted = useRef(false)
+
+  /**
+   * Mută coșul strâns înainte de autentificare din localStorage în contul
+   * utilizatorului. Fără asta, produsele adăugate ca vizitator dispăreau din
+   * ochii lui în momentul autentificării: rămâneau în localStorage, dar coșul
+   * afișat era cel din baza de date.
+   *
+   * Refolosește `addToCartDB`, exact acțiunea pe care o folosește butonul de
+   * adăugare în coș. Nu introduce niciun tipar nou de acces la baza de date,
+   * deci nu poate da peste o politică lipsă.
+   *
+   * Întoarce `true` dacă cel puțin un produs a fost mutat.
+   */
+  const mergeGuestCart = async (): Promise<boolean> => {
+    const localCart = getLocalCart()
+    if (localCart.length === 0) return false
+
+    // Produsele care nu au putut fi mutate rămân în localStorage; cele reușite
+    // sunt scoase. Astfel o eventuală reluare nu le adaugă a doua oară, dar
+    // nici nu pierdem ceva ce nu a ajuns în cont.
+    const notMerged: CartItem[] = []
+
+    for (const item of localCart) {
+      const result = await addToCartDB(item.product_slug, item.price, item.quantity)
+      if (!result.success) {
+        console.warn('Produsul nu a putut fi mutat in cont:', item.product_slug, result.error)
+        notMerged.push(item)
+      }
+    }
+
+    saveLocalCart(notMerged)
+    return notMerged.length < localCart.length
+  }
+
   // `silent` sare peste starea de încărcare: o folosim după o modificare,
   // când coșul este deja actualizat optimist. Altfel, `isLoading` înlocuiește
   // tot conținutul paginii cu un schelet, ceea ce arată ca o reîncărcare.
@@ -80,6 +119,22 @@ export function CartProvider({ children }: { children: ReactNode }) {
       }
     } else {
       setIsGuest(false)
+
+      // Prima citire după autentificare: dacă a rămas un coș de vizitator, îl
+      // mutăm în cont înainte de a afișa ceva. Altfel utilizatorul ar vedea
+      // pentru o clipă coșul din bază, fără produsele lui.
+      if (!mergeAttempted.current) {
+        mergeAttempted.current = true
+        const merged = await mergeGuestCart()
+
+        if (merged) {
+          const afterMerge = await fetchCart()
+          setCartItems(afterMerge.items || [])
+          if (!options?.silent) setIsLoading(false)
+          return
+        }
+      }
+
       setCartItems(result.items || [])
     }
     if (!options?.silent) setIsLoading(false)

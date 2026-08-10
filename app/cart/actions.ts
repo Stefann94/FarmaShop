@@ -1,7 +1,6 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import { revalidatePath } from 'next/cache'
 
 // Tipul returnat de fetchCart. `notAuthenticated` era deja citit în CartContext,
 // dar nu apărea în tipul inferat — de aici eroarea de compilare.
@@ -91,8 +90,11 @@ export async function addToCartDB(productSlug: string, price: number, quantity: 
     if (error) return { error: error.message }
   }
 
-  revalidatePath('/')
-  revalidatePath('/produs/[slug]', 'page')
+  // Fără revalidatePath: coșul este ținut în context, pe client, și nicio
+  // pagină randată pe server nu citește `cart_items`. Revalidarea rutei
+  // curente era muncă în plus care, pe pagina de produs, demonta caruselul de
+  // recomandate în timpul re-randării — iar odată cu el dispărea și fereastra
+  // de confirmare tocmai deschisă. Același raționament ca la favorite.
   return { success: true }
 }
 
