@@ -43,17 +43,24 @@ export async function login(formData: FormData) {
     return { error: 'E-mail și parolă sunt obligatorii.' }
   }
 
-  const { error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  })
+  // Acelasi motiv ca la inregistrare: o excepție neașteptată trebuie să devină
+  // mesaj în formular, nu pagina generică de eroare.
+  try {
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    })
 
-  if (error) {
-    // Return friendly error messages
-    if (error.message.includes('Invalid login credentials')) {
-      return { error: 'Date de conectare incorecte. Verifică e-mailul și parola.' }
+    if (error) {
+      // Return friendly error messages
+      if (error.message.includes('Invalid login credentials')) {
+        return { error: 'Date de conectare incorecte. Verifică e-mailul și parola.' }
+      }
+      return { error: error.message }
     }
-    return { error: error.message }
+  } catch (err) {
+    console.error('Eroare neasteptata la autentificare:', err)
+    return { error: 'A apărut o problemă la autentificare. Te rugăm să încerci din nou.' }
   }
 
   // Sesiunea există de aici încolo, deci comenzile plasate anterior fără cont
@@ -86,24 +93,43 @@ export async function signup(formData: FormData) {
     return { error: 'Parola trebuie să aibă cel puțin 6 caractere.' }
   }
 
-  // Sign up with user metadata
-  const { error } = await supabase.auth.signUp({
-    email,
-    password,
-    options: {
-      data: {
-        first_name: firstName,
-        last_name: lastName,
-        phone: phone || null,
+  // Sign up with user metadata.
+  // Orice excepție neașteptată (rețea, Supabase indisponibil) ar ajunge altfel
+  // la error boundary, iar utilizatorul ar vedea pagina generică "Ceva nu a
+  // funcționat corect" în loc de un mesaj în formular.
+  let signUpData
+  try {
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          first_name: firstName,
+          last_name: lastName,
+          phone: phone || null,
+        },
       },
-    },
-  })
+    })
 
-  if (error) {
-    if (error.message.includes('User already registered')) {
-      return { error: 'Acest e-mail este deja înregistrat.' }
+    if (error) {
+      if (error.message.includes('User already registered')) {
+        return { error: 'Acest e-mail este deja înregistrat.' }
+      }
+      return { error: error.message }
     }
-    return { error: error.message }
+
+    signUpData = data
+  } catch (err) {
+    console.error('Eroare neasteptata la inregistrare:', err)
+    return { error: 'A apărut o problemă la crearea contului. Te rugăm să încerci din nou.' }
+  }
+
+  // Când confirmarea pe email este activă, Supabase nu spune că adresa există
+  // deja: întoarce succes cu un utilizator fără identități, ca să nu poată fi
+  // aflat cine are cont. Fără verificarea asta, cineva care se reînregistrează
+  // ar fi trimis pe pagina principală ca și cum contul tocmai s-ar fi creat.
+  if (signUpData?.user && signUpData.user.identities?.length === 0) {
+    return { error: 'Acest e-mail este deja înregistrat.' }
   }
 
   // After successful signup, redirect to home page or a confirmation page
@@ -115,6 +141,8 @@ export async function signup(formData: FormData) {
   // autentificare — de aceea revendicarea stă și în `login`.
   await claimGuestOrders(supabase)
 
+  // `redirect` semnalează redirecționarea aruncând o excepție pe care Next o
+  // tratează intern, deci trebuie să rămână în afara oricărui try/catch.
   revalidatePath('/', 'layout')
   redirect('/')
 }
