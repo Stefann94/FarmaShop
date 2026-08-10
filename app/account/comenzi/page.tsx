@@ -90,26 +90,45 @@ export default async function OrdersPage() {
                       <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.95rem' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
                           
-                          {/* Poza produsului */}
-                          <div style={{ position: 'relative', width: '50px', height: '50px', backgroundColor: '#f9f9f9', borderRadius: '8px', overflow: 'hidden', border: '1px solid #eee' }}>
-                            <img src={imageUrl} alt={item.product_name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-                            
+                          {/* Poza produsului.
+                              Învelișul exterior nu taie nimic: el este doar
+                              reperul de poziționare pentru badge. Tăierea la
+                              colțuri rotunjite se face în cadrul interior,
+                              altfel `overflow: hidden` ar reteza badge-ul, care
+                              iese intenționat în afara imaginii. */}
+                          <div style={{ position: 'relative', width: '50px', height: '50px', flexShrink: 0 }}>
+                            <div style={{
+                              width: '100%',
+                              height: '100%',
+                              backgroundColor: '#f9f9f9',
+                              borderRadius: '8px',
+                              overflow: 'hidden',
+                              border: '1px solid #eee',
+                              boxSizing: 'border-box'
+                            }}>
+                              <img src={imageUrl} alt={item.product_name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                            </div>
+
                             {/* Badge cu cantitatea */}
-                            <div style={{ 
-                              position: 'absolute', 
-                              top: '-5px', 
-                              right: '-5px', 
-                              backgroundColor: '#2e8b57', 
-                              color: 'white', 
-                              fontSize: '0.7rem', 
-                              fontWeight: 'bold', 
-                              width: '20px', 
-                              height: '20px', 
-                              borderRadius: '50%', 
-                              display: 'flex', 
-                              alignItems: 'center', 
+                            <div style={{
+                              position: 'absolute',
+                              top: '-7px',
+                              right: '-7px',
+                              backgroundColor: '#2e8b57',
+                              color: 'white',
+                              fontSize: '0.72rem',
+                              fontWeight: 700,
+                              lineHeight: 1,
+                              minWidth: '22px',
+                              height: '22px',
+                              padding: '0 5px',
+                              borderRadius: '999px',
+                              display: 'flex',
+                              alignItems: 'center',
                               justifyContent: 'center',
-                              border: '2px solid white'
+                              boxSizing: 'border-box',
+                              border: '2px solid #fff',
+                              boxShadow: '0 1px 4px rgba(0, 0, 0, 0.18)'
                             }}>
                               {item.quantity}
                             </div>

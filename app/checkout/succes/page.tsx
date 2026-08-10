@@ -1,6 +1,5 @@
 import React from 'react'
 import Link from 'next/link'
-import { FiCheckCircle } from 'react-icons/fi'
 import { createClient } from '@/lib/supabase/server'
 
 export const metadata = {
@@ -70,6 +69,14 @@ const containerStyle: React.CSSProperties = {
   backgroundColor: '#fafafa',
 }
 
+/* Se ajunge aici prin navigare din pagina de checkout, iar la o navigare
+   client-side bucata de CSS a rutei noi se incarca separat de HTML. De aceea
+   stilurile stau inline: ele sosesc odata cu marcajul, deci nu exista niciun
+   moment in care pagina sa fie randata fara ele.
+   Din acelasi motiv, fiecare regula de care depinde asezarea este scrisa
+   explicit — marginile, `boxSizing` si centrarea nu se lasa mostenite din
+   `globals.css`, care este un fisier separat. */
+
 const cardStyle: React.CSSProperties = {
   backgroundColor: 'white',
   padding: '50px 30px',
@@ -78,6 +85,7 @@ const cardStyle: React.CSSProperties = {
   textAlign: 'center',
   maxWidth: '500px',
   width: '100%',
+  boxSizing: 'border-box',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
@@ -86,7 +94,9 @@ const cardStyle: React.CSSProperties = {
 const titleStyle: React.CSSProperties = {
   fontSize: '2rem',
   color: '#1a2b22',
-  marginBottom: '15px',
+  // Marginea implicita a browserului pentru <h1> ar impinge titlul daca
+  // resetul din globals.css nu a apucat sa se aplice.
+  margin: '0 0 15px 0',
   fontWeight: 700,
 }
 
@@ -94,7 +104,7 @@ const descStyle: React.CSSProperties = {
   color: '#666',
   fontSize: '1.1rem',
   lineHeight: '1.5',
-  marginBottom: '30px',
+  margin: '0 0 30px 0',
 }
 
 const btnStyle: React.CSSProperties = {
@@ -107,6 +117,14 @@ const btnStyle: React.CSSProperties = {
   fontSize: '1.05rem',
   marginBottom: '15px',
   width: '100%',
+  // Un <a> este implicit inline. Fara aceste reguli, latimea si centrarea
+  // textului depind de blocarea ca element flex si de `text-align` mostenit —
+  // exact lucrurile care faceau butonul sa apara deplasat la inceput.
+  boxSizing: 'border-box',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  textAlign: 'center',
   transition: 'background-color 0.2s',
 }
 
@@ -114,6 +132,8 @@ const linkStyle: React.CSSProperties = {
   color: '#2e8b57',
   textDecoration: 'none',
   fontWeight: 600,
+  display: 'block',
+  textAlign: 'center',
 }
 
 const noteStyle: React.CSSProperties = {
@@ -124,5 +144,7 @@ const noteStyle: React.CSSProperties = {
   color: '#4a5c51',
   fontSize: '0.95rem',
   lineHeight: '1.5',
-  marginBottom: '25px',
+  margin: '0 0 25px 0',
+  boxSizing: 'border-box',
+  width: '100%',
 }
