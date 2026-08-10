@@ -172,6 +172,28 @@
   color: var(--color-primary-dark);
 }
 
+.newsBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Mesajul de după abonare, sub câmpul de email */
+.newsMsgOk,
+.newsMsgErr {
+  margin-top: 10px;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.newsMsgOk {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.newsMsgErr {
+  color: #b3261e;
+}
+
 .footerBottom {
   border-top: 1px solid rgba(39, 79, 56, 0.1);
   padding: 30px 0;

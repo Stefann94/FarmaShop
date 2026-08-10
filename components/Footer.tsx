@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './Footer.module.css';
+import NewsletterForm from './NewsletterForm';
 
 export default function Footer() {
   return (
@@ -75,12 +76,7 @@ export default function Footer() {
               
               <div className={styles.newsletter}>
                 <h4>Abonează-te la Newsletter</h4>
-                <div className={styles.newsInputForm}>
-                  <input type="email" placeholder="Adresa ta de email" className={styles.newsInput} />
-                  <button className={styles.newsBtn}>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                  </button>
-                </div>
+                <NewsletterForm />
               </div>
             </div>
 

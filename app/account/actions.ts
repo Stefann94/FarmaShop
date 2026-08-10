@@ -131,12 +131,25 @@ export async function updateAddress(formData: FormData) {
       return { error: error.message }
     }
   } else {
+    // `addresses` cere obligatoriu first_name, last_name și phone, dar
+    // formularul de adresă nu le întreabă. Fără ele, orice adresă nouă era
+    // respinsă de baza de date. Le luăm din profil, cu același lanț de
+    // rezerve folosit deja de paginile de cont și de checkout.
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('first_name, last_name, phone')
+      .eq('id', user.id)
+      .maybeSingle()
+
     const { error } = await supabase
       .from('addresses')
       .insert({
         user_id: user.id,
         type,
         street, city, postal_code: zip, county,
+        first_name: profile?.first_name || user.user_metadata?.first_name || '',
+        last_name: profile?.last_name || user.user_metadata?.last_name || '',
+        phone: profile?.phone || user.user_metadata?.phone || '',
         is_default: true,
         updated_at: new Date().toISOString()
       })
