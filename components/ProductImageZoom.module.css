@@ -91,3 +91,37 @@
   object-fit: contain;
   transition: transform 0.1s linear; /* Tranzitie lină dar rapidă pentru zoom continuu */
 }
+
+/* =========================================
+   MOBIL
+   ========================================= */
+@media (max-width: 768px) {
+  /* `dvh` ține cont de bara de adrese a browserului mobil, pe care `100vh`
+     o ignoră — fereastra ieșea parțial sub ea. */
+  .lightbox {
+    height: 100dvh;
+  }
+
+  .lightboxContent {
+    /* Pătrat, cât permite ecranul: la 850px fix, `max-width: 95vw` lăsa
+       fereastra înaltă și îngustă, cu poza pierdută la mijloc. */
+    width: min(95vw, 95dvh);
+    height: min(95vw, 95dvh);
+    max-height: 95dvh;
+    padding: 20px;
+    border-radius: 16px;
+  }
+
+  .closeBtn {
+    top: 10px;
+    right: 10px;
+    width: 40px;
+    height: 40px;
+  }
+
+  /* Fără mouse nu există zoom la deplasarea cursorului; lăsăm imaginea
+     întreagă și cursorul implicit. */
+  .zoomContainer {
+    cursor: default;
+  }
+}

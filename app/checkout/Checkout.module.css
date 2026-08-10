@@ -184,4 +184,36 @@
   .formGrid {
     grid-template-columns: 1fr;
   }
+
+  .checkoutWrapper {
+    padding: 24px 16px;
+  }
+
+  .checkoutTitle {
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+  }
+
+  .formSection {
+    padding: 20px 16px;
+  }
+
+  .summarySection {
+    padding: 20px 16px;
+  }
+
+  .sectionTitle {
+    font-size: 1.2rem;
+  }
+
+  /* Lățimea fixă de 200px tăia numele lungi mai devreme decât era nevoie. */
+  .itemName {
+    max-width: none;
+    min-width: 0;
+    padding-right: 12px;
+  }
+
+  .totalsRow.grandTotal {
+    font-size: 1.25rem;
+  }
 }

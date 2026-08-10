@@ -162,3 +162,58 @@
   padding: 60px 0;
   border-top: 1px solid #eaeaea;
 }
+
+/* =========================================
+   MOBIL
+   ========================================= */
+@media (max-width: 768px) {
+  .articleContainer {
+    padding: 24px 20px 48px 20px;
+  }
+
+  .breadcrumb {
+    margin-bottom: 24px;
+    font-size: 0.8rem;
+  }
+
+  .articleHeader {
+    margin-bottom: 28px;
+  }
+
+  .summary {
+    font-size: 1.05rem;
+    margin-bottom: 24px;
+  }
+
+  /* Autorul, data și punctele despărțitoare nu încăpeau pe un rând. */
+  .metaInfo {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    padding: 14px 0;
+  }
+
+  .coverImageWrapper {
+    border-radius: 16px;
+    margin-bottom: 32px;
+  }
+
+  .articleContent {
+    font-size: 1.05rem;
+    line-height: 1.75;
+  }
+
+  .articleContent p {
+    margin-bottom: 22px;
+  }
+
+  .articleFooter {
+    margin-top: 40px;
+    padding-top: 28px;
+  }
+
+  .recommendedSection {
+    padding: 40px 0;
+  }
+}

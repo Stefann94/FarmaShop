@@ -30,8 +30,8 @@ export default function ProductCarousel({ title, products }: ProductCarouselProp
   // Responsive items per view
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth < 600) setItemsPerView(1);
-      else if (window.innerWidth < 900) setItemsPerView(2);
+      // Două carduri pe telefon, la fel ca grilele de produse.
+      if (window.innerWidth < 900) setItemsPerView(2);
       else if (window.innerWidth < 1200) setItemsPerView(3);
       else setItemsPerView(4);
     };

@@ -566,8 +566,58 @@
 }
 
 @media (max-width: 600px) {
+  /* Două coloane, ca la /bestsellers și /pachete. O singură coloană dădea
+     un card cât tot ecranul și cerea multă derulare pentru puține produse. */
   .productsGrid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  .productsSection {
+    padding: 40px 0;
+  }
+
+  .sectionHeader {
+    margin-bottom: 24px;
+    gap: 12px;
+  }
+
+  .productName {
+    font-size: 0.9rem;
+  }
+
+  .productPrice {
+    font-size: 1rem;
+  }
+
+  .currency {
+    font-size: 0.75rem;
+  }
+
+  .productInfo {
+    padding: 0 8px 10px;
+  }
+
+  .addToCartBtn {
+    width: 34px;
+    height: 34px;
+  }
+
+  .productBadge {
+    top: 8px;
+    left: 8px;
+    padding: 4px 8px;
+    font-size: 0.55rem;
+    letter-spacing: 0.5px;
+  }
+}
+
+/* Fără mouse nu există hover, deci butonul de favorite nu apărea niciodată
+   pe telefon. `(hover: none)` nu se potrivește pe desktop cu mouse. */
+@media (hover: none) {
+  .favoriteBtn {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -865,5 +915,54 @@
   .contactBannerContent {
     padding: 40px 20px;
     margin: 0 auto;
+  }
+}
+
+/* =========================================
+   MOBIL — ritm vertical
+   Blocul stă la finalul fișierului ca să câștige în fața regulilor de bază
+   definite mai sus, la aceeași specificitate.
+   ========================================= */
+@media (max-width: 600px) {
+  .contactBannerSection {
+    padding: 40px 0;
+  }
+
+  .contactBannerWrapper {
+    min-height: 0;
+  }
+
+  .contactBannerDesc {
+    font-size: 1rem;
+    margin-bottom: 28px;
+  }
+
+  .contactBannerBtn {
+    padding: 14px 26px;
+    font-size: 1rem;
+  }
+
+  .discoverCardsSection {
+    padding: 20px 0 40px 0;
+  }
+
+  .discoverSectionHeader {
+    margin-bottom: 24px;
+  }
+
+  .discoverCardContent {
+    padding: 20px 16px;
+  }
+
+  .promoBannerSection {
+    padding: 20px 0 10px 0;
+  }
+
+  .promoBannerOverlay {
+    padding: 0 24px;
+  }
+
+  .quickCategoriesSection {
+    padding: 20px 0 4px;
   }
 }

@@ -449,8 +449,11 @@
     position: fixed;
     top: 0;
     left: 0;
-    width: 320px;
-    height: 100vh;
+    /* Nu depășim lățimea ecranului pe telefoanele înguste. */
+    width: min(320px, 88vw);
+    /* `dvh` urmărește bara de adrese a browserului mobil; cu `100vh`
+       partea de jos a filtrelor rămânea tăiată sub ea. */
+    height: 100dvh;
     z-index: 1000;
     background: #ffffff;
     padding: 24px;
@@ -515,19 +518,50 @@
 }
 
 @media (max-width: 600px) {
+  /* Două coloane, ca pe restul site-ului (/bestsellers, /pachete, home). */
   .productsGrid {
-    grid-template-columns: 1fr;
-    gap: 20px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
   }
 
   .toolbar {
     flex-direction: column;
     align-items: flex-start;
     gap: 14px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+  }
+
+  /* Butoanele de sortare depășeau lățimea ecranului pe un singur rând. */
+  .sortOptions {
+    flex-wrap: wrap;
+    width: 100%;
   }
 
   .categoryTitle {
     font-size: 1.8rem;
+  }
+
+  .categoryHeader {
+    padding: 12px 0 16px;
+  }
+
+  .categoryDescription {
+    font-size: 0.95rem;
+  }
+
+  .mainLayout {
+    padding: 12px 0 48px;
+  }
+
+  .breadcrumbs {
+    padding: 16px 0 0;
+    font-size: 0.8rem;
+  }
+
+  .emptyState {
+    padding: 48px 20px;
+    font-size: 1rem;
   }
 }
 

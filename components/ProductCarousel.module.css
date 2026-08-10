@@ -215,3 +215,77 @@
   width: 24px;
   border-radius: 10px;
 }
+
+/* =========================================
+   MOBIL
+   ========================================= */
+
+/* Pe touch nu există hover, deci butonul de favorite rămânea invizibil. */
+@media (hover: none) {
+  .favoriteBtn {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .carouselSection {
+    padding: 40px 0;
+  }
+
+  .header {
+    margin-bottom: 24px;
+    gap: 12px;
+  }
+
+  .arrowBtn {
+    width: 40px;
+    height: 40px;
+  }
+
+  /* Puncte mai mari și mai rare: la 10px și gap 8px erau greu de nimerit
+     cu degetul. Nu le distanțăm mai mult, ca zonele de apăsare să nu ajungă
+     să se suprapună și să provoace apăsări greșite. */
+  .dotsContainer {
+    margin-top: 24px;
+    gap: 14px;
+    padding: 6px 0;
+  }
+
+  .dot {
+    width: 12px;
+    height: 12px;
+  }
+
+  .activeDot {
+    width: 28px;
+  }
+}
+
+@media (max-width: 600px) {
+  .carouselContainer {
+    margin: 0 -7px;
+    padding: 0 7px;
+  }
+
+  .carouselSlide {
+    padding: 0 7px;
+  }
+
+  .productName {
+    font-size: 0.9rem;
+  }
+
+  .productPrice {
+    font-size: 1rem;
+  }
+
+  .productInfo {
+    padding: 0 8px 10px;
+  }
+
+  .addToCartBtn {
+    width: 34px;
+    height: 34px;
+  }
+}

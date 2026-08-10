@@ -278,4 +278,25 @@
     justify-content: center;
     text-align: center;
   }
+
+  .footer {
+    padding-top: 48px;
+  }
+
+  .footerGrid {
+    padding-bottom: 40px;
+  }
+
+  .colTitle {
+    margin-bottom: 18px;
+  }
+
+  .footerBottom {
+    padding: 24px 0;
+  }
+
+  .paymentMethods {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
 }

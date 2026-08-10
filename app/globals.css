@@ -141,3 +141,37 @@ ul {
   transform: translateY(0) !important;
   color: var(--color-primary) !important;
 }
+
+/* =========================================
+   MOBIL — reguli de bază
+   Totul stă în @media (max-width: 768px), deci desktopul nu vede nimic
+   de aici.
+   ========================================= */
+@media (max-width: 768px) {
+  /* Plasă de siguranță împotriva derulării laterale. Folosim `clip`, nu
+     `hidden`: `hidden` ar transforma pagina în container de derulare și ar
+     strica antetul `position: sticky`. */
+  body {
+    overflow-x: clip;
+  }
+
+  /* iOS mărește singur textul unor blocuri la rotirea telefonului. */
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* Mai multă lățime utilă pe ecrane înguste. */
+  .container {
+    padding: 0 16px;
+  }
+
+  /* Numele lungi de produse sau adresele nu mai împing layoutul în lateral. */
+  h1, h2, h3, h4, h5, h6, p, li, a {
+    overflow-wrap: break-word;
+  }
+
+  /* Zone de apăsare mai apropiate de minimul recomandat de 44px. */
+  .btn {
+    padding: 14px 24px;
+  }
+}

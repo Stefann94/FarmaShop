@@ -251,3 +251,70 @@
   background-color: var(--color-primary);
   color: #ffffff;
 }
+
+/* =========================================
+   MOBIL
+   ========================================= */
+@media (max-width: 768px) {
+  .accountWrapper {
+    margin: 28px auto 56px auto;
+    padding: 0 16px;
+  }
+
+  .accountGrid {
+    gap: 24px;
+  }
+
+  .sidebar {
+    padding: 12px 8px;
+  }
+
+  .sidebarTitle {
+    font-size: 1.1rem;
+    padding: 8px 16px 14px 16px;
+    margin-bottom: 4px;
+  }
+
+  .menuLink,
+  .menuLinkActive,
+  .logoutLink {
+    padding: 13px 16px;
+  }
+
+  /* Ilustrația ocupa jumătate din banner și strivea salutul pe un ecran
+     îngust; textul primește toată lățimea. */
+  .heroImage {
+    display: none;
+  }
+
+  .heroContent {
+    max-width: 100%;
+  }
+
+  .heroSubtitle {
+    font-size: 0.95rem;
+  }
+
+  .dashboardGrid {
+    gap: 20px;
+  }
+
+  .premiumCard {
+    padding: 24px 20px;
+    border-radius: 18px;
+  }
+
+  .iconWrapper {
+    width: 46px;
+    height: 46px;
+    margin-bottom: 18px;
+  }
+
+  .cardHeader {
+    font-size: 1.15rem;
+  }
+
+  .cardContent {
+    margin-bottom: 20px;
+  }
+}

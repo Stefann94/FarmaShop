@@ -895,3 +895,213 @@
   background: #f9fbf9;
   border-radius: 8px;
 }
+
+/* =========================================
+   MOBIL
+   Tot ce urmează stă în @media (max-width: ...), deci desktopul
+   (peste 768px) nu vede nicio regulă de aici. Blocul e ultimul din
+   fișier ca să câștige în fața regulilor de mai sus la egalitate de
+   specificitate.
+   ========================================= */
+
+/* Linkurile din bara de jos, replicate în meniul hamburger.
+   Sub 768px bara `.bottomMenu` este ascunsă, iar fără asta cele șase
+   destinații (Bestsellers, Pachete, Abonamente, Calitate, Jurnal,
+   Contact) nu mai erau accesibile de nicăieri pe telefon. */
+.mobileNavColumn {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobileNavColumn {
+    display: block;
+    order: -1; /* înaintea categoriilor, ca prima secțiune din meniu */
+  }
+
+  .mobileNavTitle {
+    font-family: var(--font-heading);
+    color: var(--color-primary-dark);
+    font-size: 1.2rem;
+    margin-bottom: 16px;
+    border-bottom: 2px solid var(--color-accent);
+    display: inline-block;
+    padding-bottom: 5px;
+  }
+
+  .mobileNavList {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mobileNavList a {
+    display: block;
+    padding: 14px 2px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-primary-dark);
+    text-decoration: none;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .mobileNavList a:last-child {
+    border-bottom: none;
+  }
+
+  /* Antetul trebuie să încapă pe un rând de telefon.
+     Logoul scalează cu viewportul, deci rândul rămâne întreg și la 320px. */
+  .topRow {
+    gap: 8px;
+    padding: 12px 0;
+  }
+
+  .leftActions,
+  .rightActions {
+    flex: 0 0 auto;
+    gap: 8px;
+  }
+
+  .logoCenter {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .logo {
+    font-size: clamp(1rem, 4.4vw, 1.5rem);
+    gap: 8px;
+    white-space: nowrap;
+  }
+
+  .logoIcon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .logo span.premiumText {
+    font-size: 0.5rem;
+    letter-spacing: 2px;
+  }
+
+  .iconBtn {
+    width: 38px;
+    height: 38px;
+  }
+
+  /* Coșul păstrează iconița și badge-ul; suma se vede oricum în panou. */
+  .cartTotal {
+    display: none;
+  }
+
+  .cartBtn {
+    padding: 3px;
+  }
+
+  /* Meniul este copil al antetului sticky, deci nu se poate derula odată cu
+     pagina: fără o înălțime maximă proprie, tot ce depășește ecranul devine
+     inaccesibil pe telefon. `100%` se raportează la înălțimea antetului, ca
+     la `.menuBackdrop`. */
+  .dropdownMenu {
+    padding: 24px 0;
+    max-height: calc(100dvh - 100%);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .dropdownContent {
+    gap: 28px;
+  }
+
+  .searchDropdown {
+    padding: 20px 0;
+    max-height: calc(100dvh - 100%);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .searchInput {
+    font-size: 1.05rem;
+    min-width: 0;
+  }
+
+  .searchSubmitBtn {
+    padding: 9px 16px;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+  }
+
+  .searchIcon {
+    margin-right: 10px;
+    flex-shrink: 0;
+  }
+
+  .searchResults {
+    max-height: 55vh;
+  }
+}
+
+@media (max-width: 600px) {
+  .leftActions,
+  .rightActions {
+    gap: 6px;
+  }
+
+  .iconBtn {
+    width: 34px;
+    height: 34px;
+  }
+
+  .cartIconWrapper {
+    width: 30px;
+    height: 30px;
+  }
+
+  /* Contul iese din antet ca să încapă restul; îl regăsim în meniu. */
+  .accountWrapper {
+    display: none;
+  }
+
+  /* Panourile ancorate la un buton de 34px ar ieși din ecran la 320px
+     lățime. Le desprindem de buton și le prindem de antet: `.headerWrapper`
+     este `position: sticky`, deci devine blocul de referință de îndată ce
+     wrapperul butonului nu mai este poziționat. */
+  .favWrapper,
+  .profileWrapper {
+    position: static;
+  }
+
+  .favDropdown,
+  .profileDropdown {
+    top: 100%;
+    left: 12px;
+    right: 12px;
+    width: auto;
+    margin-top: 8px;
+  }
+
+  /* Săgeata rămâne sub iconița care a deschis panoul. Coșul folosește
+     aceeași clasă de panou ca favoritele, dar e ultimul buton din rând,
+     deci are nevoie de propria poziție. */
+  .favDropdown::before {
+    right: 58px;
+  }
+
+  .favDropdown.cartDropdown::before,
+  .profileDropdown::before {
+    right: 24px;
+  }
+
+  .favList {
+    max-height: 50vh;
+  }
+}
+
+/* Telefoane foarte înguste (320px): frunza și subtitlul logoului sunt
+   primele care cedează, ca numele mărcii să rămână întreg pe un rând. */
+@media (max-width: 380px) {
+  .logoIcon {
+    display: none;
+  }
+
+  .logo span.premiumText {
+    display: none;
+  }
+}

@@ -23,6 +23,38 @@ interface HeaderClientProps {
   user: any;
 }
 
+// Linkurile din bara de sub antet. Pe desktop apar în `.bottomMenu`; pe
+// telefon bara este ascunsă, iar aceeași listă este randată în meniul
+// hamburger, ca destinațiile să nu devină inaccesibile.
+const MAIN_NAV_LINKS = [
+  { href: '/bestsellers', label: 'Bestsellers' },
+  { href: '/pachete', label: 'Pachete & Oferte' },
+  { href: '/abonamente', label: 'Abonamente' },
+  { href: '/calitate', label: 'Calitate & Ingrediente' },
+  { href: '/jurnal', label: 'Jurnal Științific' },
+  { href: '/contact', label: 'Contact' },
+];
+
+/**
+ * Spune dacă dispozitivul are un pointer care poate face hover (mouse).
+ * Panoul de favorite se deschide pe hover, ceea ce pe touch înseamnă că nu
+ * se deschide deloc. Pornim de la `true`, deci desktopul se comportă identic
+ * de la primul randat, iar pe telefon efectul comută valoarea după montare.
+ */
+function useCanHover() {
+  const [canHover, setCanHover] = useState(true);
+
+  useEffect(() => {
+    const query = window.matchMedia('(hover: hover)');
+    const sync = () => setCanHover(query.matches);
+    sync();
+    query.addEventListener('change', sync);
+    return () => query.removeEventListener('change', sync);
+  }, []);
+
+  return canHover;
+}
+
 export default function HeaderClient({ categories, featuredProducts, activePromo, user }: HeaderClientProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -38,6 +70,7 @@ export default function HeaderClient({ categories, featuredProducts, activePromo
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   );
 
+  const canHover = useCanHover();
   const router = useRouter();
   const pathname = usePathname();
   const { cartItems, cartCount, cartTotal, isLoading, clearCart, removeFromCart } = useCart();
@@ -214,14 +247,37 @@ export default function HeaderClient({ categories, featuredProducts, activePromo
 
               {/* Right side */}
               <div className={styles.rightActions}>
-                <div className={styles.favWrapper} onMouseEnter={() => setIsFavOpen(true)} onMouseLeave={() => setIsFavOpen(false)}>
-                  <button className={`${styles.iconBtn} ${isFavOpen ? styles.iconBtnActive : ''}`} aria-label="Favorite">
+                <div
+                  className={styles.favWrapper}
+                  onMouseEnter={canHover ? () => setIsFavOpen(true) : undefined}
+                  onMouseLeave={canHover ? () => setIsFavOpen(false) : undefined}
+                >
+                  {/* Fără mouse nu există hover, deci pe touch panoul se
+                      deschide la apăsare. Pe desktop butonul rămâne inert,
+                      exact ca înainte. */}
+                  <button
+                    className={`${styles.iconBtn} ${isFavOpen ? styles.iconBtnActive : ''}`}
+                    aria-label="Favorite"
+                    onClick={canHover ? undefined : () => {
+                      setIsFavOpen(!isFavOpen);
+                      setIsProfileOpen(false);
+                      setIsCartOpen(false);
+                      setIsMenuOpen(false);
+                      setIsSearchOpen(false);
+                    }}
+                  >
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
                     {favoriteCount > 0 && (
                       <span className={styles.favBadge}>{favoriteCount}</span>
                     )}
                   </button>
-                  
+
+                  {/* Pe touch panoul rămâne deschis până la o apăsare în afara
+                      lui, la fel ca panourile de cont și de coș. */}
+                  {!canHover && isFavOpen && (
+                    <div className={styles.profileBackdrop} onClick={() => setIsFavOpen(false)}></div>
+                  )}
+
                   <div className={`${styles.favDropdown} ${isFavOpen ? styles.favDropdownOpen : ''}`}>
                     {!user ? (
                       /* Vizitator neautentificat: favoritele se salvează în cont,
@@ -289,9 +345,9 @@ export default function HeaderClient({ categories, featuredProducts, activePromo
                     )}
                   </div>
                 </div>
-                <div className={styles.profileWrapper}>
-                  <button 
-                    className={`${styles.iconBtn} ${isProfileOpen ? styles.iconBtnActive : ''}`} 
+                <div className={`${styles.profileWrapper} ${styles.accountWrapper}`}>
+                  <button
+                    className={`${styles.iconBtn} ${isProfileOpen ? styles.iconBtnActive : ''}`}
                     aria-label="Cont utilizator"
                     onClick={() => {
                       setIsProfileOpen(!isProfileOpen);
@@ -387,7 +443,7 @@ export default function HeaderClient({ categories, featuredProducts, activePromo
                     <div className={styles.profileBackdrop} onClick={() => setIsCartOpen(false)}></div>
                   )}
 
-                  <div className={`${styles.favDropdown} ${isCartOpen ? styles.favDropdownOpen : ''}`}>
+                  <div className={`${styles.favDropdown} ${styles.cartDropdown} ${isCartOpen ? styles.favDropdownOpen : ''}`}>
                     {cartCount === 0 ? (
                       <div className={styles.favHeader} style={{ padding: '20px' }}>
                         Coșul tău este gol.
@@ -507,6 +563,21 @@ export default function HeaderClient({ categories, featuredProducts, activePromo
             <div className={styles.dropdownMenu}>
               <div className="container">
                 <div className={styles.dropdownContent}>
+                  {/* Vizibilă doar sub 768px, acolo unde `.bottomMenu` este
+                      ascunsă. Include și contul, al cărui buton iese din
+                      antet pe ecranele înguste. */}
+                  <div className={styles.mobileNavColumn}>
+                    <h3 className={styles.mobileNavTitle}>Meniu</h3>
+                    <div className={styles.mobileNavList}>
+                      {MAIN_NAV_LINKS.map((link) => (
+                        <Link key={link.href} href={link.href}>{link.label}</Link>
+                      ))}
+                      <Link href={user ? '/account' : '/login'}>
+                        {user ? 'Contul meu' : 'Autentificare'}
+                      </Link>
+                    </div>
+                  </div>
+
                   {Object.entries(groupedCategories).map(([groupName, cats]) => (
                     <div key={groupName} className={styles.dropdownColumn}>
                       <h3>{groupName}</h3>
@@ -557,12 +628,9 @@ export default function HeaderClient({ categories, featuredProducts, activePromo
 
           <div className="container">
             <nav className={styles.bottomMenu}>
-              <Link href="/bestsellers" className={styles.menuLink}>Bestsellers</Link>
-              <Link href="/pachete" className={styles.menuLink}>Pachete & Oferte</Link>
-              <Link href="/abonamente" className={styles.menuLink}>Abonamente</Link>
-              <Link href="/calitate" className={styles.menuLink}>Calitate & Ingrediente</Link>
-              <Link href="/jurnal" className={styles.menuLink}>Jurnal Științific</Link>
-              <Link href="/contact" className={styles.menuLink}>Contact</Link>
+              {MAIN_NAV_LINKS.map((link) => (
+                <Link key={link.href} href={link.href} className={styles.menuLink}>{link.label}</Link>
+              ))}
             </nav>
           </div>
         </header>

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import styles from './Category.module.css';
@@ -44,6 +44,16 @@ export default function CategoryClient({ category, products, allCategories }: Ca
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 500]);
   const [brandSearchTerm, setBrandSearchTerm] = useState('');
+
+  // Panoul de filtre este `position: fixed` peste pagină; fără asta, derularea
+  // cu degetul peste el mișca lista de produse din spate. Se aplică doar când
+  // panoul e deschis, deci pe desktop (unde nu se deschide) nu are efect.
+  useEffect(() => {
+    if (!sidebarOpen) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = previous; };
+  }, [sidebarOpen]);
 
   // Filter and Sort products client-side
   const sortedProducts = useMemo(() => {
