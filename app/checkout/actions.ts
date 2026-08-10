@@ -74,18 +74,53 @@ export async function processCheckout(formData: FormData) {
   const orderId = crypto.randomUUID()
 
   // 5. Create Order
-  const { error: orderError } = await supabase
-    .from('orders')
-    .insert({
-      id: orderId,
-      user_id: user?.id || null,
-      total_amount: finalTotal,
-      shipping_cost: shippingCost,
-      shipping_name: fullName,
-      shipping_phone: phone,
-      shipping_address: fullAddress,
-      status: 'În procesare'
-    })
+  type OrderRow = {
+    id: string
+    user_id: string | null
+    total_amount: number
+    shipping_cost: number
+    shipping_name: string
+    shipping_phone: string
+    shipping_address: string
+    status: string
+    guest_email?: string
+  }
+
+  const orderRow: OrderRow = {
+    id: orderId,
+    user_id: user?.id || null,
+    total_amount: finalTotal,
+    shipping_cost: shippingCost,
+    shipping_name: fullName,
+    shipping_phone: phone,
+    shipping_address: fullAddress,
+    status: 'În procesare'
+  }
+
+  // Comanda unui vizitator nu are user_id, deci fără email nu ar exista nimic
+  // care să o lege de o persoană: ar rămâne orfană pentru totdeauna. Emailul
+  // este singurul lucru după care o poate revendica mai târziu, când își face
+  // cont sau se autentifică. Pentru comenzile autentificate legătura se face
+  // deja prin user_id, deci acolo nu îl mai stocăm.
+  if (!user && email) {
+    orderRow.guest_email = email
+  }
+
+  let { error: orderError } = await supabase.from('orders').insert(orderRow)
+
+  // Coloana `guest_email` vine dintr-o migrare care se rulează manual în
+  // Supabase (setup_guest_orders.sql). Dacă acest cod ajunge în producție
+  // înainte de migrare, reîncercăm fără ea: mai bine o comandă care nu poate fi
+  // revendicată decât un checkout care refuză să meargă.
+  if (orderError && orderError.message?.includes('guest_email')) {
+    console.warn(
+      'Coloana orders.guest_email lipseste; comanda se salveaza fara ea. ' +
+      'Ruleaza setup_guest_orders.sql in Supabase pentru a activa revendicarea.'
+    )
+    delete orderRow.guest_email
+    const retry = await supabase.from('orders').insert(orderRow)
+    orderError = retry.error
+  }
 
   if (orderError) {
     console.error('Order creation error:', orderError)

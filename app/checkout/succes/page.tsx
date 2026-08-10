@@ -1,12 +1,16 @@
 import React from 'react'
 import Link from 'next/link'
 import { FiCheckCircle } from 'react-icons/fi'
+import { createClient } from '@/lib/supabase/server'
 
 export const metadata = {
   title: 'Comandă finalizată | Longevity Farma',
 }
 
-export default function CheckoutSuccessPage() {
+export default async function CheckoutSuccessPage() {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
   return (
     <div style={containerStyle}>
       <div style={cardStyle}>
@@ -15,12 +19,40 @@ export default function CheckoutSuccessPage() {
           <polyline points="22 4 12 14.01 9 11.01"></polyline>
         </svg>
         <h1 style={titleStyle}>Comanda a fost înregistrată!</h1>
-        <p style={descStyle}>
-          Îți mulțumim pentru cumpărături. Un email de confirmare a fost trimis către adresa ta de email.
-        </p>
-        <Link href="/account/comenzi" style={btnStyle}>
-          Vezi comenzile tale
-        </Link>
+
+        {user ? (
+          /* Utilizator autentificat: comanda este deja legată de contul lui. */
+          <>
+            <p style={descStyle}>
+              Îți mulțumim pentru cumpărături. Un email de confirmare a fost trimis către adresa ta de email.
+            </p>
+            <Link href="/account/comenzi" style={btnStyle}>
+              Vezi comenzile tale
+            </Link>
+          </>
+        ) : (
+          /* Vizitator: nu are un cont în care să vadă comanda, deci butonul
+             către istoric l-ar trimite într-un perete de autentificare. Îi
+             spunem unde găsește detaliile și îi oferim contul ca opțiune, nu
+             ca obligație. */
+          <>
+            <p style={descStyle}>
+              Îți mulțumim pentru cumpărături. Am trimis confirmarea cu toate
+              detaliile comenzii pe adresa de email completată la finalizare.
+            </p>
+            <p style={noteStyle}>
+              Creează-ți un cont cu <strong>aceeași adresă de email</strong> și
+              comanda aceasta va apărea automat în istoricul tău.
+            </p>
+            <Link href="/signup" style={btnStyle}>
+              Creează cont
+            </Link>
+            <Link href="/login" style={{ ...linkStyle, marginBottom: '15px' }}>
+              Am deja cont
+            </Link>
+          </>
+        )}
+
         <Link href="/" style={linkStyle}>
           Întoarce-te la magazin
         </Link>
@@ -82,4 +114,15 @@ const linkStyle: React.CSSProperties = {
   color: '#2e8b57',
   textDecoration: 'none',
   fontWeight: 600,
+}
+
+const noteStyle: React.CSSProperties = {
+  backgroundColor: '#f4f8f1',
+  border: '1px solid #d6e4d9',
+  borderRadius: '8px',
+  padding: '14px 16px',
+  color: '#4a5c51',
+  fontSize: '0.95rem',
+  lineHeight: '1.5',
+  marginBottom: '25px',
 }
